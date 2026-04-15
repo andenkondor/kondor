@@ -1,0 +1,10 @@
+{
+  "colors": {
+    "highlightedText": "red",
+    "normalText": "white",
+    "selectedBackground": "grey",
+    "unselectedBackground": "none",
+    "focusedBorder": "green",
+    "unfocusedBorder": "white"
+  }
+}
