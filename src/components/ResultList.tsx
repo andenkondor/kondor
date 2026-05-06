@@ -1,17 +1,16 @@
-import { useRef, useState, type FC } from "react";
+import { useState, type FC } from "react";
 import { Box, useInput } from "ink";
-import { ScrollList, type ScrollListRef } from "ink-scroll-list";
 import { ResultLine } from "@components/ResultLine";
 import type { SearchResult } from "@definitions/SearchResult";
 import { Nvim } from "@tools/Nvim";
 import { Idea } from "@tools/Idea";
+import { VirtualList } from "ink-virtual-list";
 
 type Props = {
   resultItems: SearchResult[];
 };
 
 export const ResultList: FC<Props> = ({ resultItems }) => {
-  const listRef = useRef<ScrollListRef>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   // Handle keyboard navigation in the parent
@@ -37,12 +36,16 @@ export const ResultList: FC<Props> = ({ resultItems }) => {
   });
 
   return (
-    <Box borderStyle={"single"}>
-      <ScrollList ref={listRef} selectedIndex={selectedIndex}>
-        {resultItems.map((item, i) => (
-          <ResultLine item={item} isSelected={i === selectedIndex} />
-        ))}
-      </ScrollList>
+    <Box borderStyle={"single"} width={"100%"}>
+      <VirtualList
+        items={resultItems}
+        selectedIndex={selectedIndex}
+        showOverflowIndicators={false}
+        height={"auto"}
+        renderItem={({ item, isSelected }) => (
+          <ResultLine item={item} isSelected={isSelected} />
+        )}
+      />
     </Box>
   );
 };
