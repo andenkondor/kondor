@@ -1,3 +1,5 @@
+#!/usr/bin/env bun
+
 import { App } from "@components/App";
 import {
   ConfigProvider,
