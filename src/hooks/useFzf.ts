@@ -24,7 +24,7 @@ export function useFzf(rgInput: SearchResult[]) {
           .join("\n");
 
         const result = (
-          await $`echo ${Buffer.from(fzfInput).toString("base64")} | base64 -d | fzf --accept-nth=1..2 --delimiter=':' --with-nth=2.. -f ${fzfFilter}`.text()
+          await $`echo ${Buffer.from(fzfInput).toString("base64")} | base64 -d | fzf --accept-nth=1.. --delimiter=':' --with-nth=1.. -f ${fzfFilter}`.text()
         ).split("\n");
 
         setOutput(rgInput.filter((i) => result.some((r) => r === i.id)));
