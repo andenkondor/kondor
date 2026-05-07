@@ -1,6 +1,7 @@
 {
   "inputDebounceDelayMs": 300,
   "colors": {
+    "filePathText": "magenta",
     "highlightedText": "red",
     "normalText": "white",
     "selectedBackground": "grey",

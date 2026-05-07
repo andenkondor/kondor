@@ -5,6 +5,7 @@ export type Config = {
   initialSearchTerm?: string;
   inputDebounceDelayMs: number;
   colors: {
+    filePathText: string;
     highlightedText: string;
     normalText: string;
     selectedBackground: string;

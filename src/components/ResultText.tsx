@@ -6,12 +6,14 @@ type Props = {
   text: string;
   isSelected?: boolean;
   isHighlighted?: boolean;
+  color?: string;
 };
 
 export const ResultText: FC<Props> = ({
   text,
   isSelected = false,
   isHighlighted = false,
+  color,
 }) => {
   const config = useConfig();
   const { colors } = config;
@@ -19,7 +21,11 @@ export const ResultText: FC<Props> = ({
   return (
     <Text
       color={
-        Boolean(isHighlighted) ? colors.highlightedText : colors.normalText
+        Boolean(color)
+          ? color
+          : Boolean(isHighlighted)
+            ? colors.highlightedText
+            : colors.normalText
       }
       backgroundColor={
         isSelected ? colors.selectedBackground : colors.unselectedBackground
