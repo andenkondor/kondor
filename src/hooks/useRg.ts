@@ -31,11 +31,13 @@ export function useRg() {
       }
 
       try {
-        const result = (
-          (
-            await $`rg --column --fixed-strings --line-number --no-heading --smart-case --color=always --json ${debouncedSearchTerm} | jq -s '.'`.json()
-          ).filter(isRgMatch) as unknown as RgMatch[]
-        ).map(({ data }) => ({
+        const rgOutput =
+          await $`rg --column --fixed-strings --line-number --no-heading --smart-case --color=always --json ${debouncedSearchTerm}`.text();
+        const rgMatches = Bun.JSONL.parse(rgOutput).filter(
+          isRgMatch,
+        ) as unknown as RgMatch[];
+
+        const searchResult = rgMatches.map(({ data }) => ({
           id: `${data.path.text}:${data.line_number}`,
           filePath: data.path.text,
           lineContent: data.lines.text.trimEnd(),
@@ -43,7 +45,7 @@ export function useRg() {
           subMatches: data.submatches,
         }));
 
-        setSearchResult(result);
+        setSearchResult(searchResult);
       } catch (e) {
         setSearchResult([]);
       }
