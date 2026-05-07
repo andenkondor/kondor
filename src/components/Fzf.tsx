@@ -1,7 +1,7 @@
 import { type FC } from "react";
 import { useFocus } from "@hooks/useFocus";
 import { Focus } from "@definitions/Focus";
-import { Input } from "@components/Input";
+import { BorderedTextInput } from "@components/BorderedTextInput";
 
 type Props = {
   filterTerm: string;
@@ -13,7 +13,7 @@ export const Fzf: FC<Props> = ({ filterTerm, onFilterTermChange }) => {
   const hasFocus = currentFocus === Focus.FZF;
 
   return (
-    <Input
+    <BorderedTextInput
       input={filterTerm}
       onInputChange={onFilterTermChange}
       hasFocus={hasFocus}

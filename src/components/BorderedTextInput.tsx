@@ -10,7 +10,7 @@ type Props = {
   titles: string[];
 };
 
-export const Input: FC<Props> = ({
+export const BorderedTextInput: FC<Props> = ({
   input,
   onInputChange,
   hasFocus,

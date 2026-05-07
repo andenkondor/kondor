@@ -1,7 +1,7 @@
 import { type FC } from "react";
 import { useFocus } from "@hooks/useFocus";
 import { Focus } from "@definitions/Focus";
-import { Input } from "@components/Input";
+import { BorderedTextInput } from "./BorderedTextInput";
 
 type Props = {
   searchTerm: string;
@@ -13,7 +13,7 @@ export const Rg: FC<Props> = ({ searchTerm, onSearchTermChange }) => {
   const hasFocus = currentFocus === Focus.RG;
 
   return (
-    <Input
+    <BorderedTextInput
       input={searchTerm}
       onInputChange={onSearchTermChange}
       hasFocus={hasFocus}
