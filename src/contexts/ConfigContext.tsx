@@ -3,6 +3,7 @@ import { createContext, useContext } from "react";
 
 export type Config = {
   initialSearchTerm?: string;
+  inputDebounceDelayMs: number;
   colors: {
     highlightedText: string;
     normalText: string;

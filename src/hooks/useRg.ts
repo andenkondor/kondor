@@ -2,26 +2,15 @@ import type { SearchResult } from "@definitions/SearchResult";
 import { $ } from "bun";
 import { useEffect, useState } from "react";
 import { useConfig } from "@contexts/ConfigContext";
-
-const DEBOUNCE_DELAY = 100;
-
-function useDebounce<T>(value: T, delay: number): T {
-  const [debouncedValue, setDebouncedValue] = useState<T>(value);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedValue(value), delay);
-    return () => clearTimeout(timer);
-  }, [value, delay]);
-
-  return debouncedValue;
-}
+import { useDebounce } from "@hooks/useDebounce";
 
 export function useRg() {
+  const { inputDebounceDelayMs } = useConfig();
   const { initialSearchTerm } = useConfig();
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm ?? "");
   const [searchResult, setSearchResult] = useState<SearchResult[]>([]);
 
-  const debouncedSearchTerm = useDebounce(searchTerm, DEBOUNCE_DELAY);
+  const debouncedSearchTerm = useDebounce(searchTerm, inputDebounceDelayMs);
 
   useEffect(() => {
     const search = async () => {

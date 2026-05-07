@@ -1,4 +1,5 @@
 {
+  "inputDebounceDelayMs": 300,
   "colors": {
     "highlightedText": "red",
     "normalText": "white",
