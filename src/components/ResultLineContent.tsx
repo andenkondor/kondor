@@ -9,7 +9,8 @@ type Props = {
 };
 
 export const ResultLineContent: FC<Props> = ({ item, isSelected }) => {
-  const boundaries = new Set([0, item.lineContent.length]);
+  const lineContent = item.lineContent.trimEnd();
+  const boundaries = new Set([0, lineContent.length]);
   for (const h of item.subMatches) {
     boundaries.add(h.start);
     boundaries.add(h.end);
@@ -21,7 +22,7 @@ export const ResultLineContent: FC<Props> = ({ item, isSelected }) => {
   for (let i = 0; i < sortedBoundaries.length - 1; i++) {
     const start = sortedBoundaries[i]!;
     const end = sortedBoundaries[i + 1]!;
-    const chunk = item.lineContent.slice(start, end);
+    const chunk = lineContent.slice(start, end);
 
     const highlight = item.subMatches.find(
       (h) => start >= h.start && end <= h.end,
@@ -32,7 +33,7 @@ export const ResultLineContent: FC<Props> = ({ item, isSelected }) => {
         key={`result-line-content-chunk-${elements.length}`}
         isHighlighted={Boolean(highlight)}
         isSelected={isSelected}
-        text={chunk}
+        text={i === 0 ? chunk.trimStart() : chunk}
       />,
     );
   }
