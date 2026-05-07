@@ -17,6 +17,7 @@ export const Rg: FC<Props> = ({ searchTerm, onSearchTermChange }) => {
       input={searchTerm}
       onInputChange={onSearchTermChange}
       hasFocus={hasFocus}
+      titles={["rg"]}
     />
   );
 };

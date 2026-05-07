@@ -7,15 +7,21 @@ type Props = {
   input: string;
   onInputChange: (input: string) => void;
   hasFocus: boolean;
+  titles: string[];
 };
 
-export const Input: FC<Props> = ({ input, onInputChange, hasFocus }) => {
+export const Input: FC<Props> = ({
+  input,
+  onInputChange,
+  hasFocus,
+  titles,
+}) => {
   const config = useConfig();
   const { colors } = config;
   return (
     <TitledBox
       borderStyle="single"
-      titles={["rg"]}
+      titles={titles}
       width={100}
       borderColor={hasFocus ? colors.focusedBorder : colors.unfocusedBorder}
     >

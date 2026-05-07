@@ -17,6 +17,7 @@ export const Fzf: FC<Props> = ({ filterTerm, onFilterTermChange }) => {
       input={filterTerm}
       onInputChange={onFilterTermChange}
       hasFocus={hasFocus}
+      titles={["fzf"]}
     />
   );
 };
