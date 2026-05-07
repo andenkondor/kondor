@@ -42,6 +42,7 @@ export const ResultList: FC<Props> = ({ resultItems }) => {
         selectedIndex={selectedIndex}
         showOverflowIndicators={false}
         height={"auto"}
+        keyExtractor={(item) => item.id}
         renderItem={({ item, isSelected }) => (
           <ResultLine item={item} isSelected={isSelected} />
         )}
