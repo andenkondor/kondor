@@ -20,6 +20,11 @@ type RgState = {
   isLoading?: boolean;
 };
 
+type SelectionState = {
+  selectedResult?: SearchResult;
+  selectedResultIndex?: number;
+};
+
 type ApplicationState = {
   rgState: RgState;
   setRgState: React.Dispatch<React.SetStateAction<RgState>>;
@@ -27,6 +32,8 @@ type ApplicationState = {
   setFzfState: React.Dispatch<React.SetStateAction<FzfState>>;
   focusState: FocusState;
   setFocusState: React.Dispatch<React.SetStateAction<FocusState>>;
+  selectionState: SelectionState;
+  setSelectionState: React.Dispatch<React.SetStateAction<SelectionState>>;
 };
 
 const ApplicationStateContext = createContext<ApplicationState | null>(null);
@@ -50,6 +57,8 @@ export const ApplicationStateProvider: FC<{
     currentFocus: Focus.RG,
   });
 
+  const [selectionState, setSelectionState] = useState<SelectionState>({});
+
   return (
     <ApplicationStateContext.Provider
       value={{
@@ -59,6 +68,8 @@ export const ApplicationStateProvider: FC<{
         setFzfState,
         focusState,
         setFocusState,
+        selectionState,
+        setSelectionState,
       }}
     >
       {children}
