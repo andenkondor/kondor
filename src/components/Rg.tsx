@@ -2,15 +2,21 @@ import { type FC } from "react";
 import { useFocus } from "@hooks/useFocus";
 import { Focus } from "@definitions/Focus";
 import { BorderedTextInput } from "./BorderedTextInput";
+import { useApplicationState } from "@contexts/ApplicationStateContext";
+import { useRg } from "@hooks/useRg";
 
-type Props = {
-  searchTerm: string;
-  onSearchTermChange: (searchTerm: string) => void;
-};
-
-export const Rg: FC<Props> = ({ searchTerm, onSearchTermChange }) => {
+export const Rg: FC = () => {
+  useRg();
   const { currentFocus } = useFocus();
+  const {
+    rgState: { searchTerm },
+    setRgState,
+  } = useApplicationState();
   const hasFocus = currentFocus === Focus.RG;
+
+  const onSearchTermChange = (searchTerm: string) => {
+    setRgState((prev) => ({ ...prev, searchTerm }));
+  };
 
   return (
     <BorderedTextInput

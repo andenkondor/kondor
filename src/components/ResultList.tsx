@@ -1,16 +1,17 @@
 import { useRef, useState, type FC, type RefObject } from "react";
 import { Box, useBoxMetrics, useInput, type DOMElement } from "ink";
 import { ResultLine } from "@components/ResultLine";
-import type { SearchResult } from "@definitions/SearchResult";
 import { Nvim } from "@tools/Nvim";
 import { Idea } from "@tools/Idea";
 import { VirtualList } from "ink-virtual-list";
+import { TitledBox } from "@mishieck/ink-titled-box";
+import { useApplicationState } from "@contexts/ApplicationStateContext";
 
-type Props = {
-  resultItems: SearchResult[];
-};
-
-export const ResultList: FC<Props> = ({ resultItems }) => {
+export const ResultList: FC = () => {
+  const {
+    rgState: { searchResults },
+    fzfState: { filterResults },
+  } = useApplicationState();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const boxRef = useRef(null);
   const { height } = useBoxMetrics(boxRef as unknown as RefObject<DOMElement>);
@@ -20,35 +21,40 @@ export const ResultList: FC<Props> = ({ resultItems }) => {
       setSelectedIndex((prev) => Math.max(prev - 1, 0));
     }
     if (key.downArrow) {
-      setSelectedIndex((prev) => Math.min(prev + 1, resultItems.length - 1));
+      setSelectedIndex((prev) => Math.min(prev + 1, filterResults.length - 1));
     }
     if (key.return) {
-      if (!resultItems.length) {
+      if (!filterResults.length) {
         return;
       }
-      Nvim.open(resultItems[selectedIndex]!);
+      Nvim.open(filterResults[selectedIndex]!);
     }
     if (key.ctrl && input === "s") {
-      if (!resultItems.length) {
+      if (!filterResults.length) {
         return;
       }
-      Idea.open(resultItems[selectedIndex]!);
+      Idea.open(filterResults[selectedIndex]!);
     }
   });
 
   return (
-    <Box borderStyle={"single"} width={"100%"} ref={boxRef}>
-      <VirtualList
-        items={resultItems}
-        selectedIndex={selectedIndex}
-        showOverflowIndicators={false}
-        // box size minus top/bottom border
-        height={height - 2}
-        keyExtractor={({ id }) => id.toString()}
-        renderItem={({ item, isSelected }) => (
-          <ResultLine item={item} isSelected={isSelected} />
-        )}
-      />
-    </Box>
+    <TitledBox
+      borderStyle={"single"}
+      width={"100%"}
+      titles={[`${filterResults.length}/${searchResults.length}`]}
+    >
+      <Box ref={boxRef}>
+        <VirtualList
+          items={filterResults}
+          selectedIndex={selectedIndex}
+          showOverflowIndicators={false}
+          height={height}
+          keyExtractor={({ id }) => id.toString()}
+          renderItem={({ item, isSelected }) => (
+            <ResultLine item={item} isSelected={isSelected} />
+          )}
+        />
+      </Box>
+    </TitledBox>
   );
 };

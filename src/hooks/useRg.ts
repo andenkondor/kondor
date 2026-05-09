@@ -1,14 +1,15 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useConfig } from "@contexts/ConfigContext";
 import { useDebounce } from "@hooks/useDebounce";
 import { Rg } from "@tools/Rg";
-import type { SearchResult } from "@definitions/SearchResult";
+import { useApplicationState } from "@contexts/ApplicationStateContext";
 
 export function useRg() {
+  const {
+    setRgState,
+    rgState: { searchTerm },
+  } = useApplicationState();
   const { inputDebounceDelayMs } = useConfig();
-  const { initialSearchTerm } = useConfig();
-  const [searchTerm, setSearchTerm] = useState(initialSearchTerm ?? "");
-  const [searchResult, setSearchResult] = useState<SearchResult[]>([]);
   const rgProcRef = useRef<Bun.Subprocess | undefined>(undefined);
   const activeSearchRef = useRef(0);
   const debouncedSearchTerm = useDebounce(searchTerm, inputDebounceDelayMs);
@@ -24,7 +25,7 @@ export function useRg() {
 
       if (!debouncedSearchTerm) {
         if (searchId === activeSearchRef.current) {
-          setSearchResult([]);
+          setRgState((prev) => ({ ...prev, searchResults: [] }));
         }
         return;
       }
@@ -36,14 +37,14 @@ export function useRg() {
         if (searchId !== activeSearchRef.current) {
           return;
         }
-        const searchResult = await getResult();
+        const searchResults = await getResult();
 
         if (searchId === activeSearchRef.current) {
-          setSearchResult(searchResult);
+          setRgState((prev) => ({ ...prev, searchResults }));
         }
       } catch (e) {
         if (searchId === activeSearchRef.current) {
-          setSearchResult([]);
+          setRgState((prev) => ({ ...prev, searchResults: [] }));
         }
       }
     };
@@ -57,6 +58,4 @@ export function useRg() {
       }
     };
   }, [debouncedSearchTerm]);
-
-  return { searchResult, setSearchTerm, searchTerm };
 }

@@ -1,17 +1,20 @@
-import type { SearchResult } from "@definitions/SearchResult";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useDebounce } from "@hooks/useDebounce";
 import { useConfig } from "@contexts/ConfigContext";
 import { Fzf } from "@tools/Fzf";
+import { useApplicationState } from "@contexts/ApplicationStateContext";
 
-export function useFzf(rgInput: SearchResult[]) {
+export function useFzf() {
+  const {
+    setFzfState,
+    rgState: { searchResults },
+    fzfState: { filterTerm },
+  } = useApplicationState();
+
   const { inputDebounceDelayMs } = useConfig();
-  const [fzfFilter, setFzfFilter] = useState("");
-  const [output, setOutput] = useState<SearchResult[]>([]);
   const fzfProcRef = useRef<Bun.Subprocess | undefined>(undefined);
   const activeFilterRef = useRef(0);
-
-  const debouncedFzfFilter = useDebounce(fzfFilter, inputDebounceDelayMs);
+  const debouncedFzfFilter = useDebounce(filterTerm, inputDebounceDelayMs);
 
   useEffect(() => {
     const filterId = ++activeFilterRef.current;
@@ -22,9 +25,9 @@ export function useFzf(rgInput: SearchResult[]) {
         fzfProcRef.current = undefined;
       }
 
-      if (!rgInput.length) {
+      if (!searchResults.length) {
         if (filterId === activeFilterRef.current) {
-          setOutput([]);
+          setFzfState((prev) => ({ ...prev, filterResults: [] }));
         }
 
         return;
@@ -32,28 +35,37 @@ export function useFzf(rgInput: SearchResult[]) {
 
       if (!debouncedFzfFilter) {
         if (filterId === activeFilterRef.current) {
-          setOutput(rgInput);
+          setFzfState((prev) => ({ ...prev, filterResults: searchResults }));
         }
 
         return;
       }
 
       try {
-        const { proc, getResult } = Fzf.execute(rgInput, debouncedFzfFilter);
+        const { proc, getResult } = Fzf.execute(
+          searchResults,
+          debouncedFzfFilter,
+        );
         fzfProcRef.current = proc;
 
+        const filterResults = await getResult();
+
         if (filterId === activeFilterRef.current) {
-          setOutput(await getResult());
+          setFzfState((prev) => ({
+            ...prev,
+            filterResults,
+          }));
         }
       } catch (e) {
         if (filterId === activeFilterRef.current) {
-          setOutput([]);
+          setFzfState((prev) => ({
+            ...prev,
+            filterResults: [],
+          }));
         }
       }
     };
 
     search();
-  }, [rgInput, debouncedFzfFilter]);
-
-  return { fzfFilter, setFzfFilter, output };
+  }, [searchResults, debouncedFzfFilter]);
 }

@@ -6,6 +6,7 @@ import { FocusProvider } from "@contexts/FocusContext";
 import { render } from "ink";
 import { merge } from "lodash";
 import defaultConfig from "./config.json";
+import { ApplicationStateProvider } from "@contexts/ApplicationStateContext";
 
 // clear screen and move cursor
 process.stdout.write("\u001b[2J\u001b[0;0H");
@@ -22,7 +23,9 @@ const config = merge({}, defaultConfig, cliConfig);
 const { unmount } = render(
   <ConfigProvider value={config}>
     <FocusProvider>
-      <App />
+      <ApplicationStateProvider>
+        <App />
+      </ApplicationStateProvider>
     </FocusProvider>
   </ConfigProvider>,
   {
