@@ -1,6 +1,6 @@
 import type { SearchResult } from "@definitions/SearchResult";
 import type { FC, ReactNode } from "react";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useConfig } from "./ConfigContext";
 import { Focus } from "@definitions/Focus";
 
@@ -22,7 +22,7 @@ type RgState = {
 
 type SelectionState = {
   selectedResult?: SearchResult;
-  selectedResultIndex?: number;
+  selectedResultIndex: number;
 };
 
 type ApplicationState = {
@@ -57,7 +57,13 @@ export const ApplicationStateProvider: FC<{
     currentFocus: Focus.RG,
   });
 
-  const [selectionState, setSelectionState] = useState<SelectionState>({});
+  const [selectionState, setSelectionState] = useState<SelectionState>({
+    selectedResultIndex: 0,
+  });
+
+  useEffect(() => {
+    setSelectionState({ selectedResultIndex: 0, selectedResult: undefined });
+  }, [fzfState.filterResults]);
 
   return (
     <ApplicationStateContext.Provider
