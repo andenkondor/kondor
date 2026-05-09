@@ -18,12 +18,14 @@ export const ResultList: FC = () => {
   const fzfResultIndicator = isLoading ? "?" : filterResults.length;
   const rgResultIndicator = isRgLoading ? "?" : searchResults.length;
 
+  const selectedIndicator = filterResults.length
+    ? `#${selectedResultIndex + 1} -- `
+    : "";
+
+  const statusIndicator = `${selectedIndicator}${fzfResultIndicator}/${rgResultIndicator}`;
+
   return (
-    <TitledBox
-      borderStyle={"single"}
-      width={"100%"}
-      titles={[`${fzfResultIndicator}/${rgResultIndicator}`]}
-    >
+    <TitledBox borderStyle={"single"} width={"100%"} titles={[statusIndicator]}>
       {isLoading ? null : (
         <Box ref={boxRef}>
           <VirtualList
