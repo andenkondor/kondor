@@ -1,3 +1,5 @@
+import { SearchResult } from "@definitions/SearchResult";
+
 export class Rg {
   static execute(searchTerm: string) {
     const proc = Bun.spawn(
@@ -24,13 +26,7 @@ export class Rg {
         isRgMatch,
       ) as unknown as RgMatch[];
 
-      return rgMatches.map(({ data }) => ({
-        id: `${data.path.text}:${data.line_number}`,
-        filePath: data.path.text,
-        lineContent: data.lines.text.trimEnd(),
-        lineNumber: data.line_number,
-        subMatches: data.submatches,
-      }));
+      return rgMatches.map((match) => new SearchResult(match.data));
     };
 
     return { proc, getResult };

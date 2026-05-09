@@ -2,12 +2,14 @@ import type { SearchResult } from "@definitions/SearchResult";
 
 export class Fzf {
   static execute(input: SearchResult[], filterTerm: string) {
-    const stdin = input.map((rg) => `${rg.id}:${rg.lineContent}`).join("\n");
+    const stdin = input
+      .map((rg) => `${rg.id}:${rg.filePath}:${rg.lineContent}`)
+      .join("\n");
     const proc = Bun.spawn(
       [
         "fzf",
-        ...["--accept-nth", "1..2"],
-        ...["--with-nth", "1.."],
+        ...["--accept-nth", "1"],
+        ...["--with-nth", "2.."],
         ...["--delimiter", ":"],
         ...["-f", filterTerm],
       ],
@@ -22,7 +24,7 @@ export class Fzf {
       const fzfOutput = (await new Response(proc.stdout).text()).split("\n");
 
       const filtered = new Set(fzfOutput);
-      return input.filter((rg) => filtered.has(rg.id));
+      return input.filter((rg) => filtered.has(rg.id.toString()));
     };
 
     return { proc, getResult };
