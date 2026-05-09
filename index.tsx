@@ -2,7 +2,6 @@
 
 import { App } from "@components/App";
 import { ConfigProvider, type CliConfig } from "@contexts/ConfigContext";
-import { FocusProvider } from "@contexts/FocusContext";
 import { render } from "ink";
 import { merge } from "lodash";
 import defaultConfig from "./config.json";
@@ -22,11 +21,9 @@ const config = merge({}, defaultConfig, cliConfig);
 
 const { unmount } = render(
   <ConfigProvider value={config}>
-    <FocusProvider>
-      <ApplicationStateProvider>
-        <App />
-      </ApplicationStateProvider>
-    </FocusProvider>
+    <ApplicationStateProvider>
+      <App />
+    </ApplicationStateProvider>
   </ConfigProvider>,
   {
     alternateScreen: true,

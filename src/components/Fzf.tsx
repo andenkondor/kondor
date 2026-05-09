@@ -1,5 +1,4 @@
 import { type FC } from "react";
-import { useFocus } from "@hooks/useFocus";
 import { Focus } from "@definitions/Focus";
 import { BorderedTextInput } from "@components/BorderedTextInput";
 import { useApplicationState } from "@contexts/ApplicationStateContext";
@@ -7,10 +6,10 @@ import { useFzf } from "@hooks/useFzf";
 
 export const Fzf: FC = () => {
   useFzf();
-  const { currentFocus } = useFocus();
   const {
     fzfState: { filterTerm },
     setFzfState,
+    focusState: { currentFocus },
   } = useApplicationState();
 
   const hasFocus = currentFocus === Focus.FZF;

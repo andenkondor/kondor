@@ -1,12 +1,15 @@
-import { useContext } from "react";
-import { FocusContext } from "@contexts/FocusContext";
+import { useInput } from "ink";
+import { useApplicationState } from "@contexts/ApplicationStateContext";
+import { Focus } from "@definitions/Focus";
 
-export function useFocus() {
-  const context = useContext(FocusContext);
-
-  if (!context) {
-    throw new Error("no focus context defined");
-  }
-
-  return context;
-}
+export const useFocus = () => {
+  const { setFocusState } = useApplicationState();
+  useInput(async (input, key) => {
+    if (key.ctrl && input === "g") {
+      setFocusState((prev) => ({
+        ...prev,
+        currentFocus: prev.currentFocus === Focus.FZF ? Focus.RG : Focus.FZF,
+      }));
+    }
+  });
+};

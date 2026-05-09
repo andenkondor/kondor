@@ -3,8 +3,10 @@ import type { FC } from "react";
 import { Rg } from "@components/Rg";
 import { Fzf } from "@components/Fzf";
 import { ResultList } from "@components/ResultList";
+import { useFocus } from "@hooks/useFocus";
 
 export const App: FC = () => {
+  useFocus();
   const { rows } = useWindowSize();
 
   return (

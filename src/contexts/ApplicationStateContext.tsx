@@ -2,6 +2,11 @@ import type { SearchResult } from "@definitions/SearchResult";
 import type { FC, ReactNode } from "react";
 import { createContext, useContext, useState } from "react";
 import { useConfig } from "./ConfigContext";
+import { Focus } from "@definitions/Focus";
+
+type FocusState = {
+  currentFocus: Focus;
+};
 
 type FzfState = {
   filterTerm: string;
@@ -18,14 +23,11 @@ type ApplicationState = {
   setRgState: React.Dispatch<React.SetStateAction<RgState>>;
   fzfState: FzfState;
   setFzfState: React.Dispatch<React.SetStateAction<FzfState>>;
+  focusState: FocusState;
+  setFocusState: React.Dispatch<React.SetStateAction<FocusState>>;
 };
 
-const ApplicationStateContext = createContext<ApplicationState>({
-  rgState: { searchTerm: "", searchResults: [] },
-  setRgState: () => {},
-  fzfState: { filterTerm: "", filterResults: [] },
-  setFzfState: () => {},
-});
+const ApplicationStateContext = createContext<ApplicationState | null>(null);
 
 export const ApplicationStateProvider: FC<{
   children: ReactNode;
@@ -42,9 +44,20 @@ export const ApplicationStateProvider: FC<{
     searchResults: [],
   });
 
+  const [focusState, setFocusState] = useState<FocusState>({
+    currentFocus: Focus.RG,
+  });
+
   return (
     <ApplicationStateContext.Provider
-      value={{ rgState, setRgState, fzfState, setFzfState }}
+      value={{
+        rgState,
+        setRgState,
+        fzfState,
+        setFzfState,
+        focusState,
+        setFocusState,
+      }}
     >
       {children}
     </ApplicationStateContext.Provider>
