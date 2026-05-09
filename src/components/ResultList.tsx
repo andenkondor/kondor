@@ -1,5 +1,5 @@
-import { useState, type FC } from "react";
-import { Box, useInput } from "ink";
+import { useRef, useState, type FC, type RefObject } from "react";
+import { Box, useBoxMetrics, useInput, type DOMElement } from "ink";
 import { ResultLine } from "@components/ResultLine";
 import type { SearchResult } from "@definitions/SearchResult";
 import { Nvim } from "@tools/Nvim";
@@ -12,8 +12,9 @@ type Props = {
 
 export const ResultList: FC<Props> = ({ resultItems }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const boxRef = useRef(null);
+  const { height } = useBoxMetrics(boxRef as unknown as RefObject<DOMElement>);
 
-  // Handle keyboard navigation in the parent
   useInput((input, key) => {
     if (key.upArrow) {
       setSelectedIndex((prev) => Math.max(prev - 1, 0));
@@ -36,13 +37,14 @@ export const ResultList: FC<Props> = ({ resultItems }) => {
   });
 
   return (
-    <Box borderStyle={"single"} width={"100%"}>
+    <Box borderStyle={"single"} width={"100%"} ref={boxRef}>
       <VirtualList
         items={resultItems}
         selectedIndex={selectedIndex}
         showOverflowIndicators={false}
-        height={"auto"}
-        keyExtractor={(item) => item.id.toString()}
+        // box size minus top/bottom border
+        height={height - 2}
+        keyExtractor={({ id }) => id.toString()}
         renderItem={({ item, isSelected }) => (
           <ResultLine item={item} isSelected={isSelected} />
         )}
