@@ -1,40 +1,54 @@
 import type { SearchResult } from "@definitions/SearchResult";
-import { $ } from "bun";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDebounce } from "@hooks/useDebounce";
 import { useConfig } from "@contexts/ConfigContext";
+import { Fzf } from "@tools/Fzf";
 
 export function useFzf(rgInput: SearchResult[]) {
   const { inputDebounceDelayMs } = useConfig();
   const [fzfFilter, setFzfFilter] = useState("");
   const [output, setOutput] = useState<SearchResult[]>([]);
+  const fzfProcRef = useRef<Bun.Subprocess | undefined>(undefined);
+  const activeFilterRef = useRef(0);
 
   const debouncedFzfFilter = useDebounce(fzfFilter, inputDebounceDelayMs);
 
   useEffect(() => {
+    const filterId = ++activeFilterRef.current;
+
     const search = async () => {
+      if (fzfProcRef.current) {
+        fzfProcRef.current.kill();
+        fzfProcRef.current = undefined;
+      }
+
       if (!rgInput.length) {
-        setOutput([]);
+        if (filterId === activeFilterRef.current) {
+          setOutput([]);
+        }
+
         return;
       }
 
       if (!debouncedFzfFilter) {
-        setOutput(rgInput);
+        if (filterId === activeFilterRef.current) {
+          setOutput(rgInput);
+        }
+
         return;
       }
 
       try {
-        const fzfInput = rgInput
-          .map((rg) => `${rg.id}:${rg.lineContent}`)
-          .join("\n");
+        const { proc, getResult } = Fzf.execute(rgInput, debouncedFzfFilter);
+        fzfProcRef.current = proc;
 
-        const result = (
-          await $`echo ${Buffer.from(fzfInput).toString("base64")} | base64 -d | fzf --accept-nth=1..2 --delimiter=':' --with-nth=1.. -f ${debouncedFzfFilter}`.text()
-        ).split("\n");
-
-        setOutput(rgInput.filter((i) => result.some((r) => r === i.id)));
+        if (filterId === activeFilterRef.current) {
+          setOutput(await getResult());
+        }
       } catch (e) {
-        setOutput([]);
+        if (filterId === activeFilterRef.current) {
+          setOutput([]);
+        }
       }
     };
 

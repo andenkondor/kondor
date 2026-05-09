@@ -1,68 +1,62 @@
-import type { SearchResult } from "@definitions/SearchResult";
-import { $ } from "bun";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useConfig } from "@contexts/ConfigContext";
 import { useDebounce } from "@hooks/useDebounce";
+import { Rg } from "@tools/Rg";
+import type { SearchResult } from "@definitions/SearchResult";
 
 export function useRg() {
   const { inputDebounceDelayMs } = useConfig();
   const { initialSearchTerm } = useConfig();
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm ?? "");
   const [searchResult, setSearchResult] = useState<SearchResult[]>([]);
-
+  const rgProcRef = useRef<Bun.Subprocess | undefined>(undefined);
+  const activeSearchRef = useRef(0);
   const debouncedSearchTerm = useDebounce(searchTerm, inputDebounceDelayMs);
 
   useEffect(() => {
+    const searchId = ++activeSearchRef.current;
+
     const search = async () => {
+      if (rgProcRef.current) {
+        rgProcRef.current.kill();
+        rgProcRef.current = undefined;
+      }
+
       if (!debouncedSearchTerm) {
-        setSearchResult([]);
+        if (searchId === activeSearchRef.current) {
+          setSearchResult([]);
+        }
         return;
       }
 
       try {
-        const rgOutput =
-          await $`rg --column --fixed-strings --line-number --no-heading --smart-case --color=always --json ${debouncedSearchTerm}`.text();
-        const rgMatches = Bun.JSONL.parse(rgOutput).filter(
-          isRgMatch,
-        ) as unknown as RgMatch[];
+        const { proc: newRgProc, getResult } = Rg.execute(debouncedSearchTerm);
+        rgProcRef.current = newRgProc;
 
-        const searchResult = rgMatches.map(({ data }) => ({
-          id: `${data.path.text}:${data.line_number}`,
-          filePath: data.path.text,
-          lineContent: data.lines.text.trimEnd(),
-          lineNumber: data.line_number,
-          subMatches: data.submatches,
-        }));
+        if (searchId !== activeSearchRef.current) {
+          return;
+        }
+        const searchResult = await getResult();
 
-        setSearchResult(searchResult);
+        if (searchId === activeSearchRef.current) {
+          setSearchResult(searchResult);
+        }
       } catch (e) {
-        setSearchResult([]);
+        if (searchId === activeSearchRef.current) {
+          setSearchResult([]);
+        }
       }
     };
 
     search();
+
+    return () => {
+      if (rgProcRef.current) {
+        rgProcRef.current.kill();
+        rgProcRef.current = undefined;
+      }
+    };
   }, [debouncedSearchTerm]);
 
   return { searchResult, setSearchTerm, searchTerm };
 }
-
-type RgMatch = {
-  type: "match";
-  data: {
-    path: { text: string };
-    lines: { text: string };
-    line_number: number;
-    absolute_offset: number;
-    submatches: {
-      match: { text: string };
-      start: number;
-      end: number;
-    }[];
-  };
-};
-
-const isRgMatch = (obj: unknown): obj is RgMatch =>
-  typeof obj === "object" &&
-  obj !== null &&
-  "type" in obj &&
-  (obj as any).type === "match";
