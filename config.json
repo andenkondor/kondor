@@ -7,6 +7,8 @@
     "selectedBackground": "grey",
     "unselectedBackground": "none",
     "focusedBorder": "green",
-    "unfocusedBorder": "white"
+    "unfocusedBorder": "white",
+    "fileLineNumber": "green",
+    "defaultText": "white"
   }
 }

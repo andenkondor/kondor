@@ -19,11 +19,7 @@ export const ResultLine: FC<Props> = ({ item, isSelected }) => {
         isSelected={isSelected}
       />
       <ResultFileLocation item={item} isSelected={isSelected} />
-      <ResultText
-        key={`result-line-separator-${item.id}`}
-        text={": "}
-        isSelected={isSelected}
-      />
+      <ResultText text={" "} isSelected={isSelected} />
       <ResultLineContent item={item} isSelected={isSelected} />
     </Box>
   );
