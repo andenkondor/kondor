@@ -37,7 +37,6 @@ export const TextInput: FC<Props> = ({ value, focus = true, onChange }) => {
 
   let renderedValue = value;
 
-  // Fake mouse cursor, because it's too inconvenient to deal with actual cursor and ansi escapes
   if (focus) {
     renderedValue = value.length > 0 ? "" : chalk.inverse(" ");
 
@@ -68,9 +67,53 @@ export const TextInput: FC<Props> = ({ value, focus = true, onChange }) => {
       let nextCursorWidth = 0;
 
       if (key.leftArrow) {
-        nextCursorOffset--;
+        if (key.meta) {
+          // Alt+Left: move cursor to start of previous word
+          let pos = cursorOffset;
+          while (pos > 0 && value[pos - 1] === " ") {
+            pos--;
+          }
+          while (pos > 0 && value[pos - 1] !== " ") {
+            pos--;
+          }
+          nextCursorOffset = pos;
+        } else {
+          nextCursorOffset--;
+        }
       } else if (key.rightArrow) {
-        nextCursorOffset++;
+        if (key.meta) {
+          // Alt+Right: move cursor to start of next word
+          let pos = cursorOffset;
+          while (pos < value.length && value[pos] === " ") {
+            pos++;
+          }
+          while (pos < value.length && value[pos] !== " ") {
+            pos++;
+          }
+          nextCursorOffset = pos;
+        } else {
+          nextCursorOffset++;
+        }
+      } else if (key.meta && input === "b") {
+        // Alt+B: move cursor backward one word (readline-style)
+        let pos = cursorOffset;
+        while (pos > 0 && value[pos - 1] === " ") {
+          pos--;
+        }
+        while (pos > 0 && value[pos - 1] !== " ") {
+          pos--;
+        }
+        nextCursorOffset = pos;
+      } else if (key.meta && input === "f") {
+        // Alt+F: move cursor forward one word (readline-style)
+        let pos = cursorOffset;
+        while (pos < value.length && value[pos] === " ") {
+          pos++;
+        }
+        while (pos < value.length && value[pos] !== " ") {
+          pos++;
+        }
+        nextCursorOffset = pos;
       } else if (key.backspace || key.delete) {
         if (key.meta && key.backspace && cursorOffset > 0) {
           // Option+Backspace: delete from cursor to start of word
