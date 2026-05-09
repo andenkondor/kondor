@@ -9,8 +9,8 @@ import { useApplicationState } from "@contexts/ApplicationStateContext";
 
 export const ResultList: FC = () => {
   const {
-    rgState: { searchResults },
-    fzfState: { filterResults },
+    rgState: { searchResults, isLoading: isRgLoading },
+    fzfState: { filterResults, isLoading: isFzfLoading },
   } = useApplicationState();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const boxRef = useRef(null);
@@ -37,24 +37,30 @@ export const ResultList: FC = () => {
     }
   });
 
+  const isLoading = isFzfLoading || isRgLoading;
+  const fzfResultIndicator = isLoading ? "?" : filterResults.length;
+  const rgResultIndicator = isRgLoading ? "?" : searchResults.length;
+
   return (
     <TitledBox
       borderStyle={"single"}
       width={"100%"}
-      titles={[`${filterResults.length}/${searchResults.length}`]}
+      titles={[`${fzfResultIndicator}/${rgResultIndicator}`]}
     >
-      <Box ref={boxRef}>
-        <VirtualList
-          items={filterResults}
-          selectedIndex={selectedIndex}
-          showOverflowIndicators={false}
-          height={height}
-          keyExtractor={({ id }) => id.toString()}
-          renderItem={({ item, isSelected }) => (
-            <ResultLine item={item} isSelected={isSelected} />
-          )}
-        />
-      </Box>
+      {isLoading ? null : (
+        <Box ref={boxRef}>
+          <VirtualList
+            items={filterResults}
+            selectedIndex={selectedIndex}
+            showOverflowIndicators={false}
+            height={height}
+            keyExtractor={({ id }) => id.toString()}
+            renderItem={({ item, isSelected }) => (
+              <ResultLine item={item} isSelected={isSelected} />
+            )}
+          />
+        </Box>
+      )}
     </TitledBox>
   );
 };

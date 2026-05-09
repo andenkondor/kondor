@@ -11,11 +11,13 @@ type FocusState = {
 type FzfState = {
   filterTerm: string;
   filterResults: SearchResult[];
+  isLoading?: boolean;
 };
 
 type RgState = {
   searchTerm: string;
   searchResults: SearchResult[];
+  isLoading?: boolean;
 };
 
 type ApplicationState = {

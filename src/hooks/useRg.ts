@@ -31,6 +31,8 @@ export function useRg() {
       }
 
       try {
+        setRgState((prev) => ({ ...prev, isLoading: true, searchResults: [] }));
+
         const { proc: newRgProc, getResult } = Rg.execute(debouncedSearchTerm);
         rgProcRef.current = newRgProc;
 
@@ -42,9 +44,12 @@ export function useRg() {
         if (searchId === activeSearchRef.current) {
           setRgState((prev) => ({ ...prev, searchResults }));
         }
-      } catch (e) {
+      } finally {
         if (searchId === activeSearchRef.current) {
-          setRgState((prev) => ({ ...prev, searchResults: [] }));
+          setRgState((prev) => ({
+            ...prev,
+            isLoading: false,
+          }));
         }
       }
     };

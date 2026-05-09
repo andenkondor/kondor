@@ -42,6 +42,12 @@ export function useFzf() {
       }
 
       try {
+        setFzfState((prev) => ({
+          ...prev,
+          isLoading: true,
+          filterResults: [],
+        }));
+
         const { proc, getResult } = Fzf.execute(
           searchResults,
           debouncedFzfFilter,
@@ -56,11 +62,11 @@ export function useFzf() {
             filterResults,
           }));
         }
-      } catch (e) {
+      } finally {
         if (filterId === activeFilterRef.current) {
           setFzfState((prev) => ({
             ...prev,
-            filterResults: [],
+            isLoading: false,
           }));
         }
       }
