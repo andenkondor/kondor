@@ -4,31 +4,28 @@ import { useConfig } from "@contexts/ConfigContext";
 
 type Props = {
   text: string;
-  isSelected?: boolean;
   isHighlighted?: boolean;
   color?: string;
+  wrap?: "truncate-end" | "truncate-middle" | "truncate-start";
 };
 
 export const ResultText: FC<Props> = ({
   text,
-  isSelected = false,
   isHighlighted = false,
   color,
+  wrap,
 }) => {
-  const config = useConfig();
-  const { colors } = config;
+  const { colors } = useConfig();
 
   return (
     <Text
+      wrap={wrap}
       color={
         Boolean(color)
           ? color
           : Boolean(isHighlighted)
             ? colors.highlightedText
             : colors.normalText
-      }
-      backgroundColor={
-        isSelected ? colors.selectedBackground : colors.unselectedBackground
       }
     >
       {text}
