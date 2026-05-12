@@ -12,6 +12,7 @@ export const useInput = () => {
     fzfState: { filterResults },
     setLayoutState,
     setRgState,
+    setFzfState,
   } = useApplicationState();
 
   useInputInk((input, key) => {
@@ -93,6 +94,26 @@ export const useInput = () => {
           rgOptions: {
             ...prev.rgOptions,
             wordRegexp: !prev.rgOptions.wordRegexp,
+          },
+        };
+      });
+    }
+
+    // fzf filter column
+    if (key.meta && input === "3") {
+      setFzfState((prev) => {
+        const filterColumn =
+          prev.fzfOptions.filterColumn === "all"
+            ? "filePath"
+            : prev.fzfOptions.filterColumn === "filePath"
+              ? "lineContent"
+              : "all";
+
+        return {
+          ...prev,
+          fzfOptions: {
+            ...prev.fzfOptions,
+            filterColumn,
           },
         };
       });

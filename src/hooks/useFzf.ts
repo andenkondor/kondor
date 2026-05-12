@@ -8,7 +8,7 @@ export function useFzf() {
   const {
     setFzfState,
     rgState: { searchResults },
-    fzfState: { filterTerm },
+    fzfState: { filterTerm, fzfOptions },
   } = useApplicationState();
 
   const { inputDebounceDelayMs } = useConfig();
@@ -51,6 +51,7 @@ export function useFzf() {
         const { proc, getResult } = Fzf.execute(
           searchResults,
           debouncedFzfFilter,
+          fzfOptions,
         );
         fzfProcRef.current = proc;
 
@@ -73,5 +74,5 @@ export function useFzf() {
     };
 
     search();
-  }, [searchResults, debouncedFzfFilter]);
+  }, [searchResults, debouncedFzfFilter, fzfOptions]);
 }

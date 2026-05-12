@@ -1,7 +1,7 @@
 import { Box, useWindowSize } from "ink";
 import type { FC } from "react";
 import { RgControl } from "@components/rg/RgControl";
-import { Fzf } from "@components/Fzf";
+import { FzfControl } from "@components/fzf/FzfControl";
 import { ResultList } from "@components/ResultList";
 import { useInput } from "@hooks/useInput";
 import { Preview } from "@components/Preview";
@@ -16,7 +16,7 @@ export const App: FC = () => {
         <RgControl />
       </Box>
       <Box flexGrow={0} flexShrink={0} flexBasis={3}>
-        <Fzf />
+        <FzfControl />
       </Box>
       <Box flexGrow={1}>
         <Box flexDirection="row">

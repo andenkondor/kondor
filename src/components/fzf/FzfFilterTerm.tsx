@@ -4,7 +4,7 @@ import { BorderedTextInput } from "@components/BorderedTextInput";
 import { useApplicationState } from "@contexts/ApplicationStateContext";
 import { useFzf } from "@hooks/useFzf";
 
-export const Fzf: FC = () => {
+export const FzfFilterTerm: FC = () => {
   useFzf();
   const {
     fzfState: { filterTerm },

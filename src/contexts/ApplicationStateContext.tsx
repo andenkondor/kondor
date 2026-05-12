@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useConfig } from "@contexts/ConfigContext";
 import { Focus } from "@definitions/Focus";
 import type { RgOptions } from "@tools/Rg";
+import type { FzfOptions } from "@tools/Fzf";
 
 type FocusState = {
   currentFocus: Focus;
@@ -12,6 +13,7 @@ type FocusState = {
 type FzfState = {
   filterTerm: string;
   filterResults: SearchResult[];
+  fzfOptions: FzfOptions;
   isLoading?: boolean;
 };
 
@@ -54,6 +56,7 @@ export const ApplicationStateProvider: FC<{
   const [fzfState, setFzfState] = useState<FzfState>({
     filterTerm: "",
     filterResults: [],
+    fzfOptions: { filterColumn: "all" },
   });
 
   const [rgState, setRgState] = useState<RgState>({
