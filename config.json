@@ -1,14 +1,14 @@
 {
   "inputDebounceDelayMs": 300,
   "colors": {
-    "filePathText": "magenta",
-    "highlightedText": "red",
-    "normalText": "white",
-    "selectedBackground": "grey",
+    "filePathText": "rgb(158, 64, 161)",
+    "highlightedText": "rgb(255, 0, 0)",
+    "normalText": "rgb(255, 255, 255)",
+    "selectedBackground": "rgb(0, 0, 0)",
     "unselectedBackground": "none",
-    "focusedBorder": "green",
-    "unfocusedBorder": "white",
-    "fileLineNumber": "green",
-    "defaultText": "white"
+    "focusedBorder": "rgb(0, 255, 0)",
+    "unfocusedBorder": "rgb(255, 255, 255)",
+    "fileLineNumber": "rgb(0, 255, 0)",
+    "defaultText": "rgb(255, 255, 255)"
   }
 }
