@@ -62,7 +62,10 @@ export const ApplicationStateProvider: FC<{
   });
 
   useEffect(() => {
-    setSelectionState({ selectedResultIndex: 0, selectedResult: undefined });
+    setSelectionState({
+      selectedResultIndex: 0,
+      selectedResult: fzfState.filterResults[0],
+    });
   }, [fzfState.filterResults]);
 
   return (
