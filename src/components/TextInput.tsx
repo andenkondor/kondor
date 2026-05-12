@@ -58,7 +58,14 @@ export const TextInput: FC<Props> = ({ value, focus = true, onChange }) => {
 
   useInput(
     (input, key) => {
-      if (key.upArrow || key.downArrow || key.ctrl || key.tab || key.return) {
+      if (
+        key.upArrow ||
+        key.downArrow ||
+        key.ctrl ||
+        key.tab ||
+        key.return ||
+        key.meta
+      ) {
         return;
       }
 

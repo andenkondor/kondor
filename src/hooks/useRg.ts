@@ -7,8 +7,9 @@ import { useApplicationState } from "@contexts/ApplicationStateContext";
 export function useRg() {
   const {
     setRgState,
-    rgState: { searchTerm },
+    rgState: { searchTerm, rgOptions },
   } = useApplicationState();
+
   const { inputDebounceDelayMs } = useConfig();
   const rgProcRef = useRef<Bun.Subprocess | undefined>(undefined);
   const activeSearchRef = useRef(0);
@@ -33,7 +34,10 @@ export function useRg() {
       try {
         setRgState((prev) => ({ ...prev, isLoading: true, searchResults: [] }));
 
-        const { proc: newRgProc, getResult } = Rg.execute(debouncedSearchTerm);
+        const { proc: newRgProc, getResult } = Rg.execute(
+          debouncedSearchTerm,
+          rgOptions,
+        );
         rgProcRef.current = newRgProc;
 
         if (searchId !== activeSearchRef.current) {
@@ -62,5 +66,5 @@ export function useRg() {
         rgProcRef.current = undefined;
       }
     };
-  }, [debouncedSearchTerm]);
+  }, [debouncedSearchTerm, rgOptions]);
 }

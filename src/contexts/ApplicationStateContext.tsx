@@ -1,8 +1,9 @@
 import type { SearchResult } from "@definitions/SearchResult";
 import type { FC, ReactNode } from "react";
 import { createContext, useContext, useEffect, useState } from "react";
-import { useConfig } from "./ConfigContext";
+import { useConfig } from "@contexts/ConfigContext";
 import { Focus } from "@definitions/Focus";
+import type { RgOptions } from "@tools/Rg";
 
 type FocusState = {
   currentFocus: Focus;
@@ -18,6 +19,7 @@ type RgState = {
   searchTerm: string;
   searchResults: SearchResult[];
   isLoading?: boolean;
+  rgOptions: RgOptions;
 };
 
 type SelectionState = {
@@ -57,6 +59,7 @@ export const ApplicationStateProvider: FC<{
   const [rgState, setRgState] = useState<RgState>({
     searchTerm: initialSearchTerm ?? "",
     searchResults: [],
+    rgOptions: { case: "--smart-case" },
   });
 
   const [focusState, setFocusState] = useState<FocusState>({

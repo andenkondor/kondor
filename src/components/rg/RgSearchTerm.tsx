@@ -1,11 +1,9 @@
 import { type FC } from "react";
 import { Focus } from "@definitions/Focus";
-import { BorderedTextInput } from "./BorderedTextInput";
+import { BorderedTextInput } from "@components/BorderedTextInput";
 import { useApplicationState } from "@contexts/ApplicationStateContext";
-import { useRg } from "@hooks/useRg";
 
-export const Rg: FC = () => {
-  useRg();
+export const RgSearchTerm: FC = () => {
   const {
     rgState: { searchTerm },
     setRgState,

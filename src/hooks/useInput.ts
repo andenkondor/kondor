@@ -11,6 +11,7 @@ export const useInput = () => {
     selectionState: { selectedResult },
     fzfState: { filterResults },
     setLayoutState,
+    setRgState,
   } = useApplicationState();
 
   useInputInk((input, key) => {
@@ -68,6 +69,20 @@ export const useInput = () => {
         ...prev,
         isPreview: !prev.isPreview,
       }));
+    }
+    // Rg case switching
+    if (key.meta && input === "1") {
+      setRgState((prev) => {
+        const newCase =
+          prev.rgOptions.case === "--smart-case"
+            ? "--case-sensitive"
+            : "--smart-case";
+
+        return {
+          ...prev,
+          rgOptions: { ...prev.rgOptions, case: newCase },
+        };
+      });
     }
   });
 };

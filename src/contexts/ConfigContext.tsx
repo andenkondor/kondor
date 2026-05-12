@@ -11,6 +11,7 @@ export type Config = {
     selectedBackground: string;
     unselectedBackground: string;
     focusedBorder: string;
+    highlightedBorder: string;
     unfocusedBorder: string;
     fileLineNumber: string;
     defaultText: string;

@@ -1,7 +1,11 @@
 import { SearchResult } from "@definitions/SearchResult";
 
+export type RgOptions = {
+  case: "--smart-case" | "--case-sensitive";
+};
+
 export class Rg {
-  static execute(searchTerm: string) {
+  static execute(searchTerm: string, options: RgOptions) {
     const proc = Bun.spawn(
       [
         "rg",
@@ -9,7 +13,7 @@ export class Rg {
         "--fixed-strings",
         "--line-number",
         "--no-heading",
-        "--smart-case",
+        options.case,
         "--json",
         searchTerm,
       ],
