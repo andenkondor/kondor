@@ -10,6 +10,7 @@ export const useInput = () => {
     setSelectionState,
     selectionState: { selectedResult },
     fzfState: { filterResults },
+    setLayoutState,
   } = useApplicationState();
 
   useInputInk((input, key) => {
@@ -58,6 +59,14 @@ export const useInput = () => {
       setFocusState((prev) => ({
         ...prev,
         currentFocus: prev.currentFocus === Focus.FZF ? Focus.RG : Focus.FZF,
+      }));
+    }
+
+    // Preview switching
+    if (key.ctrl && input === "p") {
+      setLayoutState((prev) => ({
+        ...prev,
+        isPreview: !prev.isPreview,
       }));
     }
   });

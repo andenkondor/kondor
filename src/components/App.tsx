@@ -4,6 +4,7 @@ import { Rg } from "@components/Rg";
 import { Fzf } from "@components/Fzf";
 import { ResultList } from "@components/ResultList";
 import { useInput } from "@hooks/useInput";
+import { Preview } from "@components/Preview";
 
 export const App: FC = () => {
   useInput();
@@ -18,7 +19,14 @@ export const App: FC = () => {
         <Fzf />
       </Box>
       <Box flexGrow={1}>
-        <ResultList />
+        <Box flexDirection="row">
+          <Box>
+            <ResultList />
+          </Box>
+          <Box>
+            <Preview />
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

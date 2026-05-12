@@ -25,6 +25,10 @@ type SelectionState = {
   selectedResultIndex: number;
 };
 
+type LayoutState = {
+  isPreview: boolean;
+};
+
 type ApplicationState = {
   rgState: RgState;
   setRgState: React.Dispatch<React.SetStateAction<RgState>>;
@@ -34,6 +38,8 @@ type ApplicationState = {
   setFocusState: React.Dispatch<React.SetStateAction<FocusState>>;
   selectionState: SelectionState;
   setSelectionState: React.Dispatch<React.SetStateAction<SelectionState>>;
+  layoutState: LayoutState;
+  setLayoutState: React.Dispatch<React.SetStateAction<LayoutState>>;
 };
 
 const ApplicationStateContext = createContext<ApplicationState | null>(null);
@@ -61,6 +67,10 @@ export const ApplicationStateProvider: FC<{
     selectedResultIndex: 0,
   });
 
+  const [layoutState, setLayoutState] = useState<LayoutState>({
+    isPreview: false,
+  });
+
   useEffect(() => {
     setSelectionState({
       selectedResultIndex: 0,
@@ -79,6 +89,8 @@ export const ApplicationStateProvider: FC<{
         setFocusState,
         selectionState,
         setSelectionState,
+        layoutState,
+        setLayoutState,
       }}
     >
       {children}
