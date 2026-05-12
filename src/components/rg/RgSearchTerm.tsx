@@ -20,7 +20,7 @@ export const RgSearchTerm: FC = () => {
       input={searchTerm}
       onInputChange={onSearchTermChange}
       hasFocus={hasFocus}
-      titles={["rg"]}
+      titles={["rg", ...(!hasFocus ? ["⌃G"] : [])]}
     />
   );
 };

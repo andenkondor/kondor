@@ -22,7 +22,7 @@ export const FzfFilterTerm: FC = () => {
       input={filterTerm}
       onInputChange={onFilterTermChange}
       hasFocus={hasFocus}
-      titles={["fzf"]}
+      titles={["fzf", ...(!hasFocus ? ["⌃G"] : [])]}
     />
   );
 };
