@@ -1,8 +1,7 @@
 import { type FC } from "react";
-import { Box } from "ink";
+import { Box, Text } from "ink";
 import type { SearchResult } from "@definitions/SearchResult";
 import { useConfig } from "@contexts/ConfigContext";
-import { ResultText } from "@components/ResultText";
 import { useChalk } from "@hooks/useChalk";
 
 type Props = {
@@ -51,33 +50,31 @@ export const ResultLine: FC<Props> = ({ item, isSelected }) => {
     <Box key={`result-line-${item.id}`} backgroundColor={backgroundColor}>
       {/* > */}
       <Box flexShrink={0}>
-        <ResultText text={selectionIndicator} />
+        <Text>{selectionIndicator}</Text>
       </Box>
       {/* file/path/file.txt */}
       <Box flexShrink={0}>
-        <ResultText text={colorFilePath(item.filePath)} wrap="truncate-middle" />
+        <Text wrap="truncate-middle">{colorFilePath(item.filePath)}</Text>
       </Box>
       {/* :16  */}
       <Box flexShrink={0}>
-        <ResultText
-          text={
-            colorDefaultText(":") +
+        <Text>
+          {colorDefaultText(":") +
             colorFileLineNumber(item.lineNumber.toString()) +
-            " "
-          }
-        />
+            " "}
+        </Text>
       </Box>
       {/* Prematch */}
       <Box flexShrink={2}>
-        <ResultText text={preMatchContent} wrap="truncate-middle" />
+        <Text wrap="truncate-middle">{preMatchContent}</Text>
       </Box>
       <Box flexShrink={0}>
         {/* Match */}
-        <ResultText text={colorHighlightedText(matchContent)} />
+        <Text>{colorHighlightedText(matchContent)}</Text>
       </Box>
       <Box flexShrink={3}>
         {/* Postmatch */}
-        <ResultText text={postMatchContent.join("")} wrap="truncate-end" />
+        <Text wrap="truncate-end">{postMatchContent.join("")}</Text>
       </Box>
     </Box>
   );
