@@ -59,7 +59,7 @@ export const ApplicationStateProvider: FC<{
   const [rgState, setRgState] = useState<RgState>({
     searchTerm: initialSearchTerm ?? "",
     searchResults: [],
-    rgOptions: { case: "--smart-case" },
+    rgOptions: { case: "--smart-case", wordRegexp: false },
   });
 
   const [focusState, setFocusState] = useState<FocusState>({

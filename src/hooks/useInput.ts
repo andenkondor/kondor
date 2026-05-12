@@ -84,5 +84,18 @@ export const useInput = () => {
         };
       });
     }
+
+    // Rg word-regexp
+    if (key.meta && input === "2") {
+      setRgState((prev) => {
+        return {
+          ...prev,
+          rgOptions: {
+            ...prev.rgOptions,
+            wordRegexp: !prev.rgOptions.wordRegexp,
+          },
+        };
+      });
+    }
   });
 };

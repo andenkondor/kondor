@@ -2,6 +2,7 @@ import { SearchResult } from "@definitions/SearchResult";
 
 export type RgOptions = {
   case: "--smart-case" | "--case-sensitive";
+  wordRegexp: boolean;
 };
 
 export class Rg {
@@ -13,8 +14,9 @@ export class Rg {
         "--fixed-strings",
         "--line-number",
         "--no-heading",
-        options.case,
         "--json",
+        options.case,
+        ...(options.wordRegexp ? ["--word-regexp"] : []),
         searchTerm,
       ],
       {

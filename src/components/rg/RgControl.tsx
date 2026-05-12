@@ -3,6 +3,7 @@ import { RgSearchTerm } from "@components/rg/RgSearchTerm";
 import { useRg } from "@hooks/useRg";
 import { RgCase } from "./RgCase";
 import { Box } from "ink";
+import { RgWordRegxp } from "@components/rg/RgWordRegexp";
 
 export const RgControl: FC = () => {
   useRg();
@@ -10,6 +11,7 @@ export const RgControl: FC = () => {
     <Box>
       <RgSearchTerm />
       <RgCase />
+      <RgWordRegxp />
     </Box>
   );
 };
