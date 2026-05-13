@@ -19,7 +19,7 @@ export const App: FC = () => {
         <FzfControl />
       </Box>
       <Box flexGrow={1}>
-        <Box flexDirection="row">
+        <Box flexDirection="row" columnGap={1}>
           <Box>
             <ResultList />
           </Box>
