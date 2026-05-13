@@ -1,4 +1,4 @@
-import { type FC } from "react";
+import { useMemo, type FC } from "react";
 import { Box, Text } from "ink";
 import type { SearchResult } from "@definitions/SearchResult";
 import { useConfig } from "@contexts/ConfigContext";
@@ -20,31 +20,47 @@ export const ResultLine: FC<Props> = ({ item, isSelected }) => {
     colorDefaultText,
   } = useChalk();
 
-  const firstMatch = item.subMatches[0];
-  const preMatchContent = item.lineContent.slice(0, firstMatch?.start);
-  const matchContent = item.lineContent.slice(
-    firstMatch?.start,
-    firstMatch?.end,
-  );
-
-  const postMatchContent: string[] = [];
-  let cursor = firstMatch?.end ?? 0;
-
-  for (const match of item.subMatches.slice(1)) {
-    postMatchContent.push(item.lineContent.slice(cursor, match.start));
-    postMatchContent.push(
-      colorHighlightedText(item.lineContent.slice(match.start, match.end)),
+  const {
+    preMatchContent,
+    matchContent,
+    postMatchContent,
+    backgroundColor,
+    selectionIndicator,
+  } = useMemo(() => {
+    const firstMatch = item.subMatches[0];
+    const preMatchContent = item.lineContent.slice(0, firstMatch?.start);
+    const matchContent = item.lineContent.slice(
+      firstMatch?.start,
+      firstMatch?.end,
     );
 
-    cursor = match.end;
-  }
-  postMatchContent.push(item.lineContent.slice(cursor));
+    const postMatchContent: string[] = [];
+    let cursor = firstMatch?.end ?? 0;
 
-  const backgroundColor = isSelected
-    ? selectedBackground
-    : unselectedBackground;
+    for (const match of item.subMatches.slice(1)) {
+      postMatchContent.push(item.lineContent.slice(cursor, match.start));
+      postMatchContent.push(
+        colorHighlightedText(item.lineContent.slice(match.start, match.end)),
+      );
 
-  const selectionIndicator = isSelected ? "> " : "  ";
+      cursor = match.end;
+    }
+    postMatchContent.push(item.lineContent.slice(cursor));
+
+    const backgroundColor = isSelected
+      ? selectedBackground
+      : unselectedBackground;
+
+    const selectionIndicator = isSelected ? "> " : "  ";
+
+    return {
+      preMatchContent: sanitize(preMatchContent.trimStart()),
+      matchContent,
+      postMatchContent: sanitize(postMatchContent.join("").trimEnd()),
+      backgroundColor,
+      selectionIndicator,
+    };
+  }, [item.id, isSelected]);
 
   return (
     <Box key={`result-line-${item.id}`} backgroundColor={backgroundColor}>
@@ -74,8 +90,10 @@ export const ResultLine: FC<Props> = ({ item, isSelected }) => {
       </Box>
       <Box flexShrink={3}>
         {/* Postmatch */}
-        <Text wrap="truncate-end">{postMatchContent.join("")}</Text>
+        <Text wrap="truncate-end">{postMatchContent}</Text>
       </Box>
     </Box>
   );
 };
+
+const sanitize = (content: string) => content.replaceAll("\t", "  ");
