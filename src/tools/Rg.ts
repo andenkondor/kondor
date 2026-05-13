@@ -32,7 +32,9 @@ export class Rg {
         isRgMatch,
       ) as unknown as RgMatch[];
 
-      return rgMatches.map((match) => new SearchResult(match.data));
+      return rgMatches.map(
+        (match) => new SearchResult(match.data, { searchTerm, options }),
+      );
     };
 
     return { proc, getResult };
