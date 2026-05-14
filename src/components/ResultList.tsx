@@ -1,5 +1,5 @@
-import { useRef, type FC, type RefObject } from "react";
-import { Box, useBoxMetrics, type DOMElement } from "ink";
+import { useRef, type FC } from "react";
+import { Box, useBoxMetrics } from "ink";
 import { ResultLine } from "@components/ResultLine";
 import { VirtualList } from "ink-virtual-list";
 import { TitledBox } from "@mishieck/ink-titled-box";
@@ -12,7 +12,7 @@ export const ResultList: FC = () => {
     selectionState: { selectedResultIndex },
   } = useApplicationState();
   const boxRef = useRef(null);
-  const { height } = useBoxMetrics(boxRef as unknown as RefObject<DOMElement>);
+  const { height } = useBoxMetrics(boxRef);
 
   const isLoading = isFzfLoading || isRgLoading;
   const fzfResultIndicator = isLoading ? "?" : filterResults.length;

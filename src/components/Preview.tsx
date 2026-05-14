@@ -1,11 +1,11 @@
-import { memo, useRef, type FC, type RefObject } from "react";
-import { Box, Text, useBoxMetrics, type DOMElement } from "ink";
+import { memo, useRef, type FC } from "react";
+import { Box, Text, useBoxMetrics } from "ink";
 import { usePreview } from "@hooks/usePreview";
 import { useApplicationState } from "@contexts/ApplicationStateContext";
 
 export const Preview: FC = () => {
   const boxRef = useRef(null);
-  const { height } = useBoxMetrics(boxRef as unknown as RefObject<DOMElement>);
+  const { height } = useBoxMetrics(boxRef);
   const previewContent = usePreview(height - 2);
 
   const {
