@@ -64,7 +64,7 @@ export const TextInput: FC<Props> = ({ value, focus = true, onChange }) => {
         key.ctrl ||
         key.tab ||
         key.return ||
-        key.meta
+        (key.meta && input !== "" && !isNaN(+input))
       ) {
         return;
       }
