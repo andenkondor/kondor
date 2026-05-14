@@ -5,6 +5,7 @@ import { useConfig } from "@contexts/ConfigContext";
 import { Focus } from "@definitions/Focus";
 import type { RgOptions } from "@tools/Rg";
 import type { FzfOptions } from "@tools/Fzf";
+import { useDeepDebounce } from "@hooks/useDebounce";
 
 type FocusState = {
   currentFocus: Focus;
@@ -27,6 +28,7 @@ type RgState = {
 type SelectionState = {
   selectedResult?: SearchResult;
   selectedResultIndex: number;
+  debouncedSelectedResult?: SearchResult;
 };
 
 type LayoutState = {
@@ -51,7 +53,7 @@ const ApplicationStateContext = createContext<ApplicationState | null>(null);
 export const ApplicationStateProvider: FC<{
   children: ReactNode;
 }> = ({ children }) => {
-  const { initialSearchTerm } = useConfig();
+  const { initialSearchTerm, inputDebounceDelayMs } = useConfig();
 
   const [fzfState, setFzfState] = useState<FzfState>({
     filterTerm: "",
@@ -73,6 +75,18 @@ export const ApplicationStateProvider: FC<{
     selectedResultIndex: 0,
   });
 
+  const debouncedSelectedResult = useDeepDebounce(
+    selectionState.selectedResult,
+    inputDebounceDelayMs,
+  );
+
+  useEffect(() => {
+    setSelectionState((prev) => ({
+      ...prev,
+      debouncedSelectedResult,
+    }));
+  }, [debouncedSelectedResult]);
+
   const [layoutState, setLayoutState] = useState<LayoutState>({
     isPreview: false,
   });
@@ -81,6 +95,7 @@ export const ApplicationStateProvider: FC<{
     setSelectionState({
       selectedResultIndex: 0,
       selectedResult: fzfState.filterResults[0],
+      debouncedSelectedResult: fzfState.filterResults[0],
     });
   }, [fzfState.filterResults]);
 
