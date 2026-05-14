@@ -1,3 +1,4 @@
+import type { BorderStyle } from "@mishieck/ink-titled-box";
 import type { FC, ReactNode } from "react";
 import { createContext, useContext } from "react";
 
@@ -16,6 +17,7 @@ export type Config = {
     fileLineNumber: string;
     defaultText: string;
   };
+  layout: { borderType: BorderStyle };
 };
 
 export type CliConfig = Pick<Config, "initialSearchTerm">;

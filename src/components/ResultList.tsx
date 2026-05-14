@@ -4,8 +4,12 @@ import { ResultLine } from "@components/ResultLine";
 import { VirtualList } from "ink-virtual-list";
 import { TitledBox } from "@mishieck/ink-titled-box";
 import { useApplicationState } from "@contexts/ApplicationStateContext";
+import { useConfig } from "@contexts/ConfigContext";
 
 export const ResultList: FC = () => {
+  const {
+    layout: { borderType },
+  } = useConfig();
   const {
     rgState: { searchResults, isLoading: isRgLoading },
     fzfState: { filterResults, isLoading: isFzfLoading },
@@ -25,7 +29,11 @@ export const ResultList: FC = () => {
   const statusIndicator = `${selectedIndicator}${fzfResultIndicator}/${rgResultIndicator}`;
 
   return (
-    <TitledBox borderStyle={"single"} width={"100%"} titles={[statusIndicator]}>
+    <TitledBox
+      borderStyle={borderType}
+      width={"100%"}
+      titles={[statusIndicator]}
+    >
       {isLoading ? null : (
         <Box ref={boxRef}>
           <VirtualList

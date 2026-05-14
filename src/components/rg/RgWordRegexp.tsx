@@ -7,6 +7,7 @@ import { useConfig } from "@contexts/ConfigContext";
 export const RgWordRegxp: FC = () => {
   const {
     colors: { highlightedBorder },
+    layout: { borderType },
   } = useConfig();
   const {
     rgState: { rgOptions },
@@ -19,7 +20,7 @@ export const RgWordRegxp: FC = () => {
   return (
     <TitledBox
       titles={["⌥2"]}
-      borderStyle={"single"}
+      borderStyle={borderType}
       borderColor={isInit ? undefined : highlightedBorder}
     >
       <Text>{display}</Text>

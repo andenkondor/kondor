@@ -11,5 +11,6 @@
     "unfocusedBorder": "rgb(255, 255, 255)",
     "fileLineNumber": "rgb(0, 255, 0)",
     "defaultText": "rgb(255, 255, 255)"
-  }
+  },
+  "layout": { "borderType": "round" }
 }

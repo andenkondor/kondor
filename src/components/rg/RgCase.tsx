@@ -7,6 +7,7 @@ import { useConfig } from "@contexts/ConfigContext";
 export const RgCase: FC = () => {
   const {
     colors: { highlightedBorder },
+    layout: { borderType },
   } = useConfig();
   const {
     rgState: { rgOptions },
@@ -17,7 +18,7 @@ export const RgCase: FC = () => {
   return (
     <TitledBox
       titles={["⌥1"]}
-      borderStyle={"single"}
+      borderStyle={borderType}
       borderColor={isInit ? undefined : highlightedBorder}
     >
       <Text>{rgOptions.case}</Text>

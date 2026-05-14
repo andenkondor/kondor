@@ -2,8 +2,12 @@ import { memo, useRef, type FC } from "react";
 import { Box, Text, useBoxMetrics } from "ink";
 import { usePreview } from "@hooks/usePreview";
 import { useApplicationState } from "@contexts/ApplicationStateContext";
+import { useConfig } from "@contexts/ConfigContext";
 
 export const Preview: FC = () => {
+  const {
+    layout: { borderType },
+  } = useConfig();
   const boxRef = useRef(null);
   const { height } = useBoxMetrics(boxRef);
   const previewContent = usePreview(height - 2);
@@ -16,7 +20,7 @@ export const Preview: FC = () => {
     return null;
   }
   return (
-    <Box borderStyle="single" width="100%" ref={boxRef} overflow="hidden">
+    <Box borderStyle={borderType} width="100%" ref={boxRef} overflow="hidden">
       <CachedPreviewContent content={previewContent} />
     </Box>
   );

@@ -7,6 +7,7 @@ import { useConfig } from "@contexts/ConfigContext";
 export const FzfFilterColumn: FC = () => {
   const {
     colors: { highlightedBorder },
+    layout: { borderType },
   } = useConfig();
   const {
     fzfState: { fzfOptions },
@@ -24,7 +25,7 @@ export const FzfFilterColumn: FC = () => {
   return (
     <TitledBox
       titles={["⌥3"]}
-      borderStyle={"single"}
+      borderStyle={borderType}
       borderColor={isInit ? undefined : highlightedBorder}
     >
       <Text>{display}</Text>

@@ -16,11 +16,14 @@ export const BorderedTextInput: FC<Props> = ({
   hasFocus,
   titles,
 }) => {
-  const config = useConfig();
-  const { colors } = config;
+  const {
+    colors,
+    layout: { borderType },
+  } = useConfig();
+
   return (
     <TitledBox
-      borderStyle="single"
+      borderStyle={borderType}
       titles={titles}
       width={100}
       borderColor={hasFocus ? colors.focusedBorder : colors.unfocusedBorder}
