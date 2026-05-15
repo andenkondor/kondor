@@ -99,8 +99,21 @@ export const useInput = () => {
       });
     }
 
-    // fzf filter column
+    // Rg max results per file
     if (key.meta && input === "3") {
+      setRgState((prev) => {
+        return {
+          ...prev,
+          rgOptions: {
+            ...prev.rgOptions,
+            resultsPerFile: prev.rgOptions.resultsPerFile ? undefined : 1,
+          },
+        };
+      });
+    }
+
+    // fzf filter column
+    if (key.meta && input === "4") {
       setFzfState((prev) => {
         const filterColumn =
           prev.fzfOptions.filterColumn === "all"

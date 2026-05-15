@@ -4,31 +4,30 @@ import { useApplicationState } from "@contexts/ApplicationStateContext";
 import { TitledBox } from "@mishieck/ink-titled-box";
 import { useConfig } from "@contexts/ConfigContext";
 
-export const FzfFilterColumn: FC = () => {
+export const RgResultsPerFile: FC = () => {
   const {
     colors: { highlightedBorder },
     layout: { borderType },
   } = useConfig();
   const {
-    fzfState: { fzfOptions },
+    rgState: { rgOptions },
   } = useApplicationState();
-  const initialRef = useRef(fzfOptions.filterColumn);
+  const initialRef = useRef(rgOptions.resultsPerFile);
 
-  const isInit = initialRef.current === fzfOptions.filterColumn;
+  const infinity = "\u221E";
+  const isInit = initialRef.current === rgOptions.resultsPerFile;
 
-  const display =
-    fzfOptions.filterColumn === "all"
-      ? "filter all columns"
-      : fzfOptions.filterColumn === "filePath"
-        ? "filter file path"
-        : "filter line content";
+  const resultsPerFile =
+    rgOptions.resultsPerFile != null
+      ? String(rgOptions.resultsPerFile)
+      : infinity;
   return (
     <TitledBox
-      titles={["⌥4"]}
+      titles={["⌥3"]}
       borderStyle={borderType}
       borderColor={isInit ? undefined : highlightedBorder}
     >
-      <Text>{display}</Text>
+      <Text>{`results/file: ${resultsPerFile}`}</Text>
     </TitledBox>
   );
 };

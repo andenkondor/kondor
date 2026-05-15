@@ -3,6 +3,7 @@ import { SearchResult } from "@definitions/SearchResult";
 export type RgOptions = {
   case: "--smart-case" | "--case-sensitive";
   wordRegexp: boolean;
+  resultsPerFile?: number;
 };
 
 export class Rg {
@@ -17,6 +18,9 @@ export class Rg {
         "--json",
         options.case,
         ...(options.wordRegexp ? ["--word-regexp"] : []),
+        ...(options.resultsPerFile != null
+          ? ["--max-count", String(options.resultsPerFile)]
+          : []),
         searchTerm,
       ],
       {

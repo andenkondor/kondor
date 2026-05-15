@@ -4,6 +4,7 @@ import { useRg } from "@hooks/useRg";
 import { RgCase } from "./RgCase";
 import { Box } from "ink";
 import { RgWordRegxp } from "@components/rg/RgWordRegexp";
+import { RgResultsPerFile } from "@components/rg/RgResultsPerFile";
 
 export const RgControl: FC = () => {
   useRg();
@@ -12,6 +13,7 @@ export const RgControl: FC = () => {
       <RgSearchTerm />
       <RgCase />
       <RgWordRegxp />
+      <RgResultsPerFile />
     </Box>
   );
 };
