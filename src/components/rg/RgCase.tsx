@@ -15,13 +15,15 @@ export const RgCase: FC = () => {
   const initialRef = useRef(rgOptions.case);
 
   const isInit = initialRef.current === rgOptions.case;
+  const display =
+    rgOptions.case === "--smart-case" ? "smart case" : "case sensitive";
   return (
     <TitledBox
       titles={["⌥1"]}
       borderStyle={borderType}
       borderColor={isInit ? undefined : highlightedBorder}
     >
-      <Text>{rgOptions.case}</Text>
+      <Text>{display}</Text>
     </TitledBox>
   );
 };
