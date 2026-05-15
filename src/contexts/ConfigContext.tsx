@@ -16,6 +16,7 @@ export type Config = {
     unfocusedBorder: string;
     fileLineNumber: string;
     defaultText: string;
+    truncationText: string;
   };
   layout: { borderType: BorderStyle };
 };

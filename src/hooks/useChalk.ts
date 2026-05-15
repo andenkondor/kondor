@@ -14,6 +14,7 @@ export const useChalk = () => {
       unfocusedBorder,
       fileLineNumber,
       defaultText,
+      truncationText,
     },
   } = useConfig();
 
@@ -80,6 +81,13 @@ export const useChalk = () => {
     [defaultText],
   );
 
+  const colorTruncationText = useCallback(
+    (content: string) => {
+      return Chalk.print(content,truncationText);
+    },
+    [truncationText],
+  );
+
   return {
     colorFilePath,
     colorHighlightedText,
@@ -90,5 +98,6 @@ export const useChalk = () => {
     colorUnfocusedBorder,
     colorFileLineNumber,
     colorDefaultText,
+    colorTruncationText,
   };
 };

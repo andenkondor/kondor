@@ -16,7 +16,7 @@ export const ResultList: FC = () => {
     selectionState: { selectedResultIndex },
   } = useApplicationState();
   const boxRef = useRef(null);
-  const { height } = useBoxMetrics(boxRef);
+  const { height, width } = useBoxMetrics(boxRef);
 
   const isLoading = isFzfLoading || isRgLoading;
   const fzfResultIndicator = isLoading ? "?" : filterResults.length;
@@ -35,7 +35,7 @@ export const ResultList: FC = () => {
       titles={[statusIndicator]}
     >
       {isLoading ? null : (
-        <Box ref={boxRef}>
+        <Box ref={boxRef} width={"100%"}>
           <VirtualList
             items={filterResults}
             selectedIndex={selectedResultIndex}
@@ -43,7 +43,11 @@ export const ResultList: FC = () => {
             height={height}
             keyExtractor={({ id }) => id.toString()}
             renderItem={({ item, isSelected }) => (
-              <ResultLine item={item} isSelected={isSelected} />
+              <ResultLine
+                item={item}
+                isSelected={isSelected}
+                maxWidth={width}
+              />
             )}
           />
         </Box>
