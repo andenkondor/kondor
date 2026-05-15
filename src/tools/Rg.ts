@@ -21,6 +21,7 @@ export class Rg {
         ...(options.resultsPerFile != null
           ? ["--max-count", String(options.resultsPerFile)]
           : []),
+        "--",
         searchTerm,
       ],
       {
