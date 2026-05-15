@@ -1,7 +1,11 @@
 #!/usr/bin/env bun
 
 import { App } from "@components/App";
-import { ConfigProvider, type CliConfig } from "@contexts/ConfigContext";
+import {
+  ConfigProvider,
+  type CliConfig,
+  type Config,
+} from "@contexts/ConfigContext";
 import { render } from "ink";
 import { merge } from "lodash";
 import defaultConfig from "./config.json";
@@ -20,7 +24,7 @@ const cliConfig: CliConfig = {
 const config = merge({}, defaultConfig, cliConfig);
 
 const { unmount } = render(
-  <ConfigProvider value={config}>
+  <ConfigProvider value={config as Config}>
     <ApplicationStateProvider>
       <App />
     </ApplicationStateProvider>
