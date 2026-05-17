@@ -29,11 +29,7 @@ export const ResultList: FC = () => {
   const statusIndicator = `${selectedIndicator}${fzfResultIndicator}/${rgResultIndicator}`;
 
   return (
-    <TitledBox
-      borderStyle={borderType}
-      width={"100%"}
-      titles={[statusIndicator]}
-    >
+    <TitledBox borderStyle={borderType} titles={[statusIndicator]}>
       {isLoading ? null : (
         <Box ref={boxRef} width={"100%"}>
           <VirtualList
