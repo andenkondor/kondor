@@ -7,7 +7,7 @@ import { useApplicationState } from "@contexts/ApplicationStateContext";
 export function useRg() {
   const {
     setRgState,
-    rgState: { searchTerm, rgOptions },
+    rgState: { searchTerm, rgOptions, searchNonce },
   } = useApplicationState();
 
   const { inputDebounceDelayMs } = useConfig();
@@ -66,5 +66,5 @@ export function useRg() {
         rgProcRef.current = undefined;
       }
     };
-  }, [debouncedSearchTerm, rgOptions]);
+  }, [debouncedSearchTerm, rgOptions, searchNonce]);
 }

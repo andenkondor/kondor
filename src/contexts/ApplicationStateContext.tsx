@@ -23,6 +23,7 @@ type RgState = {
   searchResults: SearchResult[];
   isLoading?: boolean;
   rgOptions: RgOptions;
+  searchNonce: number;
 };
 
 type ResultState = {
@@ -71,6 +72,7 @@ export const ApplicationStateProvider: FC<{
     searchTerm: initialSearchTerm ?? "",
     searchResults: [],
     rgOptions: { case: "--smart-case", wordRegexp: false },
+    searchNonce: 0,
   });
 
   const [focusState, setFocusState] = useState<FocusState>({

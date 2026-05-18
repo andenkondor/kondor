@@ -83,6 +83,11 @@ export const useInput = () => {
       }));
     }
 
+    // Refresh rg search
+    if (key.ctrl && input === "r") {
+      setRgState((prev) => ({ ...prev, searchNonce: prev.searchNonce + 1 }));
+    }
+
     // Rg case switching
     if (key.meta && input === "1") {
       setRgState((prev) => {
