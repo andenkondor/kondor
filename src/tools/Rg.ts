@@ -1,4 +1,6 @@
 import { SearchResult } from "@definitions/SearchResult";
+import { createInterface } from "node:readline";
+import { Readable } from "node:stream";
 
 export type RgOptions = {
   case: "--smart-case" | "--case-sensitive";
@@ -31,11 +33,29 @@ export class Rg {
     );
 
     const getResult = async () => {
-      const rgOutput = await new Response(proc.stdout).text();
+      if (!proc.stdout) {
+        throw new Error("rg stdout stream is not available");
+      }
 
-      const rgMatches = Bun.JSONL.parse(rgOutput).filter(
-        isRgMatch,
-      ) as unknown as RgMatch[];
+      const lineReader = createInterface({
+        input: Readable.fromWeb(proc.stdout as ReadableStream<Uint8Array>),
+        crlfDelay: Infinity,
+      });
+      const rgMatches: RgMatch[] = [];
+      try {
+        for await (const line of lineReader) {
+          if (!line) {
+            continue;
+          }
+
+          const parsed = JSON.parse(line) as unknown;
+          if (isRgMatch(parsed)) {
+            rgMatches.push(parsed);
+          }
+        }
+      } finally {
+        lineReader.close();
+      }
 
       return rgMatches.map(
         (match) => new SearchResult(match.data, { searchTerm, options }),
@@ -65,4 +85,7 @@ const isRgMatch = (obj: unknown): obj is RgMatch =>
   typeof obj === "object" &&
   obj !== null &&
   "type" in obj &&
-  (obj as any).type === "match";
+  obj.type === "match" &&
+  "data" in obj &&
+  typeof obj.data === "object" &&
+  obj.data !== null;

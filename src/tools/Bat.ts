@@ -1,5 +1,3 @@
-import { spawnSync } from "bun";
-
 type BatOptions = {
   highlightedLine: number;
   fromLine: number;
@@ -7,17 +5,29 @@ type BatOptions = {
 };
 
 export class Bat {
-  static show(
+  static async show(
     filePath: string,
     { highlightedLine, fromLine, toLine }: BatOptions,
-  ) {
-    return spawnSync([
-      "bat",
-      "--squeeze-blank",
-      ...["--highlight-line", highlightedLine.toString()],
-      ...["--color", "always"],
-      ...["--line-range", `${fromLine}:${toLine}`],
-      filePath,
-    ]).stdout.toString();
+  ): Promise<string> {
+    const proc = Bun.spawn(
+      [
+        "bat",
+        "--squeeze-blank",
+        ...["--highlight-line", highlightedLine.toString()],
+        ...["--color", "always"],
+        ...["--line-range", `${fromLine}:${toLine}`],
+        filePath,
+      ],
+      {
+        stdout: "pipe",
+        stderr: "inherit",
+      },
+    );
+
+    if (!proc.stdout) {
+      throw new Error("bat stdout stream is not available");
+    }
+
+    return new Response(proc.stdout).text();
   }
 }

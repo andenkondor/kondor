@@ -1,4 +1,6 @@
 import type { SearchResult } from "@definitions/SearchResult";
+import { createInterface } from "node:readline";
+import { Readable } from "node:stream";
 
 export type FzfOptions = {
   filterColumn: "all" | "filePath" | "lineContent";
@@ -37,9 +39,25 @@ export class Fzf {
     );
 
     const getResult = async () => {
-      const fzfOutput = (await new Response(proc.stdout).text()).split("\n");
+      if (!proc.stdout) {
+        throw new Error("fzf stdout stream is not available");
+      }
 
-      const filtered = new Set(fzfOutput);
+      const lineReader = createInterface({
+        input: Readable.fromWeb(proc.stdout as ReadableStream<Uint8Array>),
+        crlfDelay: Infinity,
+      });
+      const filtered = new Set<string>();
+      try {
+        for await (const line of lineReader) {
+          if (line) {
+            filtered.add(line);
+          }
+        }
+      } finally {
+        lineReader.close();
+      }
+
       return input.filter((rg) => filtered.has(rg.id.toString()));
     };
 
