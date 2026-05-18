@@ -9,20 +9,19 @@ export const useInput = () => {
     setFocusState,
     setSelectionState,
     selectionState: { selectedResult },
-    fzfState: { filterResults },
     setLayoutState,
     setRgState,
     setFzfState,
+    resultState: { overallResults },
   } = useApplicationState();
 
   useInputInk((input, key) => {
     // Result list navigation
     if (key.upArrow) {
       setSelectionState((prev) => {
-        const newIndex = Math.max((prev.selectedResultIndex ?? 0) - 1, 0);
+        const newIndex = Math.max(prev.selectedResultIndex - 1, 0);
         return {
           ...prev,
-          selectedResult: filterResults[newIndex],
           selectedResultIndex: newIndex,
         };
       });
@@ -31,12 +30,11 @@ export const useInput = () => {
     if (key.downArrow) {
       setSelectionState((prev) => {
         const newIndex = Math.min(
-          (prev.selectedResultIndex ?? 0) + 1,
-          filterResults.length - 1,
+          prev.selectedResultIndex + 1,
+          Math.max(0, overallResults.length - 1),
         );
         return {
           ...prev,
-          selectedResult: filterResults[newIndex],
           selectedResultIndex: newIndex,
         };
       });
@@ -71,6 +69,20 @@ export const useInput = () => {
         isPreview: !prev.isPreview,
       }));
     }
+
+    // Delete item
+    if (key.ctrl && input === "x") {
+      if (!selectedResult) {
+        return;
+      }
+      setSelectionState((prev) => ({
+        ...prev,
+        ignoredResultIds: new Set(prev.ignoredResultIds).add(
+          selectedResult.id.toString(),
+        ),
+      }));
+    }
+
     // Rg case switching
     if (key.meta && input === "1") {
       setRgState((prev) => {

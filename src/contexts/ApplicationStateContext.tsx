@@ -1,6 +1,6 @@
 import type { SearchResult } from "@definitions/SearchResult";
 import type { FC, ReactNode } from "react";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useConfig } from "@contexts/ConfigContext";
 import { Focus } from "@definitions/Focus";
 import type { RgOptions } from "@tools/Rg";
@@ -25,10 +25,15 @@ type RgState = {
   rgOptions: RgOptions;
 };
 
+type ResultState = {
+  overallResults: SearchResult[];
+};
+
 type SelectionState = {
   selectedResult?: SearchResult;
   selectedResultIndex: number;
   debouncedSelectedResult?: SearchResult;
+  ignoredResultIds: Set<string>;
 };
 
 type LayoutState = {
@@ -40,6 +45,7 @@ type ApplicationState = {
   setRgState: React.Dispatch<React.SetStateAction<RgState>>;
   fzfState: FzfState;
   setFzfState: React.Dispatch<React.SetStateAction<FzfState>>;
+  resultState: ResultState;
   focusState: FocusState;
   setFocusState: React.Dispatch<React.SetStateAction<FocusState>>;
   selectionState: SelectionState;
@@ -73,31 +79,59 @@ export const ApplicationStateProvider: FC<{
 
   const [selectionState, setSelectionState] = useState<SelectionState>({
     selectedResultIndex: 0,
+    ignoredResultIds: new Set(),
   });
-
-  const debouncedSelectedResult = useDeepDebounce(
-    selectionState.selectedResult,
-    inputDebounceDelayMs,
-  );
-
-  useEffect(() => {
-    setSelectionState((prev) => ({
-      ...prev,
-      debouncedSelectedResult,
-    }));
-  }, [debouncedSelectedResult]);
 
   const [layoutState, setLayoutState] = useState<LayoutState>({
     isPreview: false,
   });
 
+  const overallResults = useMemo(
+    () =>
+      fzfState.filterResults.filter(
+        ({ id }) => !selectionState.ignoredResultIds.has(id.toString()),
+      ),
+    [fzfState.filterResults, selectionState.ignoredResultIds],
+  );
+
+  const selectedResult = useMemo(
+    () => overallResults[selectionState.selectedResultIndex],
+    [overallResults, selectionState.selectedResultIndex],
+  );
+
+  const debouncedSelectedResult = useDeepDebounce(
+    selectedResult,
+    inputDebounceDelayMs,
+  );
+
+  const resultState: ResultState = useMemo(
+    () => ({ overallResults }),
+    [overallResults],
+  );
+
   useEffect(() => {
-    setSelectionState({
+    setSelectionState((prev) => ({
+      ...prev,
+      selectedResultIndex: Math.min(
+        prev.selectedResultIndex,
+        Math.max(0, overallResults.length - 1),
+      ),
+    }));
+  }, [overallResults.length]);
+
+  useEffect(() => {
+    setSelectionState((prev) => ({
+      ...prev,
       selectedResultIndex: 0,
-      selectedResult: fzfState.filterResults[0],
-      debouncedSelectedResult: fzfState.filterResults[0],
-    });
+    }));
   }, [fzfState.filterResults]);
+
+  useEffect(() => {
+    setSelectionState((prev) => ({
+      ...prev,
+      ignoredResultIds: new Set<string>(),
+    }));
+  }, [rgState.searchResults]);
 
   return (
     <ApplicationStateContext.Provider
@@ -106,9 +140,14 @@ export const ApplicationStateProvider: FC<{
         setRgState,
         fzfState,
         setFzfState,
+        resultState,
         focusState,
         setFocusState,
-        selectionState,
+        selectionState: {
+          ...selectionState,
+          selectedResult,
+          debouncedSelectedResult,
+        },
         setSelectionState,
         layoutState,
         setLayoutState,

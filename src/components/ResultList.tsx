@@ -12,17 +12,18 @@ export const ResultList: FC = () => {
   } = useConfig();
   const {
     rgState: { searchResults, isLoading: isRgLoading },
-    fzfState: { filterResults, isLoading: isFzfLoading },
+    fzfState: { isLoading: isFzfLoading },
+    resultState: { overallResults },
     selectionState: { selectedResultIndex },
   } = useApplicationState();
   const boxRef = useRef(null);
   const { height, width } = useBoxMetrics(boxRef);
 
   const isLoading = isFzfLoading || isRgLoading;
-  const fzfResultIndicator = isLoading ? "?" : filterResults.length;
+  const fzfResultIndicator = isLoading ? "?" : overallResults.length;
   const rgResultIndicator = isRgLoading ? "?" : searchResults.length;
 
-  const selectedIndicator = filterResults.length
+  const selectedIndicator = overallResults.length
     ? `#${selectedResultIndex + 1} -- `
     : "";
 
@@ -33,7 +34,7 @@ export const ResultList: FC = () => {
       {isLoading ? null : (
         <Box ref={boxRef} width={"100%"}>
           <VirtualList
-            items={filterResults}
+            items={overallResults}
             selectedIndex={selectedResultIndex}
             showOverflowIndicators={false}
             height={height}
