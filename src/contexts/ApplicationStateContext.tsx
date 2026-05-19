@@ -1,6 +1,13 @@
 import type { SearchResult } from "@definitions/SearchResult";
 import type { FC, ReactNode } from "react";
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useConfig } from "@contexts/ConfigContext";
 import { Focus } from "@definitions/Focus";
 import type { RgOptions } from "@tools/Rg";
@@ -88,6 +95,8 @@ export const ApplicationStateProvider: FC<{
     isPreview: false,
   });
 
+  const prevSearchTermAtLastResultsRef = useRef(rgState.searchTerm);
+
   const overallResults = useMemo(
     () =>
       fzfState.filterResults.filter(
@@ -129,6 +138,12 @@ export const ApplicationStateProvider: FC<{
   }, [fzfState.filterResults]);
 
   useEffect(() => {
+    if (rgState.searchTerm === prevSearchTermAtLastResultsRef.current) {
+      return;
+    }
+
+    prevSearchTermAtLastResultsRef.current = rgState.searchTerm;
+
     setSelectionState((prev) => ({
       ...prev,
       ignoredResultIds: new Set<string>(),
