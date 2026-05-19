@@ -17,9 +17,10 @@ export const useInput = () => {
 
   useInputInk((input, key) => {
     // Result list navigation
-    if (key.upArrow) {
+    if (key.upArrow || key.pageUp || key.home) {
       setSelectionState((prev) => {
-        const newIndex = Math.max(prev.selectedResultIndex - 1, 0);
+        const step = key.home ? prev.selectedResultIndex : key.pageUp ? 5 : 1;
+        const newIndex = Math.max(prev.selectedResultIndex - step, 0);
         return {
           ...prev,
           selectedResultIndex: newIndex,
@@ -27,10 +28,11 @@ export const useInput = () => {
       });
     }
 
-    if (key.downArrow) {
+    if (key.downArrow || key.pageDown || key.end) {
       setSelectionState((prev) => {
+        const step = key.end ? overallResults.length : key.pageDown ? 5 : 1;
         const newIndex = Math.min(
-          prev.selectedResultIndex + 1,
+          prev.selectedResultIndex + step,
           Math.max(0, overallResults.length - 1),
         );
         return {
