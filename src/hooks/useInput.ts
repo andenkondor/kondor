@@ -142,8 +142,21 @@ export const useInput = () => {
       });
     }
 
-    // fzf filter column
+    // Rg sort
     if (key.meta && key.name === "4") {
+      setRgState((prev) => {
+        return {
+          ...prev,
+          rgOptions: {
+            ...prev.rgOptions,
+            sort: prev.rgOptions.sort === "path" ? "none" : "path",
+          },
+        };
+      });
+    }
+
+    // fzf filter column
+    if (key.meta && key.name === "5") {
       setFzfState((prev) => {
         const filterColumn =
           prev.fzfOptions.filterColumn === "all"
