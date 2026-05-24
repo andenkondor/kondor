@@ -1,12 +1,9 @@
-import { useRef, type FC } from "react";
-import { Box, useBoxMetrics } from "ink";
-import { ResultLine } from "@components/ResultLine";
-import { VirtualList } from "ink-virtual-list";
-import { TitledBox } from "@mishieck/ink-titled-box";
+import { type ReactNode } from "react";
 import { useApplicationState } from "@contexts/ApplicationStateContext";
 import { useConfig } from "@contexts/ConfigContext";
+import { ResultListContent } from "./ResultListContent";
 
-export const ResultList: FC = () => {
+export const ResultList = (): ReactNode => {
   const {
     layout: { borderType },
   } = useConfig();
@@ -16,8 +13,6 @@ export const ResultList: FC = () => {
     resultState: { overallResults },
     selectionState: { selectedResultIndex },
   } = useApplicationState();
-  const boxRef = useRef(null);
-  const { height, width } = useBoxMetrics(boxRef);
 
   const isLoading = isFzfLoading || isRgLoading;
   const fzfResultIndicator = isLoading ? "?" : overallResults.length;
@@ -30,25 +25,8 @@ export const ResultList: FC = () => {
   const statusIndicator = `${selectedIndicator}${fzfResultIndicator}/${rgResultIndicator}`;
 
   return (
-    <TitledBox borderStyle={borderType} titles={[statusIndicator]}>
-      {isLoading ? null : (
-        <Box ref={boxRef} width={"100%"}>
-          <VirtualList
-            items={overallResults}
-            selectedIndex={selectedResultIndex}
-            showOverflowIndicators={false}
-            height={height}
-            keyExtractor={({ id }) => id.toString()}
-            renderItem={({ item, isSelected }) => (
-              <ResultLine
-                item={item}
-                isSelected={isSelected}
-                maxWidth={width}
-              />
-            )}
-          />
-        </Box>
-      )}
-    </TitledBox>
+    <box borderStyle={borderType} title={statusIndicator} width="100%">
+      <ResultListContent />
+    </box>
   );
 };

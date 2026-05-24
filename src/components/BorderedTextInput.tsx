@@ -1,7 +1,5 @@
-import { TitledBox } from "@mishieck/ink-titled-box";
-import { type FC } from "react";
+import type { ReactNode } from "react";
 import { useConfig } from "@contexts/ConfigContext";
-import { TextInput } from "@components/TextInput";
 
 type Props = {
   input: string;
@@ -10,25 +8,25 @@ type Props = {
   titles: string[];
 };
 
-export const BorderedTextInput: FC<Props> = ({
+export const BorderedTextInput = ({
   input,
   onInputChange,
   hasFocus,
   titles,
-}) => {
+}: Props): ReactNode => {
   const {
     colors,
     layout: { borderType },
   } = useConfig();
 
   return (
-    <TitledBox
+    <box
       borderStyle={borderType}
-      titles={titles}
+      title={titles.join(" ")}
       width={100}
       borderColor={hasFocus ? colors.focusedBorder : colors.unfocusedBorder}
     >
-      <TextInput value={input} onChange={onInputChange} focus={hasFocus} />
-    </TitledBox>
+      <input value={input} onInput={onInputChange} focused={hasFocus} />
+    </box>
   );
 };

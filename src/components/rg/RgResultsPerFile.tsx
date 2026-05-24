@@ -1,10 +1,8 @@
-import { useRef, type FC } from "react";
-import { Text } from "ink";
+import { useRef, type ReactNode } from "react";
 import { useApplicationState } from "@contexts/ApplicationStateContext";
-import { TitledBox } from "@mishieck/ink-titled-box";
 import { useConfig } from "@contexts/ConfigContext";
 
-export const RgResultsPerFile: FC = () => {
+export const RgResultsPerFile = (): ReactNode => {
   const {
     colors: { highlightedBorder },
     layout: { borderType },
@@ -22,12 +20,12 @@ export const RgResultsPerFile: FC = () => {
       ? String(rgOptions.resultsPerFile)
       : infinity;
   return (
-    <TitledBox
-      titles={["⌥3"]}
+    <box
+      title={"⌥3"}
       borderStyle={borderType}
       borderColor={isInit ? undefined : highlightedBorder}
     >
-      <Text>{`results/file: ${resultsPerFile}`}</Text>
-    </TitledBox>
+      <text>{`results/file: ${resultsPerFile}`}</text>
+    </box>
   );
 };

@@ -1,10 +1,11 @@
-import { useInput as useInputInk } from "ink";
+import { useKeyboard, useRenderer } from "@opentui/react";
 import { useApplicationState } from "@contexts/ApplicationStateContext";
 import { Focus } from "@definitions/Focus";
 import { Nvim } from "@tools/Nvim";
 import { Idea } from "@tools/Idea";
 
 export const useInput = () => {
+  const renderer = useRenderer();
   const {
     setFocusState,
     setSelectionState,
@@ -15,11 +16,16 @@ export const useInput = () => {
     resultState: { overallResults },
   } = useApplicationState();
 
-  useInputInk((input, key) => {
+  useKeyboard((key) => {
     // Result list navigation
-    if (key.upArrow || key.pageUp || key.home) {
+    if (key.name === "up" || key.name === "pageup" || key.name === "home") {
       setSelectionState((prev) => {
-        const step = key.home ? prev.selectedResultIndex : key.pageUp ? 5 : 1;
+        const step =
+          key.name === "home"
+            ? prev.selectedResultIndex
+            : key.name === "pageup"
+              ? 5
+              : 1;
         const newIndex = Math.max(prev.selectedResultIndex - step, 0);
         return {
           ...prev,
@@ -28,9 +34,14 @@ export const useInput = () => {
       });
     }
 
-    if (key.downArrow || key.pageDown || key.end) {
+    if (key.name === "down" || key.name === "pagedown" || key.name === "end") {
       setSelectionState((prev) => {
-        const step = key.end ? overallResults.length : key.pageDown ? 5 : 1;
+        const step =
+          key.name === "end"
+            ? overallResults.length
+            : key.name === "pagedown"
+              ? 5
+              : 1;
         const newIndex = Math.min(
           prev.selectedResultIndex + step,
           Math.max(0, overallResults.length - 1),
@@ -42,14 +53,14 @@ export const useInput = () => {
       });
     }
 
-    if (key.return) {
+    if (key.name === "return") {
       if (!selectedResult) {
         return;
       }
-      Nvim.open(selectedResult);
+      Nvim.open(selectedResult, renderer);
     }
 
-    if (key.ctrl && input === "s") {
+    if (key.ctrl && key.name === "s") {
       if (!selectedResult) {
         return;
       }
@@ -57,7 +68,7 @@ export const useInput = () => {
     }
 
     // Focus switching
-    if (key.ctrl && input === "g") {
+    if (key.ctrl && key.name === "g") {
       setFocusState((prev) => ({
         ...prev,
         currentFocus: prev.currentFocus === Focus.FZF ? Focus.RG : Focus.FZF,
@@ -65,7 +76,7 @@ export const useInput = () => {
     }
 
     // Preview switching
-    if (key.ctrl && input === "p") {
+    if (key.ctrl && key.name === "p") {
       setLayoutState((prev) => ({
         ...prev,
         isPreview: !prev.isPreview,
@@ -73,7 +84,7 @@ export const useInput = () => {
     }
 
     // Delete item
-    if (key.ctrl && input === "x") {
+    if (key.ctrl && key.name === "x") {
       if (!selectedResult) {
         return;
       }
@@ -86,12 +97,12 @@ export const useInput = () => {
     }
 
     // Refresh rg search
-    if (key.ctrl && input === "r") {
+    if (key.ctrl && key.name === "r") {
       setRgState((prev) => ({ ...prev, searchNonce: prev.searchNonce + 1 }));
     }
 
     // Rg case switching
-    if (key.meta && input === "1") {
+    if (key.meta && key.name === "1") {
       setRgState((prev) => {
         const newCase =
           prev.rgOptions.case === "--smart-case"
@@ -106,7 +117,7 @@ export const useInput = () => {
     }
 
     // Rg word-regexp
-    if (key.meta && input === "2") {
+    if (key.meta && key.name === "2") {
       setRgState((prev) => {
         return {
           ...prev,
@@ -119,7 +130,7 @@ export const useInput = () => {
     }
 
     // Rg max results per file
-    if (key.meta && input === "3") {
+    if (key.meta && key.name === "3") {
       setRgState((prev) => {
         return {
           ...prev,
@@ -132,7 +143,7 @@ export const useInput = () => {
     }
 
     // fzf filter column
-    if (key.meta && input === "4") {
+    if (key.meta && key.name === "4") {
       setFzfState((prev) => {
         const filterColumn =
           prev.fzfOptions.filterColumn === "all"

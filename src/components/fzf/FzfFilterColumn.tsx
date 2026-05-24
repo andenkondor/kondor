@@ -1,10 +1,8 @@
-import { useRef, type FC } from "react";
-import { Text } from "ink";
+import { useRef, type ReactNode } from "react";
 import { useApplicationState } from "@contexts/ApplicationStateContext";
-import { TitledBox } from "@mishieck/ink-titled-box";
 import { useConfig } from "@contexts/ConfigContext";
 
-export const FzfFilterColumn: FC = () => {
+export const FzfFilterColumn = (): ReactNode => {
   const {
     colors: { highlightedBorder },
     layout: { borderType },
@@ -23,12 +21,12 @@ export const FzfFilterColumn: FC = () => {
         ? "filter file path"
         : "filter line content";
   return (
-    <TitledBox
-      titles={["⌥4"]}
+    <box
+      title={"⌥4"}
       borderStyle={borderType}
       borderColor={isInit ? undefined : highlightedBorder}
     >
-      <Text>{display}</Text>
-    </TitledBox>
+      <text>{display}</text>
+    </box>
   );
 };

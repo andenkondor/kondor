@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useApplicationState } from "@contexts/ApplicationStateContext";
 import { Bat } from "@tools/Bat";
 
-export const usePreview = (previewHeight: number) => {
+export const usePreview = (previewHeight: number = 0) => {
   const {
     layoutState: { isPreview },
     selectionState: { debouncedSelectedResult, selectedResult },

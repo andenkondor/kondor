@@ -1,19 +1,18 @@
-import { type FC } from "react";
-import { RgSearchTerm } from "@components/rg/RgSearchTerm";
+import type { ReactNode } from "react";
 import { useRg } from "@hooks/useRg";
-import { RgCase } from "./RgCase";
-import { Box } from "ink";
+import { RgSearchTerm } from "@components/rg/RgSearchTerm";
+import { RgCase } from "@components/rg//RgCase";
 import { RgWordRegxp } from "@components/rg/RgWordRegexp";
 import { RgResultsPerFile } from "@components/rg/RgResultsPerFile";
 
-export const RgControl: FC = () => {
+export const RgControl = (): ReactNode => {
   useRg();
   return (
-    <Box>
+    <box flexDirection="row">
       <RgSearchTerm />
       <RgCase />
       <RgWordRegxp />
       <RgResultsPerFile />
-    </Box>
+    </box>
   );
 };

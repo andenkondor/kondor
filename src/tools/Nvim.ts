@@ -1,8 +1,11 @@
 import type { SearchResult } from "@definitions/SearchResult";
+import type { CliRenderer } from "@opentui/core";
 import { spawnSync } from "bun";
 
 export class Nvim {
-  static open(item: SearchResult) {
+  static async open(item: SearchResult, renderer: CliRenderer) {
+    renderer.suspend();
+
     spawnSync(
       [
         "nvim",
@@ -16,6 +19,6 @@ export class Nvim {
       },
     );
 
-    console.log("tick");
+    renderer.resume();
   }
 }

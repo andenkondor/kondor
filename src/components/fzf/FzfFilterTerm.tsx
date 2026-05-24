@@ -1,9 +1,9 @@
-import { type FC } from "react";
+import type { ReactNode } from "react";
 import { Focus } from "@definitions/Focus";
 import { BorderedTextInput } from "@components/BorderedTextInput";
 import { useApplicationState } from "@contexts/ApplicationStateContext";
 
-export const FzfFilterTerm: FC = () => {
+export const FzfFilterTerm = (): ReactNode => {
   const {
     fzfState: { filterTerm },
     setFzfState,

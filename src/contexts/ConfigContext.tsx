@@ -1,6 +1,6 @@
-import type { BorderStyle } from "@mishieck/ink-titled-box";
-import type { FC, ReactNode } from "react";
+import type { ReactNode } from "react";
 import { createContext, useContext } from "react";
+import type { BorderStyle } from "@opentui/core";
 
 export type Config = {
   initialSearchTerm?: string;
@@ -10,7 +10,6 @@ export type Config = {
     highlightedText: string;
     normalText: string;
     selectedBackground: string;
-    unselectedBackground: string;
     focusedBorder: string;
     highlightedBorder: string;
     unfocusedBorder: string;
@@ -25,10 +24,13 @@ export type CliConfig = Pick<Config, "initialSearchTerm">;
 
 const ConfigContext = createContext<Config | null>(null);
 
-export const ConfigProvider: FC<{ value: Config; children: ReactNode }> = ({
+export const ConfigProvider = ({
   value,
   children,
-}) => {
+}: {
+  value: Config;
+  children: ReactNode;
+}): ReactNode => {
   return (
     <ConfigContext.Provider value={value}>{children}</ConfigContext.Provider>
   );

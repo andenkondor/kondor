@@ -1,33 +1,38 @@
-import { memo, useRef, type FC } from "react";
-import { Box, Text, useBoxMetrics } from "ink";
+import { useMemo, useRef, type ReactNode } from "react";
+import { ptyToJson, type TerminalData } from "ghostty-opentui";
 import { usePreview } from "@hooks/usePreview";
-import { useApplicationState } from "@contexts/ApplicationStateContext";
 import { useConfig } from "@contexts/ConfigContext";
+import type { BoxRenderable } from "@opentui/core";
 
-export const Preview: FC = () => {
+export const Preview = (): ReactNode => {
+  const boxRef = useRef<BoxRenderable>(null);
   const {
     layout: { borderType },
   } = useConfig();
-  const boxRef = useRef(null);
-  const { height } = useBoxMetrics(boxRef);
-  const previewContent = usePreview(height - 2);
+  const previewContent = usePreview(boxRef.current?.height);
 
-  const {
-    layoutState: { isPreview },
-  } = useApplicationState();
-
-  if (!isPreview) {
-    return null;
-  }
+  const data: TerminalData = useMemo(
+    () => ptyToJson(previewContent),
+    [previewContent],
+  );
   return (
-    <Box borderStyle={borderType} width="100%" ref={boxRef} overflow="hidden">
-      <CachedPreviewContent content={previewContent} />
-    </Box>
+    <box
+      borderStyle={borderType}
+      overflow="hidden"
+      ref={boxRef}
+      height={"100%"}
+    >
+      {data.lines.map((line, i) => (
+        <text key={i} height={1} wrapMode="none">
+          {line.spans.map(({ fg, bg, text }, j) => {
+            return (
+              <span key={j} fg={fg ?? undefined} bg={bg ?? undefined}>
+                {text}
+              </span>
+            );
+          })}
+        </text>
+      ))}
+    </box>
   );
 };
-
-const PreviewContent: FC<{ content: string }> = ({ content }) => {
-  return <Text>{content}</Text>;
-};
-
-const CachedPreviewContent = memo(PreviewContent);

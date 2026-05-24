@@ -1,44 +1,39 @@
-import { memo, type FC } from "react";
-import { Box, Text } from "ink";
+import { type ReactNode } from "react";
 import type { SearchResult } from "@definitions/SearchResult";
-import { useConfig } from "@contexts/ConfigContext";
 import { useResult } from "@hooks/useResult";
+import { useConfig } from "@contexts/ConfigContext";
+import { useApplicationState } from "@contexts/ApplicationStateContext";
 
 type Props = {
   item: SearchResult;
   isSelected: boolean;
-  maxWidth: number;
 };
 
-export const ResultLine: FC<Props> = ({ item, isSelected, maxWidth }) => {
+export const ResultLine = ({ item, isSelected }: Props): ReactNode => {
   const {
-    colors: { selectedBackground, unselectedBackground },
+    colors: { selectedBackground },
   } = useConfig();
 
-  const backgroundColor = isSelected
-    ? selectedBackground
-    : unselectedBackground;
+  const {
+    layoutState: { resultLineMaxLength },
+  } = useApplicationState();
 
-  const selectionIndicator = isSelected ? "> " : "  ";
+  const { segments } = useResult(item, resultLineMaxLength);
 
-  const { pathColumn, contentColumn } = useResult(
-    item,
-    maxWidth -
-      selectionIndicator.length -
-      // don't count borders
-      2,
-  );
   return (
-    <Box backgroundColor={backgroundColor}>
-      <CachedResultLineContent
-        content={selectionIndicator + pathColumn + contentColumn}
-      />
-    </Box>
+    <box
+      flexDirection="row"
+      height={1}
+      backgroundColor={isSelected ? selectedBackground : undefined}
+    >
+      <text flexShrink={0}>{isSelected ? "> " : "  "}</text>
+      <text>
+        {segments.map((segment, index) => (
+          <span key={index} fg={segment.color}>
+            {segment.text}
+          </span>
+        ))}
+      </text>
+    </box>
   );
 };
-
-const ResultLineContent: FC<{ content: string }> = ({ content }) => {
-  return <Text>{content}</Text>;
-};
-
-const CachedResultLineContent = memo(ResultLineContent);

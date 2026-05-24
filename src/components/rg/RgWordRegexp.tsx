@@ -1,10 +1,8 @@
-import { useRef, type FC } from "react";
-import { Text } from "ink";
+import { useRef, type ReactNode } from "react";
 import { useApplicationState } from "@contexts/ApplicationStateContext";
-import { TitledBox } from "@mishieck/ink-titled-box";
 import { useConfig } from "@contexts/ConfigContext";
 
-export const RgWordRegxp: FC = () => {
+export const RgWordRegxp = (): ReactNode => {
   const {
     colors: { highlightedBorder },
     layout: { borderType },
@@ -18,12 +16,12 @@ export const RgWordRegxp: FC = () => {
 
   const display = rgOptions.wordRegexp ? "match whole word" : "match any";
   return (
-    <TitledBox
-      titles={["⌥2"]}
+    <box
+      title={"⌥2"}
       borderStyle={borderType}
       borderColor={isInit ? undefined : highlightedBorder}
     >
-      <Text>{display}</Text>
-    </TitledBox>
+      <text>{display}</text>
+    </box>
   );
 };

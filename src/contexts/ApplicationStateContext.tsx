@@ -1,5 +1,5 @@
 import type { SearchResult } from "@definitions/SearchResult";
-import type { FC, ReactNode } from "react";
+import type { ReactNode } from "react";
 import {
   createContext,
   useContext,
@@ -13,6 +13,9 @@ import { Focus } from "@definitions/Focus";
 import type { RgOptions } from "@tools/Rg";
 import type { FzfOptions } from "@tools/Fzf";
 import { useDeepDebounce } from "@hooks/useDebounce";
+import { useTerminalDimensions } from "@opentui/react";
+
+const BORDER_THICKNESS = 1;
 
 type FocusState = {
   currentFocus: Focus;
@@ -46,6 +49,7 @@ type SelectionState = {
 
 type LayoutState = {
   isPreview: boolean;
+  resultLineMaxLength: number;
 };
 
 type ApplicationState = {
@@ -64,9 +68,12 @@ type ApplicationState = {
 
 const ApplicationStateContext = createContext<ApplicationState | null>(null);
 
-export const ApplicationStateProvider: FC<{
+export const ApplicationStateProvider = ({
+  children,
+}: {
   children: ReactNode;
-}> = ({ children }) => {
+}): ReactNode => {
+  const { width } = useTerminalDimensions();
   const { initialSearchTerm, inputDebounceDelayMs } = useConfig();
 
   const [fzfState, setFzfState] = useState<FzfState>({
@@ -93,7 +100,16 @@ export const ApplicationStateProvider: FC<{
 
   const [layoutState, setLayoutState] = useState<LayoutState>({
     isPreview: false,
+    resultLineMaxLength: 0,
   });
+
+  const resultLineMaxLength = useMemo(
+    () =>
+      layoutState.isPreview
+        ? Math.floor(width / 2) - 4 * BORDER_THICKNESS
+        : width - 2 * BORDER_THICKNESS,
+    [layoutState.isPreview],
+  );
 
   const prevSearchTermAtLastResultsRef = useRef(rgState.searchTerm);
 
@@ -166,7 +182,10 @@ export const ApplicationStateProvider: FC<{
           debouncedSelectedResult,
         },
         setSelectionState,
-        layoutState,
+        layoutState: {
+          ...layoutState,
+          resultLineMaxLength,
+        },
         setLayoutState,
       }}
     >

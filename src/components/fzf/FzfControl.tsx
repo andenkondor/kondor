@@ -1,16 +1,15 @@
-import { type FC } from "react";
+import type { ReactNode } from "react";
 import { useFzf } from "@hooks/useFzf";
-import { Box } from "ink";
-import { FzfFilterColumn } from "@components/fzf/FzfFilterColumn";
 import { FzfFilterTerm } from "@components/fzf/FzfFilterTerm";
+import { FzfFilterColumn } from "@components/fzf/FzfFilterColumn";
 
-export const FzfControl: FC = () => {
+export const FzfControl = (): ReactNode => {
   useFzf();
 
   return (
-    <Box>
+    <box flexDirection="row">
       <FzfFilterTerm />
       <FzfFilterColumn />
-    </Box>
+    </box>
   );
 };
