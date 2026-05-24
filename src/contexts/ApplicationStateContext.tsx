@@ -1,55 +1,21 @@
-import type { SearchResult } from "@definitions/SearchResult";
 import type { ReactNode } from "react";
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { createContext, useContext, useMemo } from "react";
 import { useConfig } from "@contexts/ConfigContext";
-import { Focus } from "@definitions/Focus";
-import type { RgOptions } from "@tools/Rg";
-import type { FzfOptions } from "@tools/Fzf";
-import { useDebounce } from "@hooks/useDebounce";
 import { useTerminalDimensions } from "@opentui/react";
-
-const BORDER_THICKNESS = 1;
-
-type FocusState = {
-  currentFocus: Focus;
-};
-
-type FzfState = {
-  filterTerm: string;
-  filterResults: SearchResult[];
-  fzfOptions: FzfOptions;
-  isLoading?: boolean;
-};
-
-type RgState = {
-  searchTerm: string;
-  searchResults: SearchResult[];
-  isLoading?: boolean;
-  rgOptions: RgOptions;
-  searchNonce: number;
-};
+import { useRgState } from "@hooks/useRgState";
+import type { RgState } from "@hooks/useRgState";
+import { useFzfState } from "@hooks/useFzfState";
+import type { FzfState } from "@hooks/useFzfState";
+import { useFocusState } from "@hooks/useFocusState";
+import type { FocusState } from "@hooks/useFocusState";
+import { useSelectionState } from "@hooks/useSelectionState";
+import type { SelectionState } from "@hooks/useSelectionState";
+import { useLayoutState } from "@hooks/useLayoutState";
+import type { LayoutState } from "@hooks/useLayoutState";
+import type { SearchResult } from "@definitions/SearchResult";
 
 type ResultState = {
   overallResults: SearchResult[];
-};
-
-type SelectionState = {
-  selectedResult?: SearchResult;
-  selectedResultIndex: number;
-  previewedResult?: SearchResult;
-  ignoredResultIds: Set<string>;
-};
-
-type LayoutState = {
-  isPreview: boolean;
-  resultLineMaxLength: number;
 };
 
 type ApplicationState = {
@@ -74,97 +40,24 @@ export const ApplicationStateProvider = ({
   children: ReactNode;
 }): ReactNode => {
   const { width } = useTerminalDimensions();
-  const { initialSearchTerm, inputDebounceDelayMs, previewDebounceDelayMs } = useConfig();
+  const { initialSearchTerm, previewDebounceDelayMs } = useConfig();
 
-  const [fzfState, setFzfState] = useState<FzfState>({
-    filterTerm: "",
-    filterResults: [],
-    fzfOptions: { filterColumn: "all" },
-  });
-
-  const [rgState, setRgState] = useState<RgState>({
-    searchTerm: initialSearchTerm ?? "",
-    searchResults: [],
-    rgOptions: { case: "--smart-case", wordRegexp: false },
-    searchNonce: 0,
-  });
-
-  const [focusState, setFocusState] = useState<FocusState>({
-    currentFocus: Focus.RG,
-  });
-
-  const [selectionState, setSelectionState] = useState<SelectionState>({
-    selectedResultIndex: 0,
-    ignoredResultIds: new Set(),
-  });
-
-  const [layoutState, setLayoutState] = useState<LayoutState>({
-    isPreview: false,
-    resultLineMaxLength: 0,
-  });
-
-  const resultLineMaxLength = useMemo(
-    () =>
-      layoutState.isPreview
-        ? Math.floor(width / 2) - 4 * BORDER_THICKNESS
-        : width - 2 * BORDER_THICKNESS,
-    [layoutState.isPreview],
-  );
-
-  const prevSearchTermAtLastResultsRef = useRef(rgState.searchTerm);
-
-  const overallResults = useMemo(
-    () =>
-      fzfState.filterResults.filter(
-        ({ id }) => !selectionState.ignoredResultIds.has(id.toString()),
-      ),
-    [fzfState.filterResults, selectionState.ignoredResultIds],
-  );
-
-  const selectedResult = useMemo(
-    () => overallResults[selectionState.selectedResultIndex],
-    [overallResults, selectionState.selectedResultIndex],
-  );
-
-  const previewedResult = useDebounce(
-    selectedResult,
-    previewDebounceDelayMs,
-  );
+  const { rgState, setRgState } = useRgState(initialSearchTerm ?? "");
+  const { fzfState, setFzfState } = useFzfState();
+  const { focusState, setFocusState } = useFocusState();
+  const { selectionState, setSelectionState, overallResults } =
+    useSelectionState(
+      fzfState.filterResults,
+      rgState.searchTerm,
+      rgState.searchResults,
+      previewDebounceDelayMs,
+    );
+  const { layoutState, setLayoutState } = useLayoutState(width);
 
   const resultState: ResultState = useMemo(
     () => ({ overallResults }),
     [overallResults],
   );
-
-  useEffect(() => {
-    setSelectionState((prev) => ({
-      ...prev,
-      selectedResultIndex: Math.min(
-        prev.selectedResultIndex,
-        Math.max(0, overallResults.length - 1),
-      ),
-    }));
-  }, [overallResults.length]);
-
-  useEffect(() => {
-    setSelectionState((prev) => ({
-      ...prev,
-      selectedResultIndex: 0,
-    }));
-  }, [fzfState.filterResults]);
-
-  useEffect(() => {
-    if (rgState.searchTerm === prevSearchTermAtLastResultsRef.current) {
-      return;
-    }
-
-    prevSearchTermAtLastResultsRef.current = rgState.searchTerm;
-
-    setSelectionState((prev) => ({
-      ...prev,
-      ignoredResultIds: new Set<string>(),
-    }));
-  }, [rgState.searchResults]);
 
   return (
     <ApplicationStateContext.Provider
@@ -176,16 +69,9 @@ export const ApplicationStateProvider = ({
         resultState,
         focusState,
         setFocusState,
-        selectionState: {
-          ...selectionState,
-          selectedResult,
-          previewedResult,
-        },
+        selectionState,
         setSelectionState,
-        layoutState: {
-          ...layoutState,
-          resultLineMaxLength,
-        },
+        layoutState,
         setLayoutState,
       }}
     >
