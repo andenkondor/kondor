@@ -9,12 +9,22 @@ import { RgSort } from "@components/rg/RgSort";
 export const RgControl = (): ReactNode => {
   useRg();
   return (
-    <box flexDirection="row">
-      <RgSearchTerm />
-      <RgCase />
-      <RgWordRegxp />
-      <RgResultsPerFile />
-      <RgSort />
+    <box flexDirection="row" flexWrap="wrap">
+      <box flexBasis={75} minWidth={10} flexGrow={0} flexShrink={1}>
+        <RgSearchTerm />
+      </box>
+      <box flexShrink={0}>
+        <RgCase />
+      </box>
+      <box flexShrink={0}>
+        <RgWordRegxp />
+      </box>
+      <box flexShrink={0}>
+        <RgResultsPerFile />
+      </box>
+      <box flexShrink={0}>
+        <RgSort />
+      </box>
     </box>
   );
 };

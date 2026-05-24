@@ -17,10 +17,10 @@ export const App = (): ReactNode => {
 
   return (
     <box flexDirection="column">
-      <box flexGrow={0} flexShrink={0} flexBasis={3}>
+      <box flexShrink={0}>
         <RgControl />
       </box>
-      <box flexGrow={0} flexShrink={0} flexBasis={3}>
+      <box flexShrink={0}>
         <FzfControl />
       </box>
       <box flexGrow={1}>

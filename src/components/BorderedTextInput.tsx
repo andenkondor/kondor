@@ -23,7 +23,6 @@ export const BorderedTextInput = ({
     <box
       borderStyle={borderType}
       title={titles.join(" ")}
-      width={100}
       borderColor={hasFocus ? colors.focusedBorder : colors.unfocusedBorder}
     >
       <input value={input} onInput={onInputChange} focused={hasFocus} />

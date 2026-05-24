@@ -41,7 +41,6 @@ export const ResultListContent = (): ReactNode => {
   return (
     <scrollbox
       ref={scrollRef}
-      height={"100%"}
       viewportCulling
       scrollbarOptions={{ visible: false }}
     >
