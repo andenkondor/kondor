@@ -1,5 +1,6 @@
 {
   "inputDebounceDelayMs": 300,
+  "previewDebounceDelayMs": 100,
   "colors": {
     "filePathText": "#9E40A1",
     "highlightedText": "#FF0000",

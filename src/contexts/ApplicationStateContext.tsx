@@ -12,7 +12,7 @@ import { useConfig } from "@contexts/ConfigContext";
 import { Focus } from "@definitions/Focus";
 import type { RgOptions } from "@tools/Rg";
 import type { FzfOptions } from "@tools/Fzf";
-import { useDeepDebounce } from "@hooks/useDebounce";
+import { useDebounce } from "@hooks/useDebounce";
 import { useTerminalDimensions } from "@opentui/react";
 
 const BORDER_THICKNESS = 1;
@@ -43,7 +43,7 @@ type ResultState = {
 type SelectionState = {
   selectedResult?: SearchResult;
   selectedResultIndex: number;
-  debouncedSelectedResult?: SearchResult;
+  previewedResult?: SearchResult;
   ignoredResultIds: Set<string>;
 };
 
@@ -74,7 +74,7 @@ export const ApplicationStateProvider = ({
   children: ReactNode;
 }): ReactNode => {
   const { width } = useTerminalDimensions();
-  const { initialSearchTerm, inputDebounceDelayMs } = useConfig();
+  const { initialSearchTerm, inputDebounceDelayMs, previewDebounceDelayMs } = useConfig();
 
   const [fzfState, setFzfState] = useState<FzfState>({
     filterTerm: "",
@@ -126,9 +126,9 @@ export const ApplicationStateProvider = ({
     [overallResults, selectionState.selectedResultIndex],
   );
 
-  const debouncedSelectedResult = useDeepDebounce(
+  const previewedResult = useDebounce(
     selectedResult,
-    inputDebounceDelayMs,
+    previewDebounceDelayMs,
   );
 
   const resultState: ResultState = useMemo(
@@ -179,7 +179,7 @@ export const ApplicationStateProvider = ({
         selectionState: {
           ...selectionState,
           selectedResult,
-          debouncedSelectedResult,
+          previewedResult,
         },
         setSelectionState,
         layoutState: {

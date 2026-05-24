@@ -5,6 +5,7 @@ import type { BorderStyle } from "@opentui/core";
 export type Config = {
   initialSearchTerm?: string;
   inputDebounceDelayMs: number;
+  previewDebounceDelayMs: number;
   colors: {
     filePathText: string;
     highlightedText: string;
