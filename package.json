@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "bun build ./index.tsx --outdir ./dist --target bun"
+    "build": "bun build --minify --target=bun ./index.tsx --outdir ./dist"
   },
   "devDependencies": {
     "@types/bun": "latest",
