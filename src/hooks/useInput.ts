@@ -71,6 +71,18 @@ export const useInput = () => {
       });
     }
 
+    if (key.ctrl && key.name === "a") {
+      setSelectionState((prev) => {
+        if (prev.markedResultIds.size > 0) {
+          return { ...prev, markedResultIds: new Set() };
+        }
+        return {
+          ...prev,
+          markedResultIds: new Set(overallResults.map((r) => r.id)),
+        };
+      });
+    }
+
     if (key.name === "return") {
       if (markedResultIds.size > 0) {
         const markedItems = overallResults.filter((r) =>
