@@ -14,6 +14,7 @@ export const ResultLine = ({ item, isSelected, isMarked }: Props): ReactNode => 
   const {
     colors: { selectedBackground },
     markSymbol,
+    selectionSymbol,
   } = useConfig();
 
   const {
@@ -24,8 +25,8 @@ export const ResultLine = ({ item, isSelected, isMarked }: Props): ReactNode => 
 
   const marker = isSelected
     ? isMarked
-      ? `>${markSymbol}`
-      : "> "
+      ? `${selectionSymbol}${markSymbol}`
+      : `${selectionSymbol} `
     : isMarked
       ? ` ${markSymbol}`
       : "  ";

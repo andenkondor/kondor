@@ -14,5 +14,6 @@
     "truncationText": "#0000FF"
   },
   "markSymbol": "\u25CB",
+  "selectionSymbol": ">",
   "layout": { "borderType": "rounded" }
 }

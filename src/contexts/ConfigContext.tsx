@@ -19,6 +19,7 @@ export type Config = {
     truncationText: string;
   };
   markSymbol: string;
+  selectionSymbol: string;
   layout: { borderType: BorderStyle };
 };
 
