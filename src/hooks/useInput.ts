@@ -9,7 +9,7 @@ export const useInput = () => {
   const {
     setFocusState,
     setSelectionState,
-    selectionState: { selectedResult },
+    selectionState: { selectedResult, markedResultIds },
     setLayoutState,
     setRgState,
     setFzfState,
@@ -53,7 +53,38 @@ export const useInput = () => {
       });
     }
 
+    if (key.name === "tab") {
+      if (!selectedResult) {
+        return;
+      }
+      setSelectionState((prev) => {
+        const newSet = new Set(prev.markedResultIds);
+        if (newSet.has(selectedResult.id)) {
+          newSet.delete(selectedResult.id);
+        } else {
+          newSet.add(selectedResult.id);
+        }
+        return {
+          ...prev,
+          markedResultIds: newSet,
+        };
+      });
+    }
+
     if (key.name === "return") {
+      if (markedResultIds.size > 0) {
+        const markedItems = overallResults.filter((r) =>
+          markedResultIds.has(r.id),
+        );
+
+        if (markedItems.length === 1) {
+          Nvim.open(markedItems[0]!, renderer);
+        } else if (markedItems.length > 1) {
+          Nvim.openMultiple(markedItems, renderer);
+        }
+        return;
+      }
+
       if (!selectedResult) {
         return;
       }
@@ -90,9 +121,7 @@ export const useInput = () => {
       }
       setSelectionState((prev) => ({
         ...prev,
-        ignoredResultIds: new Set(prev.ignoredResultIds).add(
-          selectedResult.id.toString(),
-        ),
+        ignoredResultIds: new Set(prev.ignoredResultIds).add(selectedResult.id),
       }));
     }
 

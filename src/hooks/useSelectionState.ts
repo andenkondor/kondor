@@ -7,6 +7,7 @@ export type SelectionState = {
   selectedResultIndex: number;
   previewedResult?: SearchResult;
   ignoredResultIds: Set<string>;
+  markedResultIds: Set<string>;
 };
 
 export const useSelectionState = (
@@ -19,10 +20,12 @@ export const useSelectionState = (
   const [ignoredResultIds, setIgnoredResultIds] = useState<Set<string>>(
     new Set(),
   );
+  const [markedResultIds, setMarkedResultIds] = useState<Set<string>>(
+    new Set(),
+  );
 
   const overallResults = useMemo(
-    () =>
-      filterResults.filter(({ id }) => !ignoredResultIds.has(id.toString())),
+    () => filterResults.filter(({ id }) => !ignoredResultIds.has(id)),
     [filterResults, ignoredResultIds],
   );
 
@@ -61,10 +64,12 @@ export const useSelectionState = (
       selectedResultIndex,
       previewedResult,
       ignoredResultIds,
+      markedResultIds,
     };
     const next = updater(prev);
     setSelectedResultIndex(next.selectedResultIndex);
     setIgnoredResultIds(next.ignoredResultIds);
+    setMarkedResultIds(next.markedResultIds);
   };
 
   return {
@@ -73,6 +78,7 @@ export const useSelectionState = (
       selectedResultIndex,
       previewedResult,
       ignoredResultIds,
+      markedResultIds,
     },
     setSelectionState,
     overallResults,

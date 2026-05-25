@@ -3,7 +3,7 @@ type SubMatch = {
   end: number;
 };
 export class SearchResult {
-  public readonly id: number | bigint;
+  public readonly id: string;
   public readonly filePath: string;
   public readonly lineNumber: number;
   public readonly lineContent: string;
@@ -29,6 +29,6 @@ export class SearchResult {
     this.subMatches = input.submatches;
     this.id = Bun.hash(
       `${this.filePath}#${this.lineNumber}${JSON.stringify(searchParameters)}`,
-    );
+    ).toString();
   }
 }

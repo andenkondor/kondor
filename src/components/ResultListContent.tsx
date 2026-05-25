@@ -9,7 +9,7 @@ const OVERSCAN = 5;
 export const ResultListContent = (): ReactNode => {
   const {
     resultState: { overallResults },
-    selectionState: { selectedResultIndex },
+    selectionState: { selectedResultIndex, markedResultIds },
   } = useApplicationState();
 
   const scrollRef = useRef<ScrollBoxRenderable | null>(null);
@@ -47,9 +47,10 @@ export const ResultListContent = (): ReactNode => {
       {startIndex > 0 && <box height={startIndex} />}
       {visibleItems.map((item, index) => (
         <ResultLine
-          key={item.id.toString()}
+          key={item.id}
           item={item}
           isSelected={startIndex + index === selectedResultIndex}
+          isMarked={markedResultIds.has(item.id)}
         />
       ))}
       {endIndex < overallResults.length && (

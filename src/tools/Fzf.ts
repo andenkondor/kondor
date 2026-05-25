@@ -58,7 +58,7 @@ export class Fzf {
         lineReader.close();
       }
 
-      return input.filter((rg) => filtered.has(rg.id.toString()));
+      return input.filter((rg) => filtered.has(rg.id));
     };
 
     return { proc, getResult };
