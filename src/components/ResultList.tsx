@@ -5,13 +5,14 @@ import { ResultListContent } from "./ResultListContent";
 
 export const ResultList = (): ReactNode => {
   const {
+    markSymbol,
     layout: { borderType },
   } = useConfig();
   const {
     rgState: { searchResults, isLoading: isRgLoading },
     fzfState: { isLoading: isFzfLoading },
     resultState: { overallResults },
-    selectionState: { selectedResultIndex },
+    selectionState: { selectedResultIndex, markedResultIds },
   } = useApplicationState();
 
   const isLoading = isFzfLoading || isRgLoading;
@@ -22,7 +23,10 @@ export const ResultList = (): ReactNode => {
     ? `#${selectedResultIndex + 1} -- `
     : "";
 
-  const statusIndicator = `${selectedIndicator}${fzfResultIndicator}/${rgResultIndicator}`;
+  const markedIndicator =
+    markedResultIds.size > 0 ? ` -- ${markSymbol}${markedResultIds.size}` : "";
+
+  const statusIndicator = `${selectedIndicator}${fzfResultIndicator}/${rgResultIndicator}${markedIndicator}`;
 
   return (
     <box borderStyle={borderType} title={statusIndicator} width="100%">

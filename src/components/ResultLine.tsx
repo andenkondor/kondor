@@ -13,6 +13,7 @@ type Props = {
 export const ResultLine = ({ item, isSelected, isMarked }: Props): ReactNode => {
   const {
     colors: { selectedBackground },
+    markSymbol,
   } = useConfig();
 
   const {
@@ -23,10 +24,10 @@ export const ResultLine = ({ item, isSelected, isMarked }: Props): ReactNode => 
 
   const marker = isSelected
     ? isMarked
-      ? ">\u25CB"
+      ? `>${markSymbol}`
       : "> "
     : isMarked
-      ? " \u25CB"
+      ? ` ${markSymbol}`
       : "  ";
 
   return (

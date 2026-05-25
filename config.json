@@ -13,5 +13,6 @@
     "defaultText": "#FFFFFF",
     "truncationText": "#0000FF"
   },
+  "markSymbol": "\u25CB",
   "layout": { "borderType": "rounded" }
 }
