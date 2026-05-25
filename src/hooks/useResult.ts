@@ -70,15 +70,15 @@ export const useResult = (item: SearchResult, maxWidth: number) => {
 };
 
 const extractContent = (item: SearchResult) => {
-  const firstMatch = item.subMatches[0];
+  const firstMatch = item.getFirstMatch();
   const pre = item.lineContent
-    .slice(0, firstMatch?.start)
+    .slice(0, firstMatch.start)
     .trimStart()
     .replaceAll("\t", "  ");
-  const match = item.lineContent.slice(firstMatch?.start, firstMatch?.end);
+  const match = item.lineContent.slice(firstMatch.start, firstMatch.end);
 
   const parts: { text: string; highlighted: boolean }[] = [];
-  let cursor = firstMatch?.end ?? 0;
+  let cursor = firstMatch.end;
   for (const m of item.subMatches.slice(1)) {
     parts.push({
       text: item.lineContent.slice(cursor, m.start),

@@ -9,6 +9,14 @@ export class SearchResult {
   public readonly lineContent: string;
   public readonly subMatches: SubMatch[];
 
+  getFirstMatch(): SubMatch {
+    const first = this.subMatches[0];
+    if (!first) {
+      throw new Error("No first match found");
+    }
+    return first;
+  }
+
   constructor(
     input: {
       path: { text: string };

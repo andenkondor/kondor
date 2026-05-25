@@ -9,7 +9,7 @@ export class Nvim {
     spawnSync(
       [
         "nvim",
-        `+call cursor(${item.lineNumber}, ${item.subMatches[0]!.start + 1})`,
+        `+call cursor(${item.lineNumber}, ${item.getFirstMatch().start + 1})`,
         item.filePath,
       ],
       {
@@ -29,7 +29,7 @@ export class Nvim {
     const content = items
       .map(
         (item) =>
-          `${item.filePath}:${item.lineNumber}:${item.subMatches[0]!.start + 1}:${item.lineContent.trimEnd()}`,
+          `${item.filePath}:${item.lineNumber}:${item.getFirstMatch().start + 1}:${item.lineContent.trimEnd()}`,
       )
       .join("\n");
 
