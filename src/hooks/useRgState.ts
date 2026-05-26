@@ -14,7 +14,7 @@ export const useRgState = (initialSearchTerm: string) => {
   const [rgState, setRgState] = useState<RgState>({
     searchTerm: initialSearchTerm,
     searchResults: [],
-    rgOptions: { case: "--smart-case", wordRegexp: false, sort: "none" },
+    rgOptions: { case: "--smart-case", wordRegexp: false },
     searchNonce: 0,
   });
 

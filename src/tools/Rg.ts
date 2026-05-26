@@ -6,7 +6,6 @@ export type RgOptions = {
   case: "--smart-case" | "--case-sensitive";
   wordRegexp: boolean;
   resultsPerFile?: number;
-  sort: "none" | "path";
 };
 
 export class Rg {
@@ -19,7 +18,7 @@ export class Rg {
         "--line-number",
         "--no-heading",
         "--json",
-        ...(options.sort ? [`--sort=${options.sort}`] : []),
+        ...["--sort", "path"],
         options.case,
         ...(options.wordRegexp ? ["--word-regexp"] : []),
         ...(options.resultsPerFile != null
