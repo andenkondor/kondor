@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - uses: oven-sh/setup-bun@v2
       - run: bun install
@@ -43,7 +43,7 @@ jobs:
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
       - name: Create and update Homebrew formula
-        uses: mislav/bump-homebrew-formula-action@v2
+        uses: mislav/bump-homebrew-formula-action@v4.1
         with:
           formula-name: kondor
           formula-path: Formula/kondor.rb
