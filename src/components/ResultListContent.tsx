@@ -27,6 +27,13 @@ export const ResultListContent = (): ReactNode => {
     if (!scrollRef.current) return;
 
     const currentScrollTop = scrollRef.current.scrollTop;
+
+    if (currentScrollTop >= overallResults.length) {
+      scrollRef.current.scrollTop = 0;
+      setScrollTop(0);
+      return;
+    }
+
     const bottomVisibleIndex = currentScrollTop + scrollboxHeight - 1;
 
     if (selectedResultIndex < currentScrollTop) {
@@ -36,7 +43,7 @@ export const ResultListContent = (): ReactNode => {
       scrollRef.current.scrollTop = selectedResultIndex - scrollboxHeight + 1;
       setScrollTop(scrollRef.current.scrollTop);
     }
-  }, [selectedResultIndex, scrollboxHeight]);
+  }, [selectedResultIndex, scrollboxHeight, overallResults.length]);
 
   return (
     <scrollbox
