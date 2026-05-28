@@ -2,36 +2,22 @@ import { type ReactNode } from "react";
 import { useApplicationState } from "@contexts/ApplicationStateContext";
 import { useConfig } from "@contexts/ConfigContext";
 import { useSpinner } from "@hooks/useSpinner";
+import { useResultStatus } from "@hooks/useResultStatus";
 import { ResultListContent } from "./ResultListContent";
 
 export const ResultList = (): ReactNode => {
   const {
-    markSymbol,
     layout: { borderType },
   } = useConfig();
   const {
-    rgState: { searchResults },
-    resultState: { overallResults, isLoading },
-    selectionState: { selectedResultIndex, markedResultIds },
+    resultState: { isLoading },
   } = useApplicationState();
 
   const spinner = useSpinner(isLoading);
-
-  const selectedIndicator = overallResults.length
-    ? `#${selectedResultIndex + 1} -- `
-    : "";
-
-  const markedIndicator =
-    markedResultIds.size > 0 ? ` -- ${markSymbol}${markedResultIds.size}` : "";
-
-  const statusIndicator = `${selectedIndicator}${overallResults.length}/${searchResults.length}${markedIndicator}`;
+  const { statusIndicator } = useResultStatus();
 
   return (
-    <box
-      borderStyle={borderType}
-      title={isLoading ? "" : statusIndicator}
-      width="100%"
-    >
+    <box borderStyle={borderType} title={statusIndicator} width="100%">
       {isLoading ? (
         <box
           flexDirection="row"
