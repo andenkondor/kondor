@@ -16,6 +16,7 @@ import type { SearchResult } from "@definitions/SearchResult";
 
 type ResultState = {
   overallResults: SearchResult[];
+  isLoading: boolean;
 };
 
 type ApplicationState = {
@@ -55,8 +56,11 @@ export const ApplicationStateProvider = ({
   const { layoutState, setLayoutState } = useLayoutState(width);
 
   const resultState: ResultState = useMemo(
-    () => ({ overallResults }),
-    [overallResults],
+    () => ({
+      overallResults,
+      isLoading: Boolean(rgState.isLoading || fzfState.isLoading),
+    }),
+    [overallResults, rgState.isLoading, fzfState.isLoading],
   );
 
   return (
