@@ -2,31 +2,27 @@ import { useRef, type ReactNode } from "react";
 import { useApplicationState } from "@contexts/ApplicationStateContext";
 import { useConfig } from "@contexts/ConfigContext";
 
-export const FzfFilterColumn = (): ReactNode => {
+export const RgMatchesPerResult = (): ReactNode => {
   const {
     colors: { highlightedBorder },
     layout: { borderType },
   } = useConfig();
   const {
-    fzfState: { fzfOptions },
+    rgState: { rgOptions },
   } = useApplicationState();
-  const initialRef = useRef(fzfOptions.filterColumn);
+  const initialRef = useRef(rgOptions.singleMatchPerResult);
 
-  const isInit = initialRef.current === fzfOptions.filterColumn;
+  const infinity = "\u221E";
+  const isInit = initialRef.current === rgOptions.singleMatchPerResult;
 
-  const display =
-    fzfOptions.filterColumn === "all"
-      ? "filter all columns"
-      : fzfOptions.filterColumn === "filePath"
-        ? "filter file path"
-        : "filter line content";
+  const display = rgOptions.singleMatchPerResult ? "1" : infinity;
   return (
     <box
-      title={"⌥5"}
+      title={"⌥4"}
       borderStyle={borderType}
       borderColor={isInit ? undefined : highlightedBorder}
     >
-      <text>{display}</text>
+      <text>{`matches/result: ${display}`}</text>
     </box>
   );
 };

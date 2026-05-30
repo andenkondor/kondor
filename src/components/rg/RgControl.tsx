@@ -4,6 +4,7 @@ import { RgSearchTerm } from "@components/rg/RgSearchTerm";
 import { RgCase } from "@components/rg//RgCase";
 import { RgWordRegxp } from "@components/rg/RgWordRegexp";
 import { RgResultsPerFile } from "@components/rg/RgResultsPerFile";
+import { RgMatchesPerResult } from "@components/rg/RgMatchesPerResult";
 
 export const RgControl = (): ReactNode => {
   useRg();
@@ -20,6 +21,9 @@ export const RgControl = (): ReactNode => {
       </box>
       <box flexShrink={0}>
         <RgResultsPerFile />
+      </box>
+      <box flexShrink={0}>
+        <RgMatchesPerResult />
       </box>
     </box>
   );

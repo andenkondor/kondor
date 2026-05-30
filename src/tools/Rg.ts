@@ -6,6 +6,7 @@ export type RgOptions = {
   case: "--smart-case" | "--case-sensitive";
   wordRegexp: boolean;
   resultsPerFile?: number;
+  singleMatchPerResult: boolean;
 };
 
 export class Rg {
@@ -58,9 +59,21 @@ export class Rg {
         lineReader.close();
       }
 
-      return rgMatches.map(
-        (match) => new SearchResult(match.data, { searchTerm, options }),
-      );
+      return rgMatches.flatMap((match) => {
+        if (options.singleMatchPerResult) {
+          return match.data.submatches.map(
+            (submatch, index) =>
+              new SearchResult(
+                {
+                  ...match.data,
+                  submatches: [submatch],
+                },
+                { searchTerm, options, submatchIndex: index },
+              ),
+          );
+        }
+        return [new SearchResult(match.data, { searchTerm, options })];
+      });
     };
 
     return { proc, getResult };
