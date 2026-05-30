@@ -4,7 +4,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "bun build --minify --target=bun --external @opentui/core-darwin-arm64 ./index.tsx --outdir ./dist && mkdir -p dist/node_modules/@opentui && cp -r node_modules/@opentui/core-darwin-arm64 dist/node_modules/@opentui/"
+    "build": "bun build --minify --target=bun --external @opentui/core-darwin-arm64 ./index.tsx --outdir ./dist && mkdir -p dist/node_modules/@opentui && cp -r node_modules/@opentui/core-darwin-arm64 dist/node_modules/@opentui/",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/bun": "latest",
