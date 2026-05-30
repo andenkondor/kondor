@@ -196,8 +196,21 @@ export const useInput = () => {
       });
     }
 
-    // fzf filter column
+    // Rg unrestricted
     if (key.meta && key.name === "5") {
+      setRgState((prev) => {
+        return {
+          ...prev,
+          rgOptions: {
+            ...prev.rgOptions,
+            unrestricted: (prev.rgOptions.unrestricted + 1) % 3,
+          },
+        };
+      });
+    }
+
+    // fzf filter column
+    if (key.meta && key.name === "6") {
       setFzfState((prev) => {
         const filterColumn =
           prev.fzfOptions.filterColumn === "all"

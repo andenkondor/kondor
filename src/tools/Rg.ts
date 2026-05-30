@@ -7,6 +7,7 @@ export type RgOptions = {
   wordRegexp: boolean;
   resultsPerFile?: number;
   singleMatchPerResult: boolean;
+  unrestricted: number;
 };
 
 export class Rg {
@@ -24,6 +25,9 @@ export class Rg {
         ...(options.wordRegexp ? ["--word-regexp"] : []),
         ...(options.resultsPerFile != null
           ? ["--max-count", String(options.resultsPerFile)]
+          : []),
+        ...(options.unrestricted > 0
+          ? Array.from({ length: options.unrestricted }, () => "-u")
           : []),
         "--",
         searchTerm,
@@ -60,20 +64,20 @@ export class Rg {
       }
 
       return rgMatches.flatMap((match) => {
-        if (options.singleMatchPerResult) {
-          return match.data.submatches.map(
-            (submatch, index) =>
-              new SearchResult(
-                {
-                  ...match.data,
-                  submatches: [submatch],
-                },
-                { searchTerm, options, submatchIndex: index },
-              ),
-          );
-        }
-        return [new SearchResult(match.data, { searchTerm, options })];
-      });
+          if (options.singleMatchPerResult) {
+            return match.data.submatches.map(
+              (submatch, index) =>
+                new SearchResult(
+                  {
+                    ...match.data,
+                    submatches: [submatch],
+                  },
+                  { searchTerm, options, submatchIndex: index },
+                ),
+            );
+          }
+          return [new SearchResult(match.data, { searchTerm, options })];
+        });
     };
 
     return { proc, getResult };

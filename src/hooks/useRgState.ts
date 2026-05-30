@@ -18,6 +18,7 @@ export const useRgState = (initialSearchTerm: string) => {
       case: "--smart-case",
       wordRegexp: false,
       singleMatchPerResult: false,
+      unrestricted: 0,
     },
     searchNonce: 0,
   });

@@ -22,7 +22,7 @@ export const FzfFilterColumn = (): ReactNode => {
         : "filter line content";
   return (
     <box
-      title={"⌥5"}
+      title={"⌥6"}
       borderStyle={borderType}
       borderColor={isInit ? undefined : highlightedBorder}
     >
