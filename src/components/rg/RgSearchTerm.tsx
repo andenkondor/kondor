@@ -12,7 +12,7 @@ export const RgSearchTerm = (): ReactNode => {
 	const hasFocus = currentFocus === Focus.RG;
 
 	const onSearchTermChange = (searchTerm: string) => {
-		setRgState((prev) => ({ ...prev, searchTerm }));
+		setRgState((prev) => ({ ...prev, searchTerm: searchTerm.trim() }));
 	};
 
 	return (

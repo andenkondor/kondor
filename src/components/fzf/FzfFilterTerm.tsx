@@ -12,7 +12,7 @@ export const FzfFilterTerm = (): ReactNode => {
 
 	const hasFocus = currentFocus === Focus.FZF;
 	const onFilterTermChange = (filterTerm: string) => {
-		setFzfState((prev) => ({ ...prev, filterTerm }));
+		setFzfState((prev) => ({ ...prev, filterTerm: filterTerm.trim() }));
 	};
 
 	return (
