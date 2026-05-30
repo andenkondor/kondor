@@ -12,7 +12,7 @@ export const useLayoutState = (width: number) => {
 
   const resultListContentWidth = useMemo(
     () => (isPreview ? Math.floor(width / 2) : width) - 2 * BORDER_THICKNESS,
-    [isPreview],
+    [isPreview, width],
   );
 
   const setLayoutState = (updater: (prev: LayoutState) => LayoutState) => {

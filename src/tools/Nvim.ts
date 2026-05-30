@@ -33,7 +33,7 @@ export class Nvim {
       )
       .join("\n");
 
-    Bun.write(tmpFile, content);
+    await Bun.write(tmpFile, content);
 
     spawnSync(["nvim", "+copen", "-q", tmpFile], {
       stdout: "inherit",

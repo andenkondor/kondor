@@ -28,9 +28,9 @@ type ApplicationState = {
   focusState: FocusState;
   setFocusState: React.Dispatch<React.SetStateAction<FocusState>>;
   selectionState: SelectionState;
-  setSelectionState: React.Dispatch<React.SetStateAction<SelectionState>>;
+  setSelectionState: (updater: (prev: SelectionState) => SelectionState) => void;
   layoutState: LayoutState;
-  setLayoutState: React.Dispatch<React.SetStateAction<LayoutState>>;
+  setLayoutState: (updater: (prev: LayoutState) => LayoutState) => void;
 };
 
 const ApplicationStateContext = createContext<ApplicationState | null>(null);

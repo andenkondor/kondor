@@ -6,6 +6,8 @@ export type FzfOptions = {
   filterColumn: "all" | "filePath" | "lineContent";
 };
 
+const delimiter = "\x1f";
+
 export class Fzf {
   static execute(
     input: SearchResult[],
@@ -13,7 +15,7 @@ export class Fzf {
     options: FzfOptions,
   ) {
     const stdin = input
-      .map((rg) => `${rg.id}:${rg.filePath}:${rg.lineContent}`)
+      .map((rg) => [rg.id, rg.filePath, rg.lineContent].join(delimiter))
       .join("\n");
 
     const withNth =
@@ -28,7 +30,7 @@ export class Fzf {
         "fzf",
         ...["--accept-nth", "1"],
         ...["--with-nth", withNth],
-        ...["--delimiter", ":"],
+        ...["--delimiter", delimiter],
         ...["-f", filterTerm],
       ],
       {
