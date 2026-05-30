@@ -1,31 +1,31 @@
 import { useMemo, useState } from "react";
 
 export type LayoutState = {
-  isPreview: boolean;
-  resultListContentWidth: number;
+	isPreview: boolean;
+	resultListContentWidth: number;
 };
 
 const BORDER_THICKNESS = 1;
 
 export const useLayoutState = (width: number) => {
-  const [isPreview, setIsPreview] = useState(false);
+	const [isPreview, setIsPreview] = useState(false);
 
-  const resultListContentWidth = useMemo(
-    () => (isPreview ? Math.floor(width / 2) : width) - 2 * BORDER_THICKNESS,
-    [isPreview, width],
-  );
+	const resultListContentWidth = useMemo(
+		() => (isPreview ? Math.floor(width / 2) : width) - 2 * BORDER_THICKNESS,
+		[isPreview, width],
+	);
 
-  const setLayoutState = (updater: (prev: LayoutState) => LayoutState) => {
-    const prev: LayoutState = {
-      isPreview,
-      resultListContentWidth,
-    };
-    const next = updater(prev);
-    setIsPreview(next.isPreview);
-  };
+	const setLayoutState = (updater: (prev: LayoutState) => LayoutState) => {
+		const prev: LayoutState = {
+			isPreview,
+			resultListContentWidth,
+		};
+		const next = updater(prev);
+		setIsPreview(next.isPreview);
+	};
 
-  return {
-    layoutState: { isPreview, resultListContentWidth },
-    setLayoutState,
-  };
+	return {
+		layoutState: { isPreview, resultListContentWidth },
+		setLayoutState,
+	};
 };

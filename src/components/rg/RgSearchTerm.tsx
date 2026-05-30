@@ -1,26 +1,26 @@
-import type { ReactNode } from "react";
-import { Focus } from "@definitions/Focus";
 import { BorderedTextInput } from "@components/BorderedTextInput";
 import { useApplicationState } from "@contexts/ApplicationStateContext";
+import { Focus } from "@definitions/Focus";
+import type { ReactNode } from "react";
 
 export const RgSearchTerm = (): ReactNode => {
-  const {
-    rgState: { searchTerm },
-    setRgState,
-    focusState: { currentFocus },
-  } = useApplicationState();
-  const hasFocus = currentFocus === Focus.RG;
+	const {
+		rgState: { searchTerm },
+		setRgState,
+		focusState: { currentFocus },
+	} = useApplicationState();
+	const hasFocus = currentFocus === Focus.RG;
 
-  const onSearchTermChange = (searchTerm: string) => {
-    setRgState((prev) => ({ ...prev, searchTerm }));
-  };
+	const onSearchTermChange = (searchTerm: string) => {
+		setRgState((prev) => ({ ...prev, searchTerm }));
+	};
 
-  return (
-    <BorderedTextInput
-      input={searchTerm}
-      onInputChange={onSearchTermChange}
-      hasFocus={hasFocus}
-      titles={["rg", ...(!hasFocus ? ["⌃G"] : [])]}
-    />
-  );
+	return (
+		<BorderedTextInput
+			input={searchTerm}
+			onInputChange={onSearchTermChange}
+			hasFocus={hasFocus}
+			titles={["rg", ...(!hasFocus ? ["⌃G"] : [])]}
+		/>
+	);
 };

@@ -1,14 +1,14 @@
-import { useState } from "react";
 import { Focus } from "@definitions/Focus";
+import { useState } from "react";
 
 export type FocusState = {
-  currentFocus: Focus;
+	currentFocus: Focus;
 };
 
 export const useFocusState = () => {
-  const [focusState, setFocusState] = useState<FocusState>({
-    currentFocus: Focus.RG,
-  });
+	const [focusState, setFocusState] = useState<FocusState>({
+		currentFocus: Focus.RG,
+	});
 
-  return { focusState, setFocusState };
+	return { focusState, setFocusState };
 };

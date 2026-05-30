@@ -1,34 +1,34 @@
-import type { ReactNode } from "react";
-import { useRg } from "@hooks/useRg";
-import { RgSearchTerm } from "@components/rg/RgSearchTerm";
 import { RgCase } from "@components/rg//RgCase";
-import { RgWordRegxp } from "@components/rg/RgWordRegexp";
-import { RgResultsPerFile } from "@components/rg/RgResultsPerFile";
 import { RgMatchesPerResult } from "@components/rg/RgMatchesPerResult";
+import { RgResultsPerFile } from "@components/rg/RgResultsPerFile";
+import { RgSearchTerm } from "@components/rg/RgSearchTerm";
 import { RgUnrestricted } from "@components/rg/RgUnrestricted";
+import { RgWordRegxp } from "@components/rg/RgWordRegexp";
+import { useRg } from "@hooks/useRg";
+import type { ReactNode } from "react";
 
 export const RgControl = (): ReactNode => {
-  useRg();
-  return (
-    <box flexDirection="row" flexWrap="wrap">
-      <box flexBasis={75} minWidth={10} flexGrow={0} flexShrink={1}>
-        <RgSearchTerm />
-      </box>
-      <box flexShrink={0}>
-        <RgCase />
-      </box>
-      <box flexShrink={0}>
-        <RgWordRegxp />
-      </box>
-      <box flexShrink={0}>
-        <RgResultsPerFile />
-      </box>
-      <box flexShrink={0}>
-        <RgMatchesPerResult />
-      </box>
-      <box flexShrink={0}>
-        <RgUnrestricted />
-      </box>
-    </box>
-  );
+	useRg();
+	return (
+		<box flexDirection="row" flexWrap="wrap">
+			<box flexBasis={75} minWidth={10} flexGrow={0} flexShrink={1}>
+				<RgSearchTerm />
+			</box>
+			<box flexShrink={0}>
+				<RgCase />
+			</box>
+			<box flexShrink={0}>
+				<RgWordRegxp />
+			</box>
+			<box flexShrink={0}>
+				<RgResultsPerFile />
+			</box>
+			<box flexShrink={0}>
+				<RgMatchesPerResult />
+			</box>
+			<box flexShrink={0}>
+				<RgUnrestricted />
+			</box>
+		</box>
+	);
 };

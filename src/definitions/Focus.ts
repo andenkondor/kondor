@@ -1,5 +1,5 @@
 export enum Focus {
-  NONE,
-  RG,
-  FZF,
+	NONE,
+	RG,
+	FZF,
 }

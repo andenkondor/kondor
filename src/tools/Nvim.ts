@@ -3,44 +3,44 @@ import type { CliRenderer } from "@opentui/core";
 import { spawnSync } from "bun";
 
 export class Nvim {
-  static async open(item: SearchResult, renderer: CliRenderer) {
-    renderer.suspend();
+	static async open(item: SearchResult, renderer: CliRenderer) {
+		renderer.suspend();
 
-    spawnSync(
-      [
-        "nvim",
-        `+call cursor(${item.lineNumber}, ${item.getFirstMatch().start + 1})`,
-        item.filePath,
-      ],
-      {
-        stdout: "inherit",
-        stdin: "inherit",
-        stderr: "inherit",
-      },
-    );
+		spawnSync(
+			[
+				"nvim",
+				`+call cursor(${item.lineNumber}, ${item.getFirstMatch().start + 1})`,
+				item.filePath,
+			],
+			{
+				stdout: "inherit",
+				stdin: "inherit",
+				stderr: "inherit",
+			},
+		);
 
-    renderer.resume();
-  }
+		renderer.resume();
+	}
 
-  static async openMultiple(items: SearchResult[], renderer: CliRenderer) {
-    renderer.suspend();
+	static async openMultiple(items: SearchResult[], renderer: CliRenderer) {
+		renderer.suspend();
 
-    const tmpFile = `/tmp/kondor-quickfix-${Date.now()}.txt`;
-    const content = items
-      .map(
-        (item) =>
-          `${item.filePath}:${item.lineNumber}:${item.getFirstMatch().start + 1}:${item.lineContent.trimEnd()}`,
-      )
-      .join("\n");
+		const tmpFile = `/tmp/kondor-quickfix-${Date.now()}.txt`;
+		const content = items
+			.map(
+				(item) =>
+					`${item.filePath}:${item.lineNumber}:${item.getFirstMatch().start + 1}:${item.lineContent.trimEnd()}`,
+			)
+			.join("\n");
 
-    await Bun.write(tmpFile, content);
+		await Bun.write(tmpFile, content);
 
-    spawnSync(["nvim", "+copen", "-q", tmpFile], {
-      stdout: "inherit",
-      stdin: "inherit",
-      stderr: "inherit",
-    });
+		spawnSync(["nvim", "+copen", "-q", tmpFile], {
+			stdout: "inherit",
+			stdin: "inherit",
+			stderr: "inherit",
+		});
 
-    renderer.resume();
-  }
+		renderer.resume();
+	}
 }

@@ -1,31 +1,31 @@
-import type { ReactNode } from "react";
 import { useConfig } from "@contexts/ConfigContext";
+import type { ReactNode } from "react";
 
 type Props = {
-  input: string;
-  onInputChange: (input: string) => void;
-  hasFocus: boolean;
-  titles: string[];
+	input: string;
+	onInputChange: (input: string) => void;
+	hasFocus: boolean;
+	titles: string[];
 };
 
 export const BorderedTextInput = ({
-  input,
-  onInputChange,
-  hasFocus,
-  titles,
+	input,
+	onInputChange,
+	hasFocus,
+	titles,
 }: Props): ReactNode => {
-  const {
-    colors,
-    layout: { borderType },
-  } = useConfig();
+	const {
+		colors,
+		layout: { borderType },
+	} = useConfig();
 
-  return (
-    <box
-      borderStyle={borderType}
-      title={titles.join(" ")}
-      borderColor={hasFocus ? colors.focusedBorder : colors.unfocusedBorder}
-    >
-      <input value={input} onInput={onInputChange} focused={hasFocus} />
-    </box>
-  );
+	return (
+		<box
+			borderStyle={borderType}
+			title={titles.join(" ")}
+			borderColor={hasFocus ? colors.focusedBorder : colors.unfocusedBorder}
+		>
+			<input value={input} onInput={onInputChange} focused={hasFocus} />
+		</box>
+	);
 };

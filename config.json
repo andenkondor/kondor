@@ -1,19 +1,19 @@
 {
-  "inputDebounceDelayMs": 300,
-  "previewDebounceDelayMs": 100,
-  "colors": {
-    "filePathText": "#9E40A1",
-    "highlightedText": "#FF0000",
-    "normalText": "#FFFFFF",
-    "selectedBackground": "#000000",
-    "focusedBorder": "#00FF00",
-    "highlightedBorder": "#CCC90A",
-    "unfocusedBorder": "#FFFFFF",
-    "fileLineNumber": "#00FF00",
-    "defaultText": "#FFFFFF",
-    "truncationText": "#0000FF"
-  },
-  "markSymbol": "\u25CB",
-  "selectionSymbol": ">",
-  "layout": { "borderType": "rounded" }
+	"inputDebounceDelayMs": 300,
+	"previewDebounceDelayMs": 100,
+	"colors": {
+		"filePathText": "#9E40A1",
+		"highlightedText": "#FF0000",
+		"normalText": "#FFFFFF",
+		"selectedBackground": "#000000",
+		"focusedBorder": "#00FF00",
+		"highlightedBorder": "#CCC90A",
+		"unfocusedBorder": "#FFFFFF",
+		"fileLineNumber": "#00FF00",
+		"defaultText": "#FFFFFF",
+		"truncationText": "#0000FF"
+	},
+	"markSymbol": "\u25CB",
+	"selectionSymbol": ">",
+	"layout": { "borderType": "rounded" }
 }
