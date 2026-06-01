@@ -54,7 +54,12 @@ export class Rg {
 						continue;
 					}
 
-					const parsed = JSON.parse(line) as unknown;
+					let parsed: unknown;
+					try {
+						parsed = JSON.parse(line) as unknown;
+					} catch {
+						continue;
+					}
 					if (isRgMatch(parsed)) {
 						rgMatches.push(parsed);
 					}
