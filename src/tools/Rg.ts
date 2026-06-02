@@ -111,4 +111,8 @@ const isRgMatch = (obj: unknown): obj is RgMatch =>
 	obj.type === "match" &&
 	"data" in obj &&
 	typeof obj.data === "object" &&
-	obj.data !== null;
+	obj.data !== null &&
+	"lines" in obj.data &&
+	typeof obj.data.lines === "object" &&
+	obj.data.lines !== null &&
+	"text" in obj.data.lines;

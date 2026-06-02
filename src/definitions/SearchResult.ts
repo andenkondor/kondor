@@ -45,7 +45,7 @@ export class SearchResult {
 	) {
 		this.filePath = input.path.text;
 		this.lineNumber = input.line_number;
-		this.lineContent = input.lines.text;
+		this.lineContent = input.lines.text ?? "";
 		this._byteSubMatches = input.submatches;
 		this.id = Bun.hash(
 			`${this.filePath}#${this.lineNumber}${JSON.stringify(searchParameters)}`,
@@ -54,6 +54,9 @@ export class SearchResult {
 }
 
 const byteToCharOffset = (str: string, byteOffset: number): number => {
+	if (!str) {
+		return 0;
+	}
 	let bytePos = 0;
 	for (let i = 0; i < str.length; i++) {
 		if (bytePos >= byteOffset) return i;
