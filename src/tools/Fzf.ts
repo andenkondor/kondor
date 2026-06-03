@@ -4,6 +4,7 @@ import type { SearchResult } from "@definitions/SearchResult";
 
 export type FzfOptions = {
 	filterColumn: "all" | "filePath" | "lineContent";
+	isExact: boolean;
 };
 
 const delimiter = "\x1f";
@@ -31,6 +32,7 @@ export class Fzf {
 				...["--accept-nth", "1"],
 				...["--with-nth", withNth],
 				...["--delimiter", delimiter],
+				...(options.isExact ? ["--exact"] : []),
 				...["-f", filterTerm],
 			],
 			{

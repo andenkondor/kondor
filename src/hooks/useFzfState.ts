@@ -13,7 +13,7 @@ export const useFzfState = () => {
 	const [fzfState, setFzfState] = useState<FzfState>({
 		filterTerm: "",
 		filterResults: [],
-		fzfOptions: { filterColumn: "all" },
+		fzfOptions: { filterColumn: "all", isExact: true },
 	});
 
 	const cycleFzfFilterColumn = () => {
