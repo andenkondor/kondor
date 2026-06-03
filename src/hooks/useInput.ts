@@ -193,5 +193,10 @@ export const useInput = () => {
 		if (key.meta && key.name === "7") {
 			cycleFzfIsExact();
 		}
+
+		// fzf exact/fuzzy toggle
+		if (key.meta && key.name === "7") {
+			toggleIsExact();
+		}
 	});
 };
