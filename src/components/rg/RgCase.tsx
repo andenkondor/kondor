@@ -9,6 +9,7 @@ export const RgCase = (): ReactNode => {
 	} = useConfig();
 	const {
 		rgState: { rgOptions },
+		cycleRgCase,
 	} = useApplicationState();
 	const initialRef = useRef(rgOptions.case);
 
@@ -20,6 +21,7 @@ export const RgCase = (): ReactNode => {
 			title={"⌥1"}
 			borderStyle={borderType}
 			borderColor={isInit ? undefined : highlightedBorder}
+			onMouseDown={cycleRgCase}
 		>
 			<text>{display}</text>
 		</box>

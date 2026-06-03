@@ -7,6 +7,7 @@ export const RgSearchTerm = (): ReactNode => {
 	const {
 		rgState: { searchTerm },
 		setRgState,
+		setFocusState,
 		focusState: { currentFocus },
 	} = useApplicationState();
 	const hasFocus = currentFocus === Focus.RG;
@@ -21,6 +22,9 @@ export const RgSearchTerm = (): ReactNode => {
 			onInputChange={onSearchTermChange}
 			hasFocus={hasFocus}
 			titles={["rg", ...(!hasFocus ? ["⌃G"] : [])]}
+			onMouseDown={() =>
+				setFocusState((prev) => ({ ...prev, currentFocus: Focus.RG }))
+			}
 		/>
 	);
 };

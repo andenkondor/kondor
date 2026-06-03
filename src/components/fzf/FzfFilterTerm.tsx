@@ -7,6 +7,7 @@ export const FzfFilterTerm = (): ReactNode => {
 	const {
 		fzfState: { filterTerm },
 		setFzfState,
+		setFocusState,
 		focusState: { currentFocus },
 	} = useApplicationState();
 
@@ -21,6 +22,9 @@ export const FzfFilterTerm = (): ReactNode => {
 			onInputChange={onFilterTermChange}
 			hasFocus={hasFocus}
 			titles={["fzf", ...(!hasFocus ? ["⌃G"] : [])]}
+			onMouseDown={() =>
+				setFocusState((prev) => ({ ...prev, currentFocus: Focus.FZF }))
+			}
 		/>
 	);
 };

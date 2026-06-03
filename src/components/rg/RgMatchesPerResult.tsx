@@ -9,6 +9,7 @@ export const RgMatchesPerResult = (): ReactNode => {
 	} = useConfig();
 	const {
 		rgState: { rgOptions },
+		cycleRgSingleMatchPerResult,
 	} = useApplicationState();
 	const initialRef = useRef(rgOptions.singleMatchPerResult);
 
@@ -21,6 +22,7 @@ export const RgMatchesPerResult = (): ReactNode => {
 			title={"⌥4"}
 			borderStyle={borderType}
 			borderColor={isInit ? undefined : highlightedBorder}
+			onMouseDown={cycleRgSingleMatchPerResult}
 		>
 			<text>{`matches/result: ${display}`}</text>
 		</box>

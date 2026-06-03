@@ -23,5 +23,66 @@ export const useRgState = (initialSearchTerm: string) => {
 		searchNonce: 0,
 	});
 
-	return { rgState, setRgState };
+	const cycleRgCase = () => {
+		setRgState((prev) => {
+			const newCase =
+				prev.rgOptions.case === "--smart-case"
+					? "--case-sensitive"
+					: "--smart-case";
+			return {
+				...prev,
+				rgOptions: { ...prev.rgOptions, case: newCase },
+			};
+		});
+	};
+
+	const cycleRgWordRegexp = () => {
+		setRgState((prev) => ({
+			...prev,
+			rgOptions: {
+				...prev.rgOptions,
+				wordRegexp: !prev.rgOptions.wordRegexp,
+			},
+		}));
+	};
+
+	const cycleRgResultsPerFile = () => {
+		setRgState((prev) => ({
+			...prev,
+			rgOptions: {
+				...prev.rgOptions,
+				resultsPerFile: prev.rgOptions.resultsPerFile ? undefined : 1,
+			},
+		}));
+	};
+
+	const cycleRgSingleMatchPerResult = () => {
+		setRgState((prev) => ({
+			...prev,
+			rgOptions: {
+				...prev.rgOptions,
+				singleMatchPerResult: !prev.rgOptions.singleMatchPerResult,
+			},
+		}));
+	};
+
+	const cycleRgUnrestricted = () => {
+		setRgState((prev) => ({
+			...prev,
+			rgOptions: {
+				...prev.rgOptions,
+				unrestricted: (prev.rgOptions.unrestricted + 1) % 3,
+			},
+		}));
+	};
+
+	return {
+		rgState,
+		setRgState,
+		cycleRgCase,
+		cycleRgWordRegexp,
+		cycleRgResultsPerFile,
+		cycleRgSingleMatchPerResult,
+		cycleRgUnrestricted,
+	};
 };

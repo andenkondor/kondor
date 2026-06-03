@@ -12,8 +12,14 @@ export const useInput = () => {
 		selectionState: { selectedResult, markedResultIds },
 		setLayoutState,
 		setRgState,
-		setFzfState,
 		resultState: { overallResults },
+		cycleRgCase,
+		cycleRgWordRegexp,
+		cycleRgResultsPerFile,
+		cycleRgSingleMatchPerResult,
+		cycleRgUnrestricted,
+		cycleFzfFilterColumn,
+		cycleFzfIsExact,
 	} = useApplicationState();
 
 	useKeyboard((key) => {
@@ -146,89 +152,37 @@ export const useInput = () => {
 
 		// Rg case switching
 		if (key.meta && key.name === "1") {
-			setRgState((prev) => {
-				const newCase =
-					prev.rgOptions.case === "--smart-case"
-						? "--case-sensitive"
-						: "--smart-case";
-
-				return {
-					...prev,
-					rgOptions: { ...prev.rgOptions, case: newCase },
-				};
-			});
+			cycleRgCase();
 		}
 
 		// Rg word-regexp
 		if (key.meta && key.name === "2") {
-			setRgState((prev) => {
-				return {
-					...prev,
-					rgOptions: {
-						...prev.rgOptions,
-						wordRegexp: !prev.rgOptions.wordRegexp,
-					},
-				};
-			});
+			cycleRgWordRegexp();
 		}
 
 		// Rg max results per file
 		if (key.meta && key.name === "3") {
-			setRgState((prev) => {
-				return {
-					...prev,
-					rgOptions: {
-						...prev.rgOptions,
-						resultsPerFile: prev.rgOptions.resultsPerFile ? undefined : 1,
-					},
-				};
-			});
+			cycleRgResultsPerFile();
 		}
 
 		// Rg matches per result
 		if (key.meta && key.name === "4") {
-			setRgState((prev) => {
-				return {
-					...prev,
-					rgOptions: {
-						...prev.rgOptions,
-						singleMatchPerResult: !prev.rgOptions.singleMatchPerResult,
-					},
-				};
-			});
+			cycleRgSingleMatchPerResult();
 		}
 
 		// Rg unrestricted
 		if (key.meta && key.name === "5") {
-			setRgState((prev) => {
-				return {
-					...prev,
-					rgOptions: {
-						...prev.rgOptions,
-						unrestricted: (prev.rgOptions.unrestricted + 1) % 3,
-					},
-				};
-			});
+			cycleRgUnrestricted();
 		}
 
 		// fzf filter column
 		if (key.meta && key.name === "6") {
-			setFzfState((prev) => {
-				const filterColumn =
-					prev.fzfOptions.filterColumn === "all"
-						? "filePath"
-						: prev.fzfOptions.filterColumn === "filePath"
-							? "lineContent"
-							: "all";
+			cycleFzfFilterColumn();
+		}
 
-				return {
-					...prev,
-					fzfOptions: {
-						...prev.fzfOptions,
-						filterColumn,
-					},
-				};
-			});
+		// fzf exact/fuzzy toggle
+		if (key.meta && key.name === "7") {
+			cycleFzfIsExact();
 		}
 	});
 };

@@ -2,31 +2,25 @@ import { useApplicationState } from "@contexts/ApplicationStateContext";
 import { useConfig } from "@contexts/ConfigContext";
 import { type ReactNode, useRef } from "react";
 
-export const FzfFilterColumn = (): ReactNode => {
+export const FzfExact = (): ReactNode => {
 	const {
 		colors: { highlightedBorder },
 		layout: { borderType },
 	} = useConfig();
 	const {
 		fzfState: { fzfOptions },
-		cycleFzfFilterColumn,
+		cycleFzfIsExact,
 	} = useApplicationState();
-	const initialRef = useRef(fzfOptions.filterColumn);
+	const initialRef = useRef(fzfOptions.isExact);
 
-	const isInit = initialRef.current === fzfOptions.filterColumn;
-
-	const display =
-		fzfOptions.filterColumn === "all"
-			? "filter all columns"
-			: fzfOptions.filterColumn === "filePath"
-				? "filter file path"
-				: "filter line content";
+	const isInit = initialRef.current === fzfOptions.isExact;
+	const display = fzfOptions.isExact ? "exact" : "fuzzy";
 	return (
 		<box
-			title={"⌥6"}
+			title={"⌥7"}
 			borderStyle={borderType}
 			borderColor={isInit ? undefined : highlightedBorder}
-			onMouseDown={cycleFzfFilterColumn}
+			onMouseDown={cycleFzfIsExact}
 		>
 			<text>{display}</text>
 		</box>

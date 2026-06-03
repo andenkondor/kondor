@@ -16,5 +16,27 @@ export const useFzfState = () => {
 		fzfOptions: { filterColumn: "all" },
 	});
 
-	return { fzfState, setFzfState };
+	const cycleFzfFilterColumn = () => {
+		setFzfState((prev) => {
+			const filterColumn =
+				prev.fzfOptions.filterColumn === "all"
+					? "filePath"
+					: prev.fzfOptions.filterColumn === "filePath"
+						? "lineContent"
+						: "all";
+			return {
+				...prev,
+				fzfOptions: { ...prev.fzfOptions, filterColumn },
+			};
+		});
+	};
+
+	const cycleFzfIsExact = () => {
+		setFzfState((prev) => ({
+			...prev,
+			fzfOptions: { ...prev.fzfOptions, isExact: !prev.fzfOptions.isExact },
+		}));
+	};
+
+	return { fzfState, setFzfState, cycleFzfFilterColumn, cycleFzfIsExact };
 };

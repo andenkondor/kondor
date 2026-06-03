@@ -9,6 +9,7 @@ export const RgUnrestricted = (): ReactNode => {
 	} = useConfig();
 	const {
 		rgState: { rgOptions },
+		cycleRgUnrestricted,
 	} = useApplicationState();
 
 	const display = String(rgOptions.unrestricted);
@@ -17,6 +18,7 @@ export const RgUnrestricted = (): ReactNode => {
 			title={"⌥5"}
 			borderStyle={borderType}
 			borderColor={rgOptions.unrestricted > 0 ? highlightedBorder : undefined}
+			onMouseDown={cycleRgUnrestricted}
 		>
 			<text>{`unrestricted: ${display}`}</text>
 		</box>

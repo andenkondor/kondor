@@ -6,6 +6,7 @@ type Props = {
 	onInputChange: (input: string) => void;
 	hasFocus: boolean;
 	titles: string[];
+	onMouseDown?: () => void;
 };
 
 export const BorderedTextInput = ({
@@ -13,6 +14,7 @@ export const BorderedTextInput = ({
 	onInputChange,
 	hasFocus,
 	titles,
+	onMouseDown,
 }: Props): ReactNode => {
 	const {
 		colors,
@@ -24,6 +26,7 @@ export const BorderedTextInput = ({
 			borderStyle={borderType}
 			title={titles.join(" ")}
 			borderColor={hasFocus ? colors.focusedBorder : colors.unfocusedBorder}
+			onMouseDown={onMouseDown}
 		>
 			<input value={input} onInput={onInputChange} focused={hasFocus} />
 		</box>

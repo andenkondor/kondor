@@ -9,6 +9,7 @@ export const RgWordRegxp = (): ReactNode => {
 	} = useConfig();
 	const {
 		rgState: { rgOptions },
+		cycleRgWordRegexp,
 	} = useApplicationState();
 	const initialRef = useRef(rgOptions.wordRegexp);
 
@@ -20,6 +21,7 @@ export const RgWordRegxp = (): ReactNode => {
 			title={"⌥2"}
 			borderStyle={borderType}
 			borderColor={isInit ? undefined : highlightedBorder}
+			onMouseDown={cycleRgWordRegexp}
 		>
 			<text>{display}</text>
 		</box>

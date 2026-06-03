@@ -19,6 +19,19 @@ type ResultState = {
 	isLoading: boolean;
 };
 
+type RgCycleMethods = {
+	cycleRgCase: () => void;
+	cycleRgWordRegexp: () => void;
+	cycleRgResultsPerFile: () => void;
+	cycleRgSingleMatchPerResult: () => void;
+	cycleRgUnrestricted: () => void;
+};
+
+type FzfCycleMethods = {
+	cycleFzfFilterColumn: () => void;
+	cycleFzfIsExact: () => void;
+};
+
 type ApplicationState = {
 	rgState: RgState;
 	setRgState: React.Dispatch<React.SetStateAction<RgState>>;
@@ -33,7 +46,8 @@ type ApplicationState = {
 	) => void;
 	layoutState: LayoutState;
 	setLayoutState: (updater: (prev: LayoutState) => LayoutState) => void;
-};
+} & RgCycleMethods &
+	FzfCycleMethods;
 
 const ApplicationStateContext = createContext<ApplicationState | null>(null);
 
@@ -45,8 +59,17 @@ export const ApplicationStateProvider = ({
 	const { width } = useTerminalDimensions();
 	const { initialSearchTerm, previewDebounceDelayMs } = useConfig();
 
-	const { rgState, setRgState } = useRgState(initialSearchTerm ?? "");
-	const { fzfState, setFzfState } = useFzfState();
+	const {
+		rgState,
+		setRgState,
+		cycleRgCase,
+		cycleRgWordRegexp,
+		cycleRgResultsPerFile,
+		cycleRgSingleMatchPerResult,
+		cycleRgUnrestricted,
+	} = useRgState(initialSearchTerm ?? "");
+	const { fzfState, setFzfState, cycleFzfFilterColumn, cycleFzfIsExact } =
+		useFzfState();
 	const { focusState, setFocusState } = useFocusState();
 	const { selectionState, setSelectionState, overallResults } =
 		useSelectionState(
@@ -79,6 +102,13 @@ export const ApplicationStateProvider = ({
 				setSelectionState,
 				layoutState,
 				setLayoutState,
+				cycleRgCase,
+				cycleRgWordRegexp,
+				cycleRgResultsPerFile,
+				cycleRgSingleMatchPerResult,
+				cycleRgUnrestricted,
+				cycleFzfFilterColumn,
+				cycleFzfIsExact,
 			}}
 		>
 			{children}

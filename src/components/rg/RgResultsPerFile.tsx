@@ -9,6 +9,7 @@ export const RgResultsPerFile = (): ReactNode => {
 	} = useConfig();
 	const {
 		rgState: { rgOptions },
+		cycleRgResultsPerFile,
 	} = useApplicationState();
 	const initialRef = useRef(rgOptions.resultsPerFile);
 
@@ -24,6 +25,7 @@ export const RgResultsPerFile = (): ReactNode => {
 			title={"⌥3"}
 			borderStyle={borderType}
 			borderColor={isInit ? undefined : highlightedBorder}
+			onMouseDown={cycleRgResultsPerFile}
 		>
 			<text>{`results/file: ${resultsPerFile}`}</text>
 		</box>
