@@ -24,14 +24,25 @@ export const useInput = () => {
 
 	useKeyboard((key) => {
 		// Result list navigation
-		if (key.name === "up" || key.name === "pageup" || key.name === "home") {
+		if (key.name === "home") {
+			key.preventDefault();
+			setSelectionState((prev) => ({
+				...prev,
+				selectedResultIndex: 0,
+			}));
+		}
+
+		if (key.name === "end") {
+			key.preventDefault();
+			setSelectionState((prev) => ({
+				...prev,
+				selectedResultIndex: Math.max(0, overallResults.length - 1),
+			}));
+		}
+
+		if (key.name === "up" || key.name === "pageup") {
 			setSelectionState((prev) => {
-				const step =
-					key.name === "home"
-						? prev.selectedResultIndex
-						: key.name === "pageup"
-							? 5
-							: 1;
+				const step = key.name === "pageup" ? 5 : 1;
 				const newIndex = Math.max(prev.selectedResultIndex - step, 0);
 				return {
 					...prev,
@@ -40,14 +51,9 @@ export const useInput = () => {
 			});
 		}
 
-		if (key.name === "down" || key.name === "pagedown" || key.name === "end") {
+		if (key.name === "down" || key.name === "pagedown") {
 			setSelectionState((prev) => {
-				const step =
-					key.name === "end"
-						? overallResults.length
-						: key.name === "pagedown"
-							? 5
-							: 1;
+				const step = key.name === "pagedown" ? 5 : 1;
 				const newIndex = Math.min(
 					prev.selectedResultIndex + step,
 					Math.max(0, overallResults.length - 1),
