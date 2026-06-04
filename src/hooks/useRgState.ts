@@ -7,7 +7,7 @@ export type RgState = {
 	searchResults: SearchResult[];
 	isLoading?: boolean;
 	rgOptions: RgOptions;
-	searchNonce: number;
+	refreshTrigger: number;
 };
 
 export const useRgState = (initialSearchTerm: string) => {
@@ -20,7 +20,7 @@ export const useRgState = (initialSearchTerm: string) => {
 			singleMatchPerResult: false,
 			unrestricted: 0,
 		},
-		searchNonce: 0,
+		refreshTrigger: 0,
 	});
 
 	const cycleRgCase = () => {

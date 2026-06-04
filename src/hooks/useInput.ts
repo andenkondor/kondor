@@ -147,7 +147,10 @@ export const useInput = () => {
 
 		// Refresh rg search
 		if (key.ctrl && key.name === "r") {
-			setRgState((prev) => ({ ...prev, searchNonce: prev.searchNonce + 1 }));
+			setRgState((prev) => ({
+				...prev,
+				refreshTrigger: prev.refreshTrigger + 1,
+			}));
 		}
 
 		// Rg case switching

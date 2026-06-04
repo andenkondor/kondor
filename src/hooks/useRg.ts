@@ -7,7 +7,7 @@ import { useEffect, useRef } from "react";
 export function useRg() {
 	const {
 		setRgState,
-		rgState: { searchTerm, rgOptions },
+		rgState: { searchTerm, rgOptions, refreshTrigger },
 	} = useApplicationState();
 
 	const { inputDebounceDelayMs } = useConfig();
@@ -16,6 +16,7 @@ export function useRg() {
 	const debouncedSearchTerm = useDebounce(searchTerm, inputDebounceDelayMs);
 
 	useEffect(() => {
+		void refreshTrigger;
 		const searchId = ++activeSearchRef.current;
 
 		const search = async () => {
@@ -66,5 +67,5 @@ export function useRg() {
 				rgProcRef.current = undefined;
 			}
 		};
-	}, [debouncedSearchTerm, rgOptions, setRgState]);
+	}, [debouncedSearchTerm, rgOptions, refreshTrigger, setRgState]);
 }
