@@ -10,7 +10,7 @@ export const Popup = (): ReactNode => {
 		},
 	} = useApplicationState();
 	const {
-		colors: { focusedBorder, popupBackgroundColor },
+		colors: { focusedBorder, popupBackgroundColor, popupOverlayColor },
 		layout: { borderType },
 	} = useConfig();
 
@@ -27,6 +27,7 @@ export const Popup = (): ReactNode => {
 			height="100%"
 			alignItems="center"
 			justifyContent="center"
+			backgroundColor={popupOverlayColor}
 		>
 			<box
 				borderStyle={borderType}

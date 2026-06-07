@@ -17,6 +17,7 @@ export type Config = {
 		highlightedBorder: string;
 		unfocusedBorder: string;
 		popupBackgroundColor: string;
+		popupOverlayColor: string;
 		fileLineNumber: string;
 		defaultText: string;
 		truncationText: string;

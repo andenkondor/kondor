@@ -10,6 +10,7 @@ colors:
   highlightedBorder: "#CCC90A"
   unfocusedBorder: "#FFFFFF"
   popupBackgroundColor: "#000000"
+  popupOverlayColor: "#000000C0"
   fileLineNumber: "#00FF00"
   defaultText: "#FFFFFF"
   truncationText: "#0000FF"
