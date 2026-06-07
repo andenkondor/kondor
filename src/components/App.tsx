@@ -1,4 +1,5 @@
 import { FzfControl } from "@components/fzf/FzfControl";
+import { Popup } from "@components/Popup";
 import { Preview } from "@components/Preview";
 import { ResultList } from "@components/ResultList";
 import { RgControl } from "@components/rg/RgControl";
@@ -12,7 +13,6 @@ export const App = (): ReactNode => {
 	const {
 		layoutState: { isPreview },
 	} = useApplicationState();
-
 	const { width } = useTerminalDimensions();
 
 	return (
@@ -35,6 +35,7 @@ export const App = (): ReactNode => {
 					)}
 				</box>
 			</box>
+			<Popup />
 		</box>
 	);
 };

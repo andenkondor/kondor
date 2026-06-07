@@ -1,3 +1,4 @@
+import type { Opener } from "@definitions/Opener";
 import type { BorderStyle } from "@opentui/core";
 import type { ReactNode } from "react";
 import { createContext, useContext } from "react";
@@ -6,6 +7,7 @@ export type Config = {
 	initialSearchTerm?: string;
 	inputDebounceDelayMs: number;
 	previewDebounceDelayMs: number;
+	openers: Opener[];
 	colors: {
 		filePathText: string;
 		highlightedText: string;
@@ -14,6 +16,7 @@ export type Config = {
 		focusedBorder: string;
 		highlightedBorder: string;
 		unfocusedBorder: string;
+		popupBackgroundColor: string;
 		fileLineNumber: string;
 		defaultText: string;
 		truncationText: string;

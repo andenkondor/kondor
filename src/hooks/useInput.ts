@@ -13,6 +13,9 @@ export const useInput = () => {
 		setLayoutState,
 		setRgState,
 		resultState: { overallResults },
+		layoutState: {
+			popups: { isChooseOpenerPopupOpen },
+		},
 		cycleRgCase,
 		cycleRgWordRegexp,
 		cycleRgResultsPerFile,
@@ -23,6 +26,10 @@ export const useInput = () => {
 	} = useApplicationState();
 
 	useKeyboard((key) => {
+		if (isChooseOpenerPopupOpen) {
+			return;
+		}
+
 		// Result list navigation
 		if (key.name === "home") {
 			key.preventDefault();
@@ -95,7 +102,7 @@ export const useInput = () => {
 			});
 		}
 
-		if (key.name === "return") {
+		if (!key.shift && key.name === "return") {
 			if (markedResultIds.size > 0) {
 				const markedItems = overallResults.filter((r) =>
 					markedResultIds.has(r.id),
@@ -115,6 +122,17 @@ export const useInput = () => {
 				return;
 			}
 			Nvim.open(selectedResult, renderer);
+		}
+
+		if (key.shift && key.name === "return") {
+			if (!selectedResult) {
+				return;
+			}
+
+			setLayoutState((prev) => ({
+				...prev,
+				popups: { ...prev.popups, isChooseOpenerPopupOpen: true },
+			}));
 		}
 
 		if (key.ctrl && key.name === "s") {
@@ -192,11 +210,6 @@ export const useInput = () => {
 		// fzf exact/fuzzy toggle
 		if (key.meta && key.name === "7") {
 			cycleFzfIsExact();
-		}
-
-		// fzf exact/fuzzy toggle
-		if (key.meta && key.name === "7") {
-			toggleIsExact();
 		}
 	});
 };

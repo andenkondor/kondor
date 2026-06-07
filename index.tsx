@@ -2,24 +2,12 @@
 
 import { App } from "@components/App";
 import { ApplicationStateProvider } from "@contexts/ApplicationStateContext";
-import {
-	type CliConfig,
-	type Config,
-	ConfigProvider,
-} from "@contexts/ConfigContext";
+import { ConfigProvider } from "@contexts/ConfigContext";
 import { createCliRenderer } from "@opentui/core";
 import { createRoot } from "@opentui/react";
-import { merge } from "lodash";
-import defaultConfig from "./config.json";
+import { resolveConfig } from "@tools/ConfigResolver";
 
-const cliArgs = process.argv.slice(2);
-const initialSearchTerm = cliArgs.join(" ");
-
-const cliConfig: CliConfig = {
-	initialSearchTerm,
-};
-
-const config = merge({}, defaultConfig, cliConfig) as Config;
+const config = await resolveConfig();
 
 const renderer = await createCliRenderer({
 	exitOnCtrlC: true,

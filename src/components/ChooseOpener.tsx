@@ -1,0 +1,62 @@
+import { useApplicationState } from "@contexts/ApplicationStateContext";
+import { useConfig } from "@contexts/ConfigContext";
+import { usePopup } from "@hooks/usePopup";
+import { Opener } from "@tools/Opener";
+import { type ReactNode, useCallback, useMemo } from "react";
+
+export const ChooseOpener = (): ReactNode => {
+	const { openers } = useConfig();
+	const {
+		selectionState: { selectedResult },
+	} = useApplicationState();
+	const maxSelectableIndex = useMemo(
+		() => Math.max(openers.length - 1, 0),
+		[openers.length],
+	);
+	const handleEnter = useCallback(
+		(index: number) => {
+			if (!selectedResult || !openers[index]) {
+				return;
+			}
+			Opener.execute(openers[index], selectedResult);
+		},
+		[openers, selectedResult],
+	);
+	const { selectedIndex } = usePopup(maxSelectableIndex, handleEnter);
+	const {
+		colors: { focusedBorder, selectedBackground },
+	} = useConfig();
+
+	if (!selectedResult) {
+		return (
+			<box padding={1}>
+				<text>No result selected</text>
+			</box>
+		);
+	}
+
+	if (openers.length === 0) {
+		return (
+			<box padding={1}>
+				<text>No openers configured</text>
+			</box>
+		);
+	}
+
+	return (
+		<box flexDirection="column" padding={1} width="100%">
+			{openers.map((opener, i) => (
+				<box
+					key={i}
+					flexDirection="row"
+					height={1}
+					backgroundColor={i === selectedIndex ? focusedBorder : undefined}
+				>
+					<text fg={i === selectedIndex ? selectedBackground : undefined}>
+						{opener.description}
+					</text>
+				</box>
+			))}
+		</box>
+	);
+};
