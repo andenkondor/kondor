@@ -1,10 +1,12 @@
 import { useApplicationState } from "@contexts/ApplicationStateContext";
 import { useConfig } from "@contexts/ConfigContext";
 import { usePopup } from "@hooks/usePopup";
+import { useRenderer } from "@opentui/react";
 import { Opener } from "@tools/Opener";
 import { type ReactNode, useCallback, useMemo } from "react";
 
 export const ChooseOpener = (): ReactNode => {
+	const renderer = useRenderer();
 	const { openers } = useConfig();
 	const {
 		selectionState: { selectedResult },
@@ -18,9 +20,9 @@ export const ChooseOpener = (): ReactNode => {
 			if (!selectedResult || !openers[index]) {
 				return;
 			}
-			Opener.execute(openers[index], selectedResult);
+			Opener.execute(openers[index], selectedResult, renderer);
 		},
-		[openers, selectedResult],
+		[openers, selectedResult, renderer],
 	);
 	const { selectedIndex } = usePopup(maxSelectableIndex, handleEnter);
 	const {
