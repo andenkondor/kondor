@@ -1,7 +1,6 @@
 import { useApplicationState } from "@contexts/ApplicationStateContext";
 import { Focus } from "@definitions/Focus";
 import { useKeyboard, useRenderer } from "@opentui/react";
-import { Idea } from "@tools/Idea";
 import { Nvim } from "@tools/Nvim";
 
 export const useInput = () => {
@@ -133,13 +132,6 @@ export const useInput = () => {
 				...prev,
 				popups: { ...prev.popups, isChooseOpenerPopupOpen: true },
 			}));
-		}
-
-		if (key.ctrl && key.name === "s") {
-			if (!selectedResult) {
-				return;
-			}
-			Idea.open(selectedResult);
 		}
 
 		// Focus switching
