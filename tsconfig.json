@@ -1,5 +1,5 @@
 {
-	"exclude": ["worktrees"],
+	"exclude": [".worktrees"],
 	"compilerOptions": {
 		// Environment setup & latest features
 		"lib": ["ESNext"],
