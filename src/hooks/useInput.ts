@@ -1,5 +1,5 @@
 import { useApplicationState } from "@contexts/ApplicationStateContext";
-import { Focus } from "@definitions/Focus";
+import { InputFocus } from "@definitions/Focus";
 import { useKeyboard, useRenderer } from "@opentui/react";
 import { Nvim } from "@tools/Nvim";
 
@@ -13,7 +13,7 @@ export const useInput = () => {
 		setRgState,
 		resultState: { overallResults },
 		layoutState: {
-			popups: { isChooseOpenerPopupOpen },
+			popups: { isPopupOpen },
 		},
 		cycleRgCase,
 		cycleRgWordRegexp,
@@ -25,7 +25,7 @@ export const useInput = () => {
 	} = useApplicationState();
 
 	useKeyboard((key) => {
-		if (isChooseOpenerPopupOpen) {
+		if (isPopupOpen) {
 			return;
 		}
 
@@ -132,14 +132,14 @@ export const useInput = () => {
 				...prev,
 				popups: { ...prev.popups, isChooseOpenerPopupOpen: true },
 			}));
-			setFocusState((prev) => ({ ...prev, currentFocus: Focus.POPUP }));
 		}
 
 		// Focus switching
 		if (key.ctrl && key.name === "g") {
 			setFocusState((prev) => ({
 				...prev,
-				currentFocus: prev.currentFocus === Focus.FZF ? Focus.RG : Focus.FZF,
+				currentFocus:
+					prev.currentFocus === InputFocus.FZF ? InputFocus.RG : InputFocus.FZF,
 			}));
 		}
 

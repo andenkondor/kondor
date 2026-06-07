@@ -1,6 +1,4 @@
-export enum Focus {
-	NONE,
+export enum InputFocus {
 	RG,
 	FZF,
-	POPUP,
 }

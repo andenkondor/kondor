@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 
 export type PopupsState = {
 	isChooseOpenerPopupOpen: boolean;
+	isPopupOpen: boolean;
 };
 
 export type LayoutState = {
@@ -21,12 +22,18 @@ export const useLayoutState = (width: number) => {
 		[isPreview, width],
 	);
 
+	const isPopupOpen = useMemo(
+		() => isChooseOpenerPopupOpen,
+		[isChooseOpenerPopupOpen],
+	);
+
 	const setLayoutState = (updater: (prev: LayoutState) => LayoutState) => {
 		const prev: LayoutState = {
 			isPreview,
 			resultListContentWidth,
 			popups: {
 				isChooseOpenerPopupOpen,
+				isPopupOpen,
 			},
 		};
 		const next = updater(prev);
@@ -40,6 +47,7 @@ export const useLayoutState = (width: number) => {
 			resultListContentWidth,
 			popups: {
 				isChooseOpenerPopupOpen,
+				isPopupOpen,
 			},
 		},
 		setLayoutState,

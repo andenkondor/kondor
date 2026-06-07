@@ -1,6 +1,6 @@
 import { BorderedTextInput } from "@components/BorderedTextInput";
 import { useApplicationState } from "@contexts/ApplicationStateContext";
-import { Focus } from "@definitions/Focus";
+import { InputFocus } from "@definitions/Focus";
 import type { ReactNode } from "react";
 
 export const FzfFilterTerm = (): ReactNode => {
@@ -9,9 +9,12 @@ export const FzfFilterTerm = (): ReactNode => {
 		setFzfState,
 		setFocusState,
 		focusState: { currentFocus },
+		layoutState: {
+			popups: { isPopupOpen },
+		},
 	} = useApplicationState();
 
-	const hasFocus = currentFocus === Focus.FZF;
+	const hasFocus = currentFocus === InputFocus.FZF;
 	const onFilterTermChange = (filterTerm: string) => {
 		setFzfState((prev) => ({ ...prev, filterTerm: filterTerm.trim() }));
 	};
@@ -21,9 +24,10 @@ export const FzfFilterTerm = (): ReactNode => {
 			input={filterTerm}
 			onInputChange={onFilterTermChange}
 			hasFocus={hasFocus}
+			disableInput={isPopupOpen}
 			titles={["fzf", ...(!hasFocus ? ["⌃G"] : [])]}
 			onMouseDown={() =>
-				setFocusState((prev) => ({ ...prev, currentFocus: Focus.FZF }))
+				setFocusState((prev) => ({ ...prev, currentFocus: InputFocus.FZF }))
 			}
 		/>
 	);
