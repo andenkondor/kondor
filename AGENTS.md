@@ -20,6 +20,7 @@
 
 ## General guidelines
 - Performance is critical — keep memory and CPU footprint low.
+- Keep [`README.md`](README.md) up to date with every change.
 
 ## Directory Structure
 
