@@ -1,14 +1,30 @@
 import { useApplicationState } from "@contexts/ApplicationStateContext";
+import { Focus } from "@definitions/Focus";
 import { useKeyboard } from "@opentui/react";
 import { useState } from "react";
+
+const closePopup = (
+	setLayoutState: ReturnType<typeof useApplicationState>["setLayoutState"],
+	setFocusState: ReturnType<typeof useApplicationState>["setFocusState"],
+	setSelectedIndex: (index: number) => void,
+) => {
+	setLayoutState((prev) => ({
+		...prev,
+		popups: { ...prev.popups, isChooseOpenerPopupOpen: false },
+	}));
+	setFocusState((prev) => ({ ...prev, currentFocus: Focus.RG }));
+	setSelectedIndex(0);
+};
 
 export const usePopup = (
 	maxIndex: number,
 	onEnter: (index: number) => void,
+	onNumber?: (index: number) => void,
 ) => {
 	const [selectedIndex, setSelectedIndex] = useState(0);
 	const {
 		setLayoutState,
+		setFocusState,
 		layoutState: {
 			popups: { isChooseOpenerPopupOpen },
 		},
@@ -20,11 +36,7 @@ export const usePopup = (
 		}
 
 		if (key.name === "escape") {
-			setLayoutState((prev) => ({
-				...prev,
-				popups: { ...prev.popups, isChooseOpenerPopupOpen: false },
-			}));
-			setSelectedIndex(0);
+			closePopup(setLayoutState, setFocusState, setSelectedIndex);
 			return;
 		}
 
@@ -40,11 +52,17 @@ export const usePopup = (
 
 		if (key.name === "return") {
 			onEnter(selectedIndex);
-			setLayoutState((prev) => ({
-				...prev,
-				popups: { ...prev.popups, isChooseOpenerPopupOpen: false },
-			}));
-			setSelectedIndex(0);
+			closePopup(setLayoutState, setFocusState, setSelectedIndex);
+			return;
+		}
+
+		const n = Number(key.name);
+		if (n >= 1 && n <= 9) {
+			const index = n - 1;
+			if (index <= maxIndex) {
+				(onNumber ?? onEnter)(index);
+				closePopup(setLayoutState, setFocusState, setSelectedIndex);
+			}
 		}
 	});
 

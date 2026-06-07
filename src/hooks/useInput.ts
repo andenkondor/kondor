@@ -132,6 +132,7 @@ export const useInput = () => {
 				...prev,
 				popups: { ...prev.popups, isChooseOpenerPopupOpen: true },
 			}));
+			setFocusState((prev) => ({ ...prev, currentFocus: Focus.POPUP }));
 		}
 
 		// Focus switching

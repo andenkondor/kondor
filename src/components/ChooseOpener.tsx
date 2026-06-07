@@ -15,7 +15,7 @@ export const ChooseOpener = (): ReactNode => {
 		() => Math.max(openers.length - 1, 0),
 		[openers.length],
 	);
-	const handleEnter = useCallback(
+	const executeOpener = useCallback(
 		(index: number) => {
 			if (!selectedResult || !openers[index]) {
 				return;
@@ -24,7 +24,11 @@ export const ChooseOpener = (): ReactNode => {
 		},
 		[openers, selectedResult, renderer],
 	);
-	const { selectedIndex } = usePopup(maxSelectableIndex, handleEnter);
+	const { selectedIndex } = usePopup(
+		maxSelectableIndex,
+		executeOpener,
+		executeOpener,
+	);
 	const {
 		colors: { focusedBorder, selectedBackground },
 	} = useConfig();
@@ -54,6 +58,12 @@ export const ChooseOpener = (): ReactNode => {
 					height={1}
 					backgroundColor={i === selectedIndex ? focusedBorder : undefined}
 				>
+					<text
+						width={2}
+						fg={i === selectedIndex ? selectedBackground : undefined}
+					>
+						{`${i + 1} `}
+					</text>
 					<text fg={i === selectedIndex ? selectedBackground : undefined}>
 						{opener.description}
 					</text>
