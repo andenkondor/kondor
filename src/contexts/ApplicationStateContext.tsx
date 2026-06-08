@@ -12,11 +12,12 @@ import type { SelectionState } from "@hooks/useSelectionState";
 import { useSelectionState } from "@hooks/useSelectionState";
 import { useTerminalDimensions } from "@opentui/react";
 import type { ReactNode } from "react";
-import { createContext, useContext, useMemo } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 type ResultState = {
 	overallResults: SearchResult[];
 	isLoading: boolean;
+	error: string | undefined;
 };
 
 type RgCycleMethods = {
@@ -38,6 +39,7 @@ type ApplicationState = {
 	fzfState: FzfState;
 	setFzfState: React.Dispatch<React.SetStateAction<FzfState>>;
 	resultState: ResultState;
+	setResultState: React.Dispatch<React.SetStateAction<ResultState>>;
 	focusState: FocusState;
 	setFocusState: React.Dispatch<React.SetStateAction<FocusState>>;
 	selectionState: SelectionState;
@@ -80,13 +82,19 @@ export const ApplicationStateProvider = ({
 		);
 	const { layoutState, setLayoutState } = useLayoutState(width);
 
-	const resultState: ResultState = useMemo(
-		() => ({
+	const [resultState, setResultState] = useState<ResultState>({
+		overallResults,
+		isLoading: false,
+		error: undefined,
+	});
+
+	useEffect(() => {
+		setResultState((prev) => ({
+			...prev,
 			overallResults,
 			isLoading: Boolean(rgState.isLoading || fzfState.isLoading),
-		}),
-		[overallResults, rgState.isLoading, fzfState.isLoading],
-	);
+		}));
+	}, [overallResults, rgState.isLoading, fzfState.isLoading]);
 
 	return (
 		<ApplicationStateContext.Provider
@@ -96,6 +104,7 @@ export const ApplicationStateProvider = ({
 				fzfState,
 				setFzfState,
 				resultState,
+				setResultState,
 				focusState,
 				setFocusState,
 				selectionState,

@@ -21,6 +21,7 @@ export type Config = {
 		fileLineNumber: string;
 		defaultText: string;
 		truncationText: string;
+		errorBorder: string;
 	};
 	markSymbol: string;
 	selectionSymbol: string;

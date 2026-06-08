@@ -14,6 +14,7 @@ colors:
   fileLineNumber: "#00FF00"
   defaultText: "#FFFFFF"
   truncationText: "#0000FF"
+  errorBorder: "#FF0000"
 markSymbol: "○"
 selectionSymbol: ">"
 layout:

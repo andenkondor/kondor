@@ -37,7 +37,7 @@ export class Fzf {
 			],
 			{
 				stdout: "pipe",
-				stderr: "inherit",
+				stderr: "pipe",
 				stdin: Buffer.from(stdin),
 			},
 		);
@@ -47,24 +47,37 @@ export class Fzf {
 				throw new Error("fzf stdout stream is not available");
 			}
 
-			const lineReader = createInterface({
-				input: Readable.fromWeb(proc.stdout as ReadableStream<Uint8Array>),
-				crlfDelay: Infinity,
-			});
-			const filtered = new Set<string>();
-			try {
-				for await (const line of lineReader) {
-					if (line) {
-						filtered.add(line);
-					}
-				}
-			} finally {
-				lineReader.close();
-			}
+			const [filtered, stderr] = await Promise.all([
+				readFzfStdout(proc.stdout as ReadableStream<Uint8Array>),
+				proc.stderr
+					? new Response(proc.stderr as ReadableStream<Uint8Array>).text()
+					: Promise.resolve(""),
+			]);
 
-			return input.filter((rg) => filtered.has(rg.id));
+			return {
+				results: input.filter((rg) => filtered.has(rg.id)),
+				stderr,
+			};
 		};
 
 		return { proc, getResult };
 	}
 }
+
+const readFzfStdout = async (
+	stream: ReadableStream<Uint8Array>,
+): Promise<Set<string>> => {
+	const lineReader = createInterface({
+		input: Readable.fromWeb(stream),
+		crlfDelay: Infinity,
+	});
+	const filtered = new Set<string>();
+	try {
+		for await (const line of lineReader) {
+			if (line) filtered.add(line);
+		}
+	} finally {
+		lineReader.close();
+	}
+	return filtered;
+};

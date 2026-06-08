@@ -10,6 +10,11 @@ export type RgOptions = {
 	unrestricted: number;
 };
 
+export type RgResult = {
+	results: SearchResult[];
+	stderr: string;
+};
+
 export class Rg {
 	static execute(searchTerm: string, options: RgOptions) {
 		const proc = Bun.spawn(
@@ -34,60 +39,65 @@ export class Rg {
 			],
 			{
 				stdout: "pipe",
-				stderr: "inherit",
+				stderr: "pipe",
 			},
 		);
 
-		const getResult = async () => {
+		const getResult = async (): Promise<RgResult> => {
 			if (!proc.stdout) {
 				throw new Error("rg stdout stream is not available");
 			}
 
-			const lineReader = createInterface({
-				input: Readable.fromWeb(proc.stdout as ReadableStream<Uint8Array>),
-				crlfDelay: Infinity,
-			});
-			const rgMatches: RgMatch[] = [];
-			try {
-				for await (const line of lineReader) {
-					if (!line) {
-						continue;
-					}
+			const [rgMatches, stderr] = await Promise.all([
+				readRgStdout(proc.stdout as ReadableStream<Uint8Array>),
+				proc.stderr
+					? new Response(proc.stderr as ReadableStream<Uint8Array>).text()
+					: Promise.resolve(""),
+			]);
 
-					let parsed: unknown;
-					try {
-						parsed = JSON.parse(line) as unknown;
-					} catch {
-						continue;
-					}
-					if (isRgMatch(parsed)) {
-						rgMatches.push(parsed);
-					}
-				}
-			} finally {
-				lineReader.close();
-			}
-
-			return rgMatches.flatMap((match) => {
+			const results = rgMatches.flatMap((match) => {
 				if (options.singleMatchPerResult) {
 					return match.data.submatches.map(
 						(submatch, index) =>
 							new SearchResult(
-								{
-									...match.data,
-									submatches: [submatch],
-								},
+								{ ...match.data, submatches: [submatch] },
 								{ searchTerm, options, submatchIndex: index },
 							),
 					);
 				}
 				return [new SearchResult(match.data, { searchTerm, options })];
 			});
+
+			return { results, stderr };
 		};
 
 		return { proc, getResult };
 	}
 }
+
+const readRgStdout = async (
+	stream: ReadableStream<Uint8Array>,
+): Promise<RgMatch[]> => {
+	const lineReader = createInterface({
+		input: Readable.fromWeb(stream),
+		crlfDelay: Infinity,
+	});
+	const rgMatches: RgMatch[] = [];
+	try {
+		for await (const line of lineReader) {
+			if (!line) continue;
+			try {
+				const parsed = JSON.parse(line) as unknown;
+				if (isRgMatch(parsed)) rgMatches.push(parsed);
+			} catch {
+				// skip non-JSON lines
+			}
+		}
+	} finally {
+		lineReader.close();
+	}
+	return rgMatches;
+};
 
 type RgMatch = {
 	type: "match";
@@ -96,11 +106,7 @@ type RgMatch = {
 		lines: { text: string };
 		line_number: number;
 		absolute_offset: number;
-		submatches: {
-			match: { text: string };
-			start: number;
-			end: number;
-		}[];
+		submatches: { match: { text: string }; start: number; end: number }[];
 	};
 };
 

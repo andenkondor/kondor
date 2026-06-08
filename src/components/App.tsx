@@ -1,3 +1,4 @@
+import { ErrorFooter } from "@components/ErrorFooter";
 import { FzfControl } from "@components/fzf/FzfControl";
 import { Popup } from "@components/Popup";
 import { Preview } from "@components/Preview";
@@ -35,6 +36,7 @@ export const App = (): ReactNode => {
 					)}
 				</box>
 			</box>
+			<ErrorFooter />
 			<Popup />
 		</box>
 	);

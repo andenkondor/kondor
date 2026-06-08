@@ -7,6 +7,7 @@ import { useEffect, useRef } from "react";
 export function useRg() {
 	const {
 		setRgState,
+		setResultState,
 		rgState: { searchTerm, rgOptions, refreshTrigger },
 	} = useApplicationState();
 
@@ -27,13 +28,19 @@ export function useRg() {
 
 			if (!debouncedSearchTerm) {
 				if (searchId === activeSearchRef.current) {
+					setResultState((prev) => ({ ...prev, error: undefined }));
 					setRgState((prev) => ({ ...prev, searchResults: [] }));
 				}
 				return;
 			}
 
 			try {
-				setRgState((prev) => ({ ...prev, isLoading: true, searchResults: [] }));
+				setResultState((prev) => ({ ...prev, error: undefined }));
+				setRgState((prev) => ({
+					...prev,
+					isLoading: true,
+					searchResults: [],
+				}));
 
 				const { proc: newRgProc, getResult } = Rg.execute(
 					debouncedSearchTerm,
@@ -44,10 +51,15 @@ export function useRg() {
 				if (searchId !== activeSearchRef.current) {
 					return;
 				}
-				const searchResults = await getResult();
+
+				const { results, stderr } = await getResult();
 
 				if (searchId === activeSearchRef.current) {
-					setRgState((prev) => ({ ...prev, searchResults }));
+					setResultState((prev) => ({ ...prev, error: stderr || undefined }));
+					setRgState((prev) => ({
+						...prev,
+						searchResults: results,
+					}));
 				}
 			} finally {
 				if (searchId === activeSearchRef.current) {
@@ -67,5 +79,11 @@ export function useRg() {
 				rgProcRef.current = undefined;
 			}
 		};
-	}, [debouncedSearchTerm, rgOptions, refreshTrigger, setRgState]);
+	}, [
+		debouncedSearchTerm,
+		rgOptions,
+		refreshTrigger,
+		setRgState,
+		setResultState,
+	]);
 }

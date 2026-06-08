@@ -7,6 +7,7 @@ import { useEffect, useRef } from "react";
 export function useFzf() {
 	const {
 		setFzfState,
+		setResultState,
 		rgState: { searchResults },
 		fzfState: { filterTerm, fzfOptions },
 	} = useApplicationState();
@@ -55,12 +56,15 @@ export function useFzf() {
 				);
 				fzfProcRef.current = proc;
 
-				const filterResults = await getResult();
+				const { results, stderr } = await getResult();
 
 				if (filterId === activeFilterRef.current) {
+					if (stderr) {
+						setResultState((prev) => ({ ...prev, error: stderr }));
+					}
 					setFzfState((prev) => ({
 						...prev,
-						filterResults,
+						filterResults: results,
 					}));
 				}
 			} finally {
@@ -74,5 +78,11 @@ export function useFzf() {
 		};
 
 		search();
-	}, [searchResults, debouncedFzfFilter, fzfOptions, setFzfState]);
+	}, [
+		searchResults,
+		debouncedFzfFilter,
+		fzfOptions,
+		setFzfState,
+		setResultState,
+	]);
 }
