@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - uses: oven-sh/setup-bun@v2
       - run: bun install
@@ -26,14 +28,37 @@ jobs:
       - name: Create tar.gz archive
         run: tar -czf kondor.tar.gz -C dist .
 
-      - name: Upload binary to release
-        uses: svenstaro/upload-release-action@v2
+      - name: Update CHANGELOG.md
+        uses: orhun/git-cliff-action@v4
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: kondor.tar.gz
-          asset_name: kondor.tar.gz
-          tag: ${{ github.ref }}
-          overwrite: true
+          args: -o CHANGELOG.md
+        env:
+          GITHUB_REPO: ${{ github.repository }}
+          OUTPUT: CHANGELOG.md
+
+      - name: Commit CHANGELOG.md
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add CHANGELOG.md
+          git diff --cached --quiet && exit 0
+          git commit -m "chore(release): prepare for ${{ github.ref_name }}"
+          git push
+
+      - name: Generate release notes
+        uses: orhun/git-cliff-action@v4
+        id: git-cliff
+        with:
+          args: --latest --strip header
+        env:
+          GITHUB_REPO: ${{ github.repository }}
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: kondor.tar.gz
+          body: ${{ steps.git-cliff.outputs.content }}
+          generate_release_notes: false
 
   update-homebrew:
     name: Update Homebrew Formula
