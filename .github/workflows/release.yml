@@ -58,7 +58,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: kondor.tar.gz
-          body: ${{ steps.git-cliff.outputs.content }}
+          body_path: ${{ steps.git-cliff.outputs.changelog }}
           generate_release_notes: false
 
   update-homebrew:
