@@ -1,3 +1,8 @@
+## [0.9.4] - 2026-06-09
+
+### ⚙️ Miscellaneous Tasks
+
+- Fix release note generation
 ## [0.9.3] - 2026-06-09
 
 ### ⚙️ Miscellaneous Tasks
