@@ -1,34 +1,8 @@
-import type { Opener } from "@definitions/Opener";
-import type { BorderStyle } from "@opentui/core";
 import type { ReactNode } from "react";
 import { createContext, useContext } from "react";
+import type { Config } from "./ConfigSchema";
 
-export type Config = {
-	initialSearchTerm?: string;
-	inputDebounceDelayMs: number;
-	previewDebounceDelayMs: number;
-	openers: Opener[];
-	colors: {
-		filePathText: string;
-		highlightedText: string;
-		normalText: string;
-		selectedBackground: string;
-		focusedBorder: string;
-		highlightedBorder: string;
-		unfocusedBorder: string;
-		popupBackgroundColor: string;
-		popupOverlayColor: string;
-		fileLineNumber: string;
-		defaultText: string;
-		truncationText: string;
-		errorBorder: string;
-	};
-	markSymbol: string;
-	selectionSymbol: string;
-	layout: { borderType: BorderStyle };
-};
-
-export type CliConfig = Pick<Config, "initialSearchTerm">;
+export type { CliConfig, Config } from "./ConfigSchema";
 
 const ConfigContext = createContext<Config | null>(null);
 

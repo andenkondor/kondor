@@ -13,8 +13,8 @@ export type LayoutState = {
 
 const BORDER_THICKNESS = 1;
 
-export const useLayoutState = (width: number) => {
-	const [isPreview, setIsPreview] = useState(false);
+export const useLayoutState = (width: number, showPreview?: boolean) => {
+	const [isPreview, setIsPreview] = useState(showPreview ?? false);
 	const [isChooseOpenerPopupOpen, setIsChooseOpenerPopupOpen] = useState(false);
 
 	const resultListContentWidth = useMemo(

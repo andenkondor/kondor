@@ -1,5 +1,4 @@
 inputDebounceDelayMs: 300
-previewDebounceDelayMs: 100
 openers: []
 colors:
   filePathText: "#9E40A1"

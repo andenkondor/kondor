@@ -1,6 +1,8 @@
 import type { CliConfig, Config } from "@contexts/ConfigContext";
+import { ConfigSchema } from "@contexts/ConfigSchema";
 import { load } from "js-yaml";
 import { merge } from "lodash";
+import { ZodError } from "zod";
 import defaultConfig from "../../config.yaml";
 
 export const resolveConfig = async (): Promise<Config> => {
@@ -14,16 +16,20 @@ export const resolveConfig = async (): Promise<Config> => {
 	const xdgConfigHome =
 		process.env.XDG_CONFIG_HOME ?? `${Bun.env.HOME ?? "~"}/.config`;
 	const settingsPath = `${xdgConfigHome}/kondor/kondor-settings.yaml`;
-	const settingsConfig: Partial<Config> = {};
+	let settingsConfig: Partial<Config> = {};
+
 	try {
 		const yamlText = await Bun.file(settingsPath).text();
 		const parsed = load(yamlText) as Record<string, unknown>;
-		if (parsed?.openers && Array.isArray(parsed.openers)) {
-			settingsConfig.openers = parsed.openers as Config["openers"];
+		settingsConfig = ConfigSchema.partial().parse(parsed);
+	} catch (e) {
+		if (e instanceof ZodError) {
+			throw e;
 		}
-	} catch {
-		// settings file is optional
+		// settings file is optional — ignore I/O errors
 	}
 
-	return merge({}, defaultConfig, settingsConfig, cliConfig) as Config;
+	return ConfigSchema.parse(
+		merge({}, defaultConfig, settingsConfig, cliConfig),
+	);
 };

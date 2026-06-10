@@ -14,6 +14,8 @@ import { useTerminalDimensions } from "@opentui/react";
 import type { ReactNode } from "react";
 import { createContext, useContext, useEffect, useState } from "react";
 
+const PREVIEW_DEBOUNCE_DELAY_MS = 100;
+
 type ResultState = {
 	overallResults: SearchResult[];
 	isLoading: boolean;
@@ -59,7 +61,7 @@ export const ApplicationStateProvider = ({
 	children: ReactNode;
 }): ReactNode => {
 	const { width } = useTerminalDimensions();
-	const { initialSearchTerm, previewDebounceDelayMs } = useConfig();
+	const { initialSearchTerm, preview } = useConfig();
 
 	const {
 		rgState,
@@ -78,9 +80,12 @@ export const ApplicationStateProvider = ({
 			fzfState.filterResults,
 			rgState.searchTerm,
 			rgState.searchResults,
-			previewDebounceDelayMs,
+			PREVIEW_DEBOUNCE_DELAY_MS,
 		);
-	const { layoutState, setLayoutState } = useLayoutState(width);
+	const { layoutState, setLayoutState } = useLayoutState(
+		width,
+		preview.showOnStart,
+	);
 
 	const [resultState, setResultState] = useState<ResultState>({
 		overallResults,
