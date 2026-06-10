@@ -1,3 +1,12 @@
+## [0.9.5] - 2026-06-10
+
+### 🚀 Features
+
+- Configure if preview shows up on startup
+
+### 📚 Documentation
+
+- AGENTS.md enforces pinned versions
 ## [0.9.4] - 2026-06-09
 
 ### ⚙️ Miscellaneous Tasks
