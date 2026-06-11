@@ -74,6 +74,7 @@ These control how `fzf` filters the rg results. Toggled from a second toolbar ro
 | `Ctrl-A`      | Toggle select all / deselect all marks                                 |
 | `Ctrl-X`      | Delete (ignore) the selected result from the list                      |
 | `Ctrl-P`      | Toggle preview pane on/off                                             |
+| `Ctrl-=`      | Cycle preview layout (right / bottom)                                  |
 | `Ctrl-G`      | Toggle input focus between Rg search term and Fzf filter term          |
 | `Ctrl-R`      | Refresh / re-run the current rg search                                 |
 

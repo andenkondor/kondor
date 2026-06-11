@@ -151,6 +151,14 @@ export const useInput = () => {
 			}));
 		}
 
+		// Cycle preview layout (right/bottom)
+		if (key.ctrl && key.name === "=") {
+			setLayoutState((prev) => ({
+				...prev,
+				previewLayout: prev.previewLayout === "right" ? "bottom" : "right",
+			}));
+		}
+
 		// Delete item
 		if (key.ctrl && key.name === "x") {
 			if (!selectedResult) {

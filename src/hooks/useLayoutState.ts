@@ -21,15 +21,17 @@ export const useLayoutState = (
 	previewLayout: PreviewLayout,
 ) => {
 	const [isPreview, setIsPreview] = useState(showPreview);
+	const [previewLayoutState, setPreviewLayoutState] =
+		useState<PreviewLayout>(previewLayout);
 	const [isChooseOpenerPopupOpen, setIsChooseOpenerPopupOpen] = useState(false);
 
 	const resultListContentWidth = useMemo(
 		() =>
-			(isPreview && previewLayout !== "bottom"
+			(isPreview && previewLayoutState !== "bottom"
 				? Math.floor(width / 2)
 				: width) -
 			2 * BORDER_THICKNESS,
-		[isPreview, previewLayout, width],
+		[isPreview, previewLayoutState, width],
 	);
 
 	const isPopupOpen = useMemo(
@@ -40,7 +42,7 @@ export const useLayoutState = (
 	const setLayoutState = (updater: (prev: LayoutState) => LayoutState) => {
 		const prev: LayoutState = {
 			isPreview,
-			previewLayout,
+			previewLayout: previewLayoutState,
 			resultListContentWidth,
 			popups: {
 				isChooseOpenerPopupOpen,
@@ -49,13 +51,14 @@ export const useLayoutState = (
 		};
 		const next = updater(prev);
 		setIsPreview(next.isPreview);
+		setPreviewLayoutState(next.previewLayout);
 		setIsChooseOpenerPopupOpen(next.popups.isChooseOpenerPopupOpen);
 	};
 
 	return {
 		layoutState: {
 			isPreview,
-			previewLayout,
+			previewLayout: previewLayoutState,
 			resultListContentWidth,
 			popups: {
 				isChooseOpenerPopupOpen,
