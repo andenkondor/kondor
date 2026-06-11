@@ -4,9 +4,12 @@ import { useEffect, useState } from "react";
 
 export const usePreview = (previewHeight: number = 0) => {
 	const {
-		layoutState: { isPreview },
+		layoutState: { isPreview, previewLayout },
 		selectionState: { previewedResult, selectedResult },
 	} = useApplicationState();
+
+	const batStyle =
+		previewLayout === "bottom" ? "changes,numbers,snip" : undefined;
 
 	const [content, setContent] = useState("");
 
@@ -21,7 +24,7 @@ export const usePreview = (previewHeight: number = 0) => {
 			return;
 		}
 
-		const above = Math.floor((previewHeight - 1) / 2);
+		const above = Math.max(0, Math.floor((previewHeight - 4) / 2));
 		const fromLine = Math.max(1, previewedResult.lineNumber - above);
 
 		setContent("");
@@ -32,6 +35,7 @@ export const usePreview = (previewHeight: number = 0) => {
 				highlightedLine: previewedResult.lineNumber,
 				fromLine,
 				toLine: fromLine + 2 * above,
+				style: batStyle,
 			});
 
 			if (!isDisposed) {
@@ -44,7 +48,7 @@ export const usePreview = (previewHeight: number = 0) => {
 		return () => {
 			isDisposed = true;
 		};
-	}, [previewedResult, isPreview, previewHeight, selectedResult]);
+	}, [previewedResult, isPreview, previewHeight, batStyle, selectedResult]);
 
 	return content;
 };

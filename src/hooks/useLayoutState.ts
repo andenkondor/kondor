@@ -1,3 +1,4 @@
+import type { PreviewLayout } from "@contexts/ConfigSchema";
 import { useMemo, useState } from "react";
 
 export type PopupsState = {
@@ -7,19 +8,28 @@ export type PopupsState = {
 
 export type LayoutState = {
 	isPreview: boolean;
+	previewLayout: PreviewLayout;
 	resultListContentWidth: number;
 	popups: PopupsState;
 };
 
 const BORDER_THICKNESS = 1;
 
-export const useLayoutState = (width: number, showPreview?: boolean) => {
-	const [isPreview, setIsPreview] = useState(showPreview ?? false);
+export const useLayoutState = (
+	width: number,
+	showPreview: boolean,
+	previewLayout: PreviewLayout,
+) => {
+	const [isPreview, setIsPreview] = useState(showPreview);
 	const [isChooseOpenerPopupOpen, setIsChooseOpenerPopupOpen] = useState(false);
 
 	const resultListContentWidth = useMemo(
-		() => (isPreview ? Math.floor(width / 2) : width) - 2 * BORDER_THICKNESS,
-		[isPreview, width],
+		() =>
+			(isPreview && previewLayout !== "bottom"
+				? Math.floor(width / 2)
+				: width) -
+			2 * BORDER_THICKNESS,
+		[isPreview, previewLayout, width],
 	);
 
 	const isPopupOpen = useMemo(
@@ -30,6 +40,7 @@ export const useLayoutState = (width: number, showPreview?: boolean) => {
 	const setLayoutState = (updater: (prev: LayoutState) => LayoutState) => {
 		const prev: LayoutState = {
 			isPreview,
+			previewLayout,
 			resultListContentWidth,
 			popups: {
 				isChooseOpenerPopupOpen,
@@ -44,6 +55,7 @@ export const useLayoutState = (width: number, showPreview?: boolean) => {
 	return {
 		layoutState: {
 			isPreview,
+			previewLayout,
 			resultListContentWidth,
 			popups: {
 				isChooseOpenerPopupOpen,

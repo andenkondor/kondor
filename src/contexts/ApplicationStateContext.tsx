@@ -85,6 +85,7 @@ export const ApplicationStateProvider = ({
 	const { layoutState, setLayoutState } = useLayoutState(
 		width,
 		preview.showOnStart,
+		preview.layout,
 	);
 
 	const [resultState, setResultState] = useState<ResultState>({

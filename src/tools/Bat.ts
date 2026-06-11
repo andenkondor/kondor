@@ -2,16 +2,18 @@ type BatOptions = {
 	highlightedLine: number;
 	fromLine: number;
 	toLine: number;
+	style?: string;
 };
 
 export class Bat {
 	static async show(
 		filePath: string,
-		{ highlightedLine, fromLine, toLine }: BatOptions,
+		{ highlightedLine, fromLine, toLine, style }: BatOptions,
 	): Promise<string> {
 		const proc = Bun.spawn(
 			[
 				"bat",
+				...(style ? [`--style=${style}`] : []),
 				"--squeeze-blank",
 				...["--highlight-line", highlightedLine.toString()],
 				...["--color", "always"],

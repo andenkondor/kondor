@@ -3,7 +3,10 @@ import { z } from "zod";
 export const ConfigSchema = z.object({
 	initialSearchTerm: z.string().optional(),
 	inputDebounceDelayMs: z.number(),
-	preview: z.object({ showOnStart: z.boolean().optional().default(false) }),
+	preview: z.object({
+		showOnStart: z.boolean().default(false),
+		layout: z.enum(["right", "bottom"]).default("right"),
+	}),
 	openers: z.array(
 		z.object({
 			description: z.string(),
@@ -35,3 +38,6 @@ export const ConfigSchema = z.object({
 
 export type Config = z.infer<typeof ConfigSchema>;
 export type CliConfig = Pick<Config, "initialSearchTerm">;
+export type PreviewLayout = z.infer<
+	typeof ConfigSchema.shape.preview.shape.layout
+>;

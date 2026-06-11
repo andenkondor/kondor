@@ -79,13 +79,15 @@ These control how `fzf` filters the rg results. Toggled from a second toolbar ro
 
 ## Configuration
 
-Settings are stored in `~/.config/kondor/kondor-settings.yaml`:
-
-### `openers`
-
-A list of custom programs to open the selected result with, accessible via the `Shift+Enter` popup.
+Settings are stored in `~/.config/kondor/kondor-settings.yaml`. All fields are optional.
 
 ```yaml
+# Preview pane
+preview:
+  showOnStart: false # show preview on startup (boolean)
+  layout: right # location of the preview pane ("right" | "bottom")
+
+# Custom openers (accessible via Shift+Enter popup)
 openers:
   - description: "vim"
     command: 'vim {{.SelectedFile.Name}} -c "call cursor({{.SelectedFile.LineNumber}}, {{.SelectedFile.ColumnNumber}}"'
