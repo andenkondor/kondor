@@ -1,7 +1,9 @@
-import type { Opener as OpenerConfig } from "@definitions/Opener";
+import type { Config } from "@contexts/ConfigSchema";
 import type { SearchResult } from "@definitions/SearchResult";
 import type { CliRenderer } from "@opentui/core";
 import { spawn, spawnSync } from "bun";
+
+type OpenerConfig = Config["openers"][number];
 
 const quote = (s: string) => `'${s.replace(/'/g, "'\\''")}'`;
 

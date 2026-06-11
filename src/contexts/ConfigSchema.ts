@@ -1,43 +1,64 @@
 import { z } from "zod";
 
 export const ConfigSchema = z.object({
-	initialSearchTerm: z.string().optional(),
-	inputDebounceDelayMs: z.number(),
-	preview: z.object({
-		showOnStart: z.boolean().default(false),
-		layout: z.enum(["right", "bottom"]).default("right"),
-	}),
-	openers: z.array(
-		z.object({
-			description: z.string(),
-			command: z.string(),
-			terminal: z.boolean().optional(),
+	initialSearchTerm: z.string().default(""),
+	inputDebounceDelayMs: z.number().default(300),
+	preview: z
+		.object({
+			showOnStart: z.boolean().default(false),
+			layout: z.enum(["right", "bottom"]).default("right"),
+		})
+		.default({ showOnStart: false, layout: "right" }),
+	openers: z
+		.array(
+			z.object({
+				description: z.string(),
+				command: z.string(),
+				terminal: z.boolean().optional(),
+			}),
+		)
+		.default([]),
+	colors: z
+		.object({
+			filePathText: z.string(),
+			highlightedText: z.string(),
+			normalText: z.string(),
+			selectedBackground: z.string(),
+			focusedBorder: z.string(),
+			highlightedBorder: z.string(),
+			unfocusedBorder: z.string(),
+			popupBackgroundColor: z.string(),
+			popupOverlayColor: z.string(),
+			fileLineNumber: z.string(),
+			defaultText: z.string(),
+			truncationText: z.string(),
+			errorBorder: z.string(),
+		})
+		.default({
+			filePathText: "#9E40A1",
+			highlightedText: "#FF0000",
+			normalText: "#FFFFFF",
+			selectedBackground: "#000000",
+			focusedBorder: "#00FF00",
+			highlightedBorder: "#CCC90A",
+			unfocusedBorder: "#FFFFFF",
+			popupBackgroundColor: "#000000",
+			popupOverlayColor: "#000000C0",
+			fileLineNumber: "#00FF00",
+			defaultText: "#FFFFFF",
+			truncationText: "#0000FF",
+			errorBorder: "#FF0000",
 		}),
-	),
-	colors: z.object({
-		filePathText: z.string(),
-		highlightedText: z.string(),
-		normalText: z.string(),
-		selectedBackground: z.string(),
-		focusedBorder: z.string(),
-		highlightedBorder: z.string(),
-		unfocusedBorder: z.string(),
-		popupBackgroundColor: z.string(),
-		popupOverlayColor: z.string(),
-		fileLineNumber: z.string(),
-		defaultText: z.string(),
-		truncationText: z.string(),
-		errorBorder: z.string(),
-	}),
-	markSymbol: z.string(),
-	selectionSymbol: z.string(),
-	layout: z.object({
-		borderType: z.enum(["single", "double", "rounded", "heavy"]),
-	}),
+	markSymbol: z.string().default("○"),
+	selectionSymbol: z.string().default(">"),
+	layout: z
+		.object({
+			borderType: z
+				.enum(["single", "double", "rounded", "heavy"])
+				.default("rounded"),
+		})
+		.default({ borderType: "rounded" }),
 });
 
 export type Config = z.infer<typeof ConfigSchema>;
-export type CliConfig = Pick<Config, "initialSearchTerm">;
-export type PreviewLayout = z.infer<
-	typeof ConfigSchema.shape.preview.shape.layout
->;
+export type PreviewLayout = Config["preview"]["layout"];

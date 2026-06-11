@@ -71,7 +71,7 @@ export const ApplicationStateProvider = ({
 		cycleRgResultsPerFile,
 		cycleRgSingleMatchPerResult,
 		cycleRgUnrestricted,
-	} = useRgState(initialSearchTerm ?? "");
+	} = useRgState(initialSearchTerm);
 	const { fzfState, setFzfState, cycleFzfFilterColumn, cycleFzfIsExact } =
 		useFzfState();
 	const { focusState, setFocusState } = useFocusState();

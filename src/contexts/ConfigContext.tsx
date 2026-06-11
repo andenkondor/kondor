@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { createContext, useContext } from "react";
 import type { Config } from "./ConfigSchema";
 
-export type { CliConfig, Config } from "./ConfigSchema";
+export type { Config } from "./ConfigSchema";
 
 const ConfigContext = createContext<Config | null>(null);
 
