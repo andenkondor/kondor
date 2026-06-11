@@ -1,3 +1,21 @@
+## [0.10.0] - 2026-06-11
+
+### 🚀 Features
+
+- Allow preview on bottom
+- Cycle preview layout
+
+### 🚜 Refactor
+
+- Get rid of config.yaml
+
+### 📚 Documentation
+
+- Minor README adjustments
+
+### ⚙️ Miscellaneous Tasks
+
+- Bump release action plugin
 ## [0.9.5] - 2026-06-10
 
 ### 🚀 Features
