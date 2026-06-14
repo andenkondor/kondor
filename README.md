@@ -22,13 +22,29 @@ A terminal-based interactive full-text search tool.
 - rg and fzf both use smart casing on default: Lowercase matches ignore case; uppercase forces case sensitivity.
 - Different rg and fzf options simplify your current search task.
 
+## Platforms
+
+Kondor supports **macOS** (ARM64 & x64) and **Linux** (x64 & ARM64).
+
 ## Installation
 
-### Brew
+### Brew (macOS)
 
 ```sh
 brew tap andenkondor/zapfhahn
 brew install andenkondor/zapfhahn/kondor
+```
+
+### Build from source
+
+Requires [Bun](https://bun.sh) and the following tools on your `PATH`:
+[ripgrep](https://github.com/BurntSushi/ripgrep), [fzf](https://github.com/junegunn/fzf),
+[bat](https://github.com/sharkdp/bat), and [neovim](https://neovim.io).
+
+```sh
+bun install
+bun run build
+./dist/index.js
 ```
 
 ## rg Options

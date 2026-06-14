@@ -9,13 +9,11 @@ permissions:
   contents: write
 
 jobs:
-  release:
-    name: Release
-    runs-on: macos-latest
-
+  quality:
+    name: Quality checks
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -23,10 +21,6 @@ jobs:
       - run: bun install
       - run: bun run typecheck
       - run: bun run lint
-      - run: bun run build
-
-      - name: Create tar.gz archive
-        run: tar -czf kondor.tar.gz -C dist .
 
       - name: Update CHANGELOG.md
         uses: orhun/git-cliff-action@v4
@@ -46,6 +40,52 @@ jobs:
           git commit -m "chore(release): prepare for ${{ github.ref_name }}"
           git push
 
+  build:
+    name: Build (${{ matrix.runner }})
+    needs: quality
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-latest
+            target: darwin-arm64
+          - runner: macos-13
+            target: darwin-x64
+          - runner: ubuntu-latest
+            target: linux-x64
+          - runner: ubuntu-24.04-arm
+            target: linux-arm64
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install
+      - run: bun run build
+
+      - name: Create archive
+        run: tar -czf kondor-${{ matrix.target }}.tar.gz -C dist .
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kondor-${{ matrix.target }}
+          path: kondor-${{ matrix.target }}.tar.gz
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: archives
+          pattern: kondor-*
+
       - name: Generate release notes
         uses: orhun/git-cliff-action@v4
         id: git-cliff
@@ -54,10 +94,16 @@ jobs:
         env:
           GITHUB_REPO: ${{ github.repository }}
 
+      - name: Collect archives
+        run: |
+          mkdir -p release-assets
+          find archives -name "*.tar.gz" -exec cp {} release-assets/ \;
+          ls -la release-assets/
+
       - name: Create release
         uses: softprops/action-gh-release@v3
         with:
-          files: kondor.tar.gz
+          files: release-assets/*
           body_path: ${{ steps.git-cliff.outputs.changelog }}
           generate_release_notes: false
 
@@ -70,15 +116,78 @@ jobs:
         id: extract_version
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
-      - name: Create and update Homebrew formula
-        uses: mislav/bump-homebrew-formula-action@v4.1
+      - name: Checkout homebrew tap
+        uses: actions/checkout@v6
         with:
-          formula-name: kondor
-          formula-path: Formula/kondor.rb
-          homebrew-tap: ${{ github.repository_owner }}/homebrew-zapfhahn
-          base-branch: main
-          download-url: https://github.com/${{ github.repository }}/releases/download/v${{ steps.extract_version.outputs.VERSION }}/kondor.tar.gz
-          commit-message: |
-            {{formulaName}} {{version}}
+          repository: andenkondor/homebrew-zapfhahn
+          token: ${{ secrets.COMMITTER_TOKEN }}
+          path: homebrew-tap
+
+      - name: Download archives and compute SHA256
+        id: shas
+        run: |
+          VERSION=${{ steps.extract_version.outputs.VERSION }}
+          mkdir -p release-assets
+          gh release download "v${VERSION}" --pattern "kondor-*.tar.gz" --dir release-assets
+          for target in darwin-arm64 darwin-x64 linux-x64 linux-arm64; do
+            sha=$(sha256sum "release-assets/kondor-${target}.tar.gz" | cut -d' ' -f1)
+            echo "${target}=${sha}" >> $GITHUB_OUTPUT
+          done
         env:
-          COMMITTER_TOKEN: ${{ secrets.COMMITTER_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Update formula
+        working-directory: homebrew-tap
+        run: |
+          VERSION=${{ steps.extract_version.outputs.VERSION }}
+          SHA_DARWIN_ARM64=${{ steps.shas.outputs.darwin-arm64 }}
+          SHA_DARWIN_X64=${{ steps.shas.outputs.darwin-x64 }}
+          SHA_LINUX_X64=${{ steps.shas.outputs.linux-x64 }}
+          SHA_LINUX_ARM64=${{ steps.shas.outputs.linux-arm64 }}
+
+          cat > Formula/kondor.rb <<EOF
+          class Kondor < Formula
+            desc "Full-text search"
+            version "$VERSION"
+
+            on_macos do
+              if Hardware::CPU.arm?
+                url "https://github.com/andenkondor/kondor/releases/download/v${VERSION}/kondor-darwin-arm64.tar.gz"
+                sha256 "${SHA_DARWIN_ARM64}"
+              else
+                url "https://github.com/andenkondor/kondor/releases/download/v${VERSION}/kondor-darwin-x64.tar.gz"
+                sha256 "${SHA_DARWIN_X64}"
+              end
+            end
+
+            on_linux do
+              if Hardware::CPU.arm?
+                url "https://github.com/andenkondor/kondor/releases/download/v${VERSION}/kondor-linux-arm64.tar.gz"
+                sha256 "${SHA_LINUX_ARM64}"
+              else
+                url "https://github.com/andenkondor/kondor/releases/download/v${VERSION}/kondor-linux-x64.tar.gz"
+                sha256 "${SHA_LINUX_X64}"
+              end
+            end
+
+            depends_on "oven-sh/bun/bun"
+            depends_on "ripgrep"
+            depends_on "neovim"
+            depends_on "bat"
+            depends_on "fzf"
+
+            def install
+              libexec.install Dir["*"]
+              (bin/"kd").write <<~EOS
+                #!/bin/bash
+                exec "#{Formula["oven-sh/bun/bun"].opt_bin}/bun" run "#{libexec}/index.js" "\$@"
+              EOS
+            end
+          end
+          EOF
+
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add Formula/kondor.rb
+          git commit -m "kondor ${VERSION}"
+          git push
