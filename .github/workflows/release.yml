@@ -126,7 +126,7 @@ jobs:
         run: |
           VERSION=${{ steps.extract_version.outputs.VERSION }}
           mkdir -p release-assets
-          gh release download "v${VERSION}" --pattern "kondor-*.tar.gz" --dir release-assets
+          gh release download "v${VERSION}" --repo "${{ github.repository }}" --pattern "kondor-*.tar.gz" --dir release-assets
           for target in darwin-arm64 linux-x64 linux-arm64; do
             sha=$(sha256sum "release-assets/kondor-${target}.tar.gz" | cut -d' ' -f1)
             echo "${target}=${sha}" >> $GITHUB_OUTPUT
