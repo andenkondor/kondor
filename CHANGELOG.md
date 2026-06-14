@@ -1,3 +1,8 @@
+## [0.11.0] - 2026-06-14
+
+### 💼 Other
+
+- Support different platforms
 ## [0.10.0] - 2026-06-11
 
 ### 🚀 Features
