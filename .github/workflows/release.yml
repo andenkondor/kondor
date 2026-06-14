@@ -65,7 +65,7 @@ jobs:
       - name: Create archive
         run: tar -czf kondor-${{ matrix.target }}.tar.gz -C dist .
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: kondor-${{ matrix.target }}
           path: kondor-${{ matrix.target }}.tar.gz
@@ -79,7 +79,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           path: archives
           pattern: kondor-*
