@@ -50,8 +50,6 @@ jobs:
         include:
           - runner: macos-latest
             target: darwin-arm64
-          - runner: macos-13
-            target: darwin-x64
           - runner: ubuntu-latest
             target: linux-x64
           - runner: ubuntu-24.04-arm
@@ -129,7 +127,7 @@ jobs:
           VERSION=${{ steps.extract_version.outputs.VERSION }}
           mkdir -p release-assets
           gh release download "v${VERSION}" --pattern "kondor-*.tar.gz" --dir release-assets
-          for target in darwin-arm64 darwin-x64 linux-x64 linux-arm64; do
+          for target in darwin-arm64 linux-x64 linux-arm64; do
             sha=$(sha256sum "release-assets/kondor-${target}.tar.gz" | cut -d' ' -f1)
             echo "${target}=${sha}" >> $GITHUB_OUTPUT
           done
@@ -141,7 +139,6 @@ jobs:
         run: |
           VERSION=${{ steps.extract_version.outputs.VERSION }}
           SHA_DARWIN_ARM64=${{ steps.shas.outputs.darwin-arm64 }}
-          SHA_DARWIN_X64=${{ steps.shas.outputs.darwin-x64 }}
           SHA_LINUX_X64=${{ steps.shas.outputs.linux-x64 }}
           SHA_LINUX_ARM64=${{ steps.shas.outputs.linux-arm64 }}
 
@@ -151,13 +148,8 @@ jobs:
             version "$VERSION"
 
             on_macos do
-              if Hardware::CPU.arm?
-                url "https://github.com/andenkondor/kondor/releases/download/v${VERSION}/kondor-darwin-arm64.tar.gz"
-                sha256 "${SHA_DARWIN_ARM64}"
-              else
-                url "https://github.com/andenkondor/kondor/releases/download/v${VERSION}/kondor-darwin-x64.tar.gz"
-                sha256 "${SHA_DARWIN_X64}"
-              end
+              url "https://github.com/andenkondor/kondor/releases/download/v${VERSION}/kondor-darwin-arm64.tar.gz"
+              sha256 "${SHA_DARWIN_ARM64}"
             end
 
             on_linux do

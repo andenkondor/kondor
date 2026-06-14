@@ -24,7 +24,7 @@ A terminal-based interactive full-text search tool.
 
 ## Platforms
 
-Kondor supports **macOS** (ARM64 & x64) and **Linux** (x64 & ARM64).
+Kondor supports **macOS** (ARM64) and **Linux** (x64 & ARM64).
 
 ## Installation
 
