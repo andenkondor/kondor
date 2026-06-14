@@ -1,3 +1,16 @@
+## [0.11.1] - 2026-06-14
+
+### 🚀 Features
+
+- Don't rely on mac specific symbols
+
+### 💼 Other
+
+- Remove macos-13 build
+
+### ⚙️ Miscellaneous Tasks
+
+- Fix action deprecation warning
 ## [0.11.0] - 2026-06-14
 
 ### 💼 Other
