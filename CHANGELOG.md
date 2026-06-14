@@ -1,3 +1,8 @@
+## [0.11.2] - 2026-06-14
+
+### ⚙️ Miscellaneous Tasks
+
+- Fix failing homebrew upload
 ## [0.11.1] - 2026-06-14
 
 ### 🚀 Features
