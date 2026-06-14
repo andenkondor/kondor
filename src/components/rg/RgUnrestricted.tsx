@@ -1,5 +1,6 @@
 import { useApplicationState } from "@contexts/ApplicationStateContext";
 import { useConfig } from "@contexts/ConfigContext";
+import { Platform } from "@tools/platform";
 import type { ReactNode } from "react";
 
 export const RgUnrestricted = (): ReactNode => {
@@ -15,7 +16,7 @@ export const RgUnrestricted = (): ReactNode => {
 	const display = String(rgOptions.unrestricted);
 	return (
 		<box
-			title={"⌥5"}
+			title={`${Platform.getOptKey()}+5`}
 			borderStyle={borderType}
 			borderColor={rgOptions.unrestricted > 0 ? highlightedBorder : undefined}
 			onMouseDown={cycleRgUnrestricted}

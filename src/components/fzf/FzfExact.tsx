@@ -1,5 +1,6 @@
 import { useApplicationState } from "@contexts/ApplicationStateContext";
 import { useConfig } from "@contexts/ConfigContext";
+import { Platform } from "@tools/platform";
 import { type ReactNode, useRef } from "react";
 
 export const FzfExact = (): ReactNode => {
@@ -17,7 +18,7 @@ export const FzfExact = (): ReactNode => {
 	const display = fzfOptions.isExact ? "exact" : "fuzzy";
 	return (
 		<box
-			title={"⌥7"}
+			title={`${Platform.getOptKey()}+7`}
 			borderStyle={borderType}
 			borderColor={isInit ? undefined : highlightedBorder}
 			onMouseDown={cycleFzfIsExact}

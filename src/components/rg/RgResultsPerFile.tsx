@@ -1,5 +1,6 @@
 import { useApplicationState } from "@contexts/ApplicationStateContext";
 import { useConfig } from "@contexts/ConfigContext";
+import { Platform } from "@tools/platform";
 import { type ReactNode, useRef } from "react";
 
 export const RgResultsPerFile = (): ReactNode => {
@@ -22,7 +23,7 @@ export const RgResultsPerFile = (): ReactNode => {
 			: infinity;
 	return (
 		<box
-			title={"⌥3"}
+			title={`${Platform.getOptKey()}+3`}
 			borderStyle={borderType}
 			borderColor={isInit ? undefined : highlightedBorder}
 			onMouseDown={cycleRgResultsPerFile}

@@ -1,6 +1,7 @@
 import { BorderedTextInput } from "@components/BorderedTextInput";
 import { useApplicationState } from "@contexts/ApplicationStateContext";
 import { InputFocus } from "@definitions/Focus";
+import { Platform } from "@tools/platform";
 import type { ReactNode } from "react";
 
 export const RgSearchTerm = (): ReactNode => {
@@ -25,7 +26,7 @@ export const RgSearchTerm = (): ReactNode => {
 			onInputChange={onSearchTermChange}
 			hasFocus={hasFocus}
 			disableInput={isPopupOpen}
-			titles={["rg", ...(!hasFocus ? ["⌃G"] : [])]}
+			titles={["rg", ...(!hasFocus ? [`${Platform.getCtrlKey()}+g`] : [])]}
 			onMouseDown={() =>
 				setFocusState((prev) => ({ ...prev, currentFocus: InputFocus.RG }))
 			}

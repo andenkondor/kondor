@@ -1,5 +1,6 @@
 import { useApplicationState } from "@contexts/ApplicationStateContext";
 import { useConfig } from "@contexts/ConfigContext";
+import { Platform } from "@tools/platform";
 import { type ReactNode, useRef } from "react";
 
 export const RgMatchesPerResult = (): ReactNode => {
@@ -19,7 +20,7 @@ export const RgMatchesPerResult = (): ReactNode => {
 	const display = rgOptions.singleMatchPerResult ? "1" : infinity;
 	return (
 		<box
-			title={"⌥4"}
+			title={`${Platform.getOptKey()}+4`}
 			borderStyle={borderType}
 			borderColor={isInit ? undefined : highlightedBorder}
 			onMouseDown={cycleRgSingleMatchPerResult}

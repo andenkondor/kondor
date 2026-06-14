@@ -1,5 +1,6 @@
 import { useApplicationState } from "@contexts/ApplicationStateContext";
 import { useConfig } from "@contexts/ConfigContext";
+import { Platform } from "@tools/platform";
 import { type ReactNode, useRef } from "react";
 
 export const FzfFilterColumn = (): ReactNode => {
@@ -23,7 +24,7 @@ export const FzfFilterColumn = (): ReactNode => {
 				: "filter line content";
 	return (
 		<box
-			title={"⌥6"}
+			title={`${Platform.getOptKey()}+6`}
 			borderStyle={borderType}
 			borderColor={isInit ? undefined : highlightedBorder}
 			onMouseDown={cycleFzfFilterColumn}
