@@ -1,3 +1,4 @@
+import { homedir } from "node:os";
 import type { Config } from "@contexts/ConfigContext";
 import { ConfigSchema } from "@contexts/ConfigSchema";
 import { load } from "js-yaml";
@@ -10,8 +11,7 @@ export const resolveConfig = async (): Promise<Config> => {
 
 	const config = ConfigSchema.parse({});
 
-	const xdgConfigHome =
-		process.env.XDG_CONFIG_HOME ?? `${Bun.env.HOME ?? "~"}/.config`;
+	const xdgConfigHome = process.env.XDG_CONFIG_HOME ?? `${homedir()}/.config`;
 	const settingsPath = `${xdgConfigHome}/kondor/kondor-settings.yaml`;
 
 	try {

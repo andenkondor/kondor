@@ -1,3 +1,4 @@
+import { tmpdir } from "node:os";
 import type { SearchResult } from "@definitions/SearchResult";
 import type { CliRenderer } from "@opentui/core";
 import { spawnSync } from "bun";
@@ -25,7 +26,7 @@ export class Nvim {
 	static async openMultiple(items: SearchResult[], renderer: CliRenderer) {
 		renderer.suspend();
 
-		const tmpFile = `/tmp/kondor-quickfix-${Date.now()}.txt`;
+		const tmpFile = `${tmpdir()}/kondor-quickfix-${Date.now()}.txt`;
 		const content = items
 			.map(
 				(item) =>
