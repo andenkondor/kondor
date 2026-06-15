@@ -2,6 +2,8 @@
 import { cpSync, existsSync, mkdirSync, rmSync } from "node:fs";
 import { spawnSync } from "bun";
 
+const pkg = JSON.parse(await Bun.file("./package.json").text());
+const version = process.env.KONDOR_VERSION ?? pkg.version;
 const platform = process.platform;
 const arch = process.arch;
 
@@ -30,6 +32,8 @@ const buildResult = spawnSync(
 		"build",
 		"--minify",
 		"--target=bun",
+		"--define",
+		`process.env.KONDOR_VERSION="${version}"`,
 		`--external=${packageName}`,
 		"./index.tsx",
 		"--outdir",

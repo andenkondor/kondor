@@ -5,9 +5,11 @@ import { ApplicationStateProvider } from "@contexts/ApplicationStateContext";
 import { ConfigProvider } from "@contexts/ConfigContext";
 import { createCliRenderer } from "@opentui/core";
 import { createRoot } from "@opentui/react";
+import { Cli } from "@tools/Cli";
 import { resolveConfig } from "@tools/ConfigResolver";
 
-const config = await resolveConfig();
+const cliResult = await Cli.parse();
+const config = await resolveConfig(cliResult);
 
 const renderer = await createCliRenderer({
 	exitOnCtrlC: true,

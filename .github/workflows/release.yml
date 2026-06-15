@@ -30,12 +30,14 @@ jobs:
           GITHUB_REPO: ${{ github.repository }}
           OUTPUT: CHANGELOG.md
 
-      - name: Commit CHANGELOG.md
+      - name: Bake version and commit
         run: |
           git checkout main
+          VERSION="${GITHUB_REF_NAME#v}"
+          jq --arg v "$VERSION" '.version = $v' package.json > package.json.tmp && mv package.json.tmp package.json
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git add CHANGELOG.md
+          git add CHANGELOG.md package.json
           git diff --cached --quiet && exit 0
           git commit -m "chore(release): prepare for ${{ github.ref_name }}"
           git push
@@ -60,7 +62,10 @@ jobs:
 
       - uses: oven-sh/setup-bun@v2
       - run: bun install
+
       - run: bun run build
+        env:
+          KONDOR_VERSION: ${GITHUB_REF_NAME#v}
 
       - name: Create archive
         run: tar -czf kondor-${{ matrix.target }}.tar.gz -C dist .

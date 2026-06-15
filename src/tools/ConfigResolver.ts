@@ -1,14 +1,12 @@
 import { homedir } from "node:os";
 import type { Config } from "@contexts/ConfigContext";
 import { ConfigSchema } from "@contexts/ConfigSchema";
+import type { CliResult } from "@tools/Cli";
 import { load } from "js-yaml";
 import { merge } from "lodash";
 import { ZodError } from "zod";
 
-export const resolveConfig = async (): Promise<Config> => {
-	const cliArgs = process.argv.slice(2);
-	const initialSearchTerm = cliArgs.join(" ");
-
+export const resolveConfig = async (cliResult: CliResult): Promise<Config> => {
 	const config = ConfigSchema.parse({});
 
 	const xdgConfigHome = process.env.XDG_CONFIG_HOME ?? `${homedir()}/.config`;
@@ -25,8 +23,8 @@ export const resolveConfig = async (): Promise<Config> => {
 		// settings file is optional — ignore I/O errors
 	}
 
-	if (initialSearchTerm) {
-		config.initialSearchTerm = initialSearchTerm;
+	if (cliResult.searchTerm) {
+		config.initialSearchTerm = cliResult.searchTerm;
 	}
 
 	return config;
