@@ -1,3 +1,30 @@
+## [0.12.1] - 2026-06-15
+
+### ⚙️ Miscellaneous Tasks
+
+- Ensure formatted package.json
+## [0.12.0] - 2026-06-15
+
+### 🚀 Features
+
+- Provide --version and --help functionality
+- Primary opening with $EDITOR
+
+### 🐛 Bug Fixes
+
+- Stable scroll list when toggling preview
+
+### 💼 Other
+
+- Major update cac to v7
+
+### 📚 Documentation
+
+- Add usage section
+
+### ⚙️ Miscellaneous Tasks
+
+- More reliable os dir detection
 ## [0.11.2] - 2026-06-14
 
 ### ⚙️ Miscellaneous Tasks
