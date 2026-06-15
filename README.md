@@ -22,6 +22,12 @@ A terminal-based interactive full-text search tool.
 - rg and fzf both use smart casing on default: Lowercase matches ignore case; uppercase forces case sensitivity.
 - Different rg and fzf options simplify your current search task.
 
+## Usage
+
+```sh
+kondor [search-term]
+```
+
 ## Platforms
 
 Kondor supports **macOS** (ARM64) and **Linux** (x64 & ARM64).
