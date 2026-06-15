@@ -14,11 +14,11 @@ export const Main = (): ReactNode => {
 		<box flexGrow={1}>
 			{previewLayout === "bottom" ? (
 				<box flexDirection="column">
-					<box flexBasis={height} flexGrow={2} flexShrink={1}>
+					<box flexBasis={height}>
 						<ResultList />
 					</box>
 					{isPreview && (
-						<box flexBasis={height} flexGrow={1} flexShrink={2} minHeight={8}>
+						<box flexBasis={height}>
 							<Preview />
 						</box>
 					)}

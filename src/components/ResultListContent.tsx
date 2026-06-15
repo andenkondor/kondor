@@ -1,10 +1,7 @@
 import { ResultLine } from "@components/ResultLine";
 import { useApplicationState } from "@contexts/ApplicationStateContext";
 import type { ScrollBoxRenderable } from "@opentui/core";
-import { type ReactNode, useEffect, useRef, useState } from "react";
-
-// We render also non visible items to avoid flickering when they come into view
-const OVERSCAN = 5;
+import { type ReactNode, useEffect, useRef } from "react";
 
 export const ResultListContent = (): ReactNode => {
 	const {
@@ -13,15 +10,6 @@ export const ResultListContent = (): ReactNode => {
 	} = useApplicationState();
 
 	const scrollRef = useRef<ScrollBoxRenderable | null>(null);
-	const [scrollTop, setScrollTop] = useState(0);
-
-	const scrollboxHeight = scrollRef.current?.height ?? 0;
-	const startIndex = Math.max(0, scrollTop - OVERSCAN);
-	const endIndex = Math.min(
-		overallResults.length,
-		scrollTop + scrollboxHeight + OVERSCAN,
-	);
-	const visibleItems = overallResults.slice(startIndex, endIndex);
 
 	useEffect(() => {
 		if (!scrollRef.current) return;
@@ -30,20 +18,18 @@ export const ResultListContent = (): ReactNode => {
 
 		if (currentScrollTop >= overallResults.length) {
 			scrollRef.current.scrollTop = 0;
-			setScrollTop(0);
 			return;
 		}
 
+		const scrollboxHeight = scrollRef.current.height;
 		const bottomVisibleIndex = currentScrollTop + scrollboxHeight - 1;
 
 		if (selectedResultIndex < currentScrollTop) {
 			scrollRef.current.scrollTop = selectedResultIndex;
-			setScrollTop(scrollRef.current.scrollTop);
 		} else if (selectedResultIndex > bottomVisibleIndex) {
 			scrollRef.current.scrollTop = selectedResultIndex - scrollboxHeight + 1;
-			setScrollTop(scrollRef.current.scrollTop);
 		}
-	}, [selectedResultIndex, scrollboxHeight, overallResults.length]);
+	}, [selectedResultIndex, overallResults.length]);
 
 	return (
 		<scrollbox
@@ -51,18 +37,14 @@ export const ResultListContent = (): ReactNode => {
 			viewportCulling
 			scrollbarOptions={{ visible: false }}
 		>
-			{startIndex > 0 && <box height={startIndex} />}
-			{visibleItems.map((item, index) => (
+			{overallResults.map((item, index) => (
 				<ResultLine
 					key={item.id}
 					item={item}
-					isSelected={startIndex + index === selectedResultIndex}
+					isSelected={index === selectedResultIndex}
 					isMarked={markedResultIds.has(item.id)}
 				/>
 			))}
-			{endIndex < overallResults.length && (
-				<box height={overallResults.length - endIndex} />
-			)}
 		</scrollbox>
 	);
 };
