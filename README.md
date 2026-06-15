@@ -44,8 +44,7 @@ brew install andenkondor/zapfhahn/kondor
 ### Build from source
 
 Requires [Bun](https://bun.sh) and the following tools on your `PATH`:
-[ripgrep](https://github.com/BurntSushi/ripgrep), [fzf](https://github.com/junegunn/fzf),
-[bat](https://github.com/sharkdp/bat), and [neovim](https://neovim.io).
+[ripgrep](https://github.com/BurntSushi/ripgrep), [fzf](https://github.com/junegunn/fzf) and [bat](https://github.com/sharkdp/bat).
 
 ```sh
 bun install
@@ -87,17 +86,17 @@ These control how `fzf` filters the rg results. Toggled from a second toolbar ro
 
 ### Actions
 
-| Key           | Action                                                                 |
-| ------------- | ---------------------------------------------------------------------- |
-| `Enter`       | Open result(s) in Neovim (single result or quickfix list for multiple) |
-| `Shift+Enter` | Show "Open with" popup to pick a custom opener                         |
-| `Tab`         | Toggle mark on the selected result                                     |
-| `Ctrl-=`      | Cycle preview layout (right / bottom)                                  |
-| `Ctrl-a`      | Toggle select all / deselect all marks                                 |
-| `Ctrl-g`      | Toggle input focus between Rg search term and Fzf filter term          |
-| `Ctrl-p`      | Toggle preview pane on/off                                             |
-| `Ctrl-r`      | Refresh / re-run the current rg search                                 |
-| `Ctrl-x`      | Delete (ignore) the selected result from the list                      |
+| Key           | Action                                                                   |
+| ------------- | ------------------------------------------------------------------------ |
+| `Enter`       | Open result(s) in $EDITOR (nvim/vim will open multiple in quickfix list) |
+| `Shift+Enter` | Show "Open with" popup to pick a custom opener                           |
+| `Tab`         | Toggle mark on the selected result                                       |
+| `Ctrl-=`      | Cycle preview layout (right / bottom)                                    |
+| `Ctrl-a`      | Toggle select all / deselect all marks                                   |
+| `Ctrl-g`      | Toggle input focus between Rg search term and Fzf filter term            |
+| `Ctrl-p`      | Toggle preview pane on/off                                               |
+| `Ctrl-r`      | Refresh / re-run the current rg search                                   |
+| `Ctrl-x`      | Delete (ignore) the selected result from the list                        |
 
 ## Configuration
 

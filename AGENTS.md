@@ -34,5 +34,5 @@ src/
 ├── contexts/       React context providers (ApplicationState, Config)
 ├── definitions/    Core types/classes (SearchResult, Focus)
 ├── hooks/          State & lifecycle (useRg, useFzf, useInput, useSelection, ...)
-└── tools/          External tool wrappers (Rg, Fzf, Nvim, Bat, Idea)
+└── tools/          External tool wrappers (Rg, Fzf, Editor, Bat, Idea)
 ```

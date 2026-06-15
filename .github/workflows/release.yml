@@ -169,7 +169,6 @@ jobs:
 
             depends_on "oven-sh/bun/bun"
             depends_on "ripgrep"
-            depends_on "neovim"
             depends_on "bat"
             depends_on "fzf"
 

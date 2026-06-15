@@ -1,7 +1,7 @@
 import { useApplicationState } from "@contexts/ApplicationStateContext";
 import { InputFocus } from "@definitions/Focus";
 import { useKeyboard, useRenderer } from "@opentui/react";
-import { Nvim } from "@tools/Nvim";
+import { Editor } from "@tools/Editor";
 
 export const useInput = () => {
 	const renderer = useRenderer();
@@ -110,9 +110,9 @@ export const useInput = () => {
 				if (markedItems.length === 1) {
 					const markedItem = markedItems[0];
 					if (!markedItem) return;
-					Nvim.open(markedItem, renderer);
+					Editor.open(markedItem, renderer);
 				} else if (markedItems.length > 1) {
-					Nvim.openMultiple(markedItems, renderer);
+					Editor.openMultiple(markedItems, renderer);
 				}
 				return;
 			}
@@ -120,7 +120,7 @@ export const useInput = () => {
 			if (!selectedResult) {
 				return;
 			}
-			Nvim.open(selectedResult, renderer);
+			Editor.open(selectedResult, renderer);
 		}
 
 		if (key.shift && key.name === "return") {
