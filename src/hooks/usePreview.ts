@@ -24,8 +24,10 @@ export const usePreview = (previewHeight: number = 0) => {
 			return;
 		}
 
-		const above = Math.max(0, Math.floor((previewHeight - 4) / 2));
+		const contentLines = Math.max(1, previewHeight - 2);
+		const above = Math.max(0, Math.floor((contentLines - 1) / 2));
 		const fromLine = Math.max(1, previewedResult.lineNumber - above);
+		const toLine = fromLine + contentLines - 1;
 
 		setContent("");
 		let isDisposed = false;
@@ -34,7 +36,7 @@ export const usePreview = (previewHeight: number = 0) => {
 			const nextContent = await Bat.show(previewedResult.filePath, {
 				highlightedLine: previewedResult.lineNumber,
 				fromLine,
-				toLine: fromLine + 2 * above,
+				toLine,
 				style: batStyle,
 			});
 
