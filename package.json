@@ -2,7 +2,7 @@
 	"name": "kondor",
 	"module": "index.ts",
 	"type": "module",
-	"version": "0.12.2",
+	"version": "0.12.3",
 	"private": true,
 	"scripts": {
 		"build": "bun run scripts/build.ts",

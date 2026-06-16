@@ -1,3 +1,12 @@
+## [0.12.3] - 2026-06-16
+
+### 🐛 Bug Fixes
+
+- Bottom preview did not utilise all space
+
+### 📚 Documentation
+
+- Add MIT license to the project
 ## [0.12.2] - 2026-06-15
 
 ### ⚙️ Miscellaneous Tasks
