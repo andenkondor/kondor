@@ -11,7 +11,7 @@ export class Editor {
 	}
 
 	private static resolve(): { cmd: string[]; isVim: boolean } {
-		const envEditor = process.env.EDITOR;
+		const envEditor = process.env.VISUAL ?? process.env.EDITOR;
 		if (envEditor) {
 			const cmd = envEditor.split(/\s+/);
 			return { cmd, isVim: Editor.isVimCompatible(cmd[0] ?? "") };
