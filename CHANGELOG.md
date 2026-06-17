@@ -1,3 +1,17 @@
+## [0.12.4] - 2026-06-17
+
+### 🚀 Features
+
+- Use default terminal palette for coloring
+- Also check $VISUAL for editor
+
+### 💼 Other
+
+- Bunfig.toml with minimum release age
+
+### ⚙️ Miscellaneous Tasks
+
+- Small code clean ups
 ## [0.12.3] - 2026-06-16
 
 ### 🐛 Bug Fixes
