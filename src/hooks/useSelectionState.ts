@@ -13,7 +13,6 @@ export type SelectionState = {
 export const useSelectionState = (
 	filterResults: SearchResult[],
 	searchTerm: string,
-	_searchResults: SearchResult[],
 	previewDebounceDelayMs: number,
 ) => {
 	const [selectedResultIndex, setSelectedResultIndex] = useState(0);
@@ -41,10 +40,6 @@ export const useSelectionState = (
 			Math.min(prev, Math.max(0, overallResults.length - 1)),
 		);
 	}, [overallResults.length]);
-
-	useEffect(() => {
-		setSelectedResultIndex(0);
-	}, []);
 
 	const prevSearchTermRef = useRef(searchTerm);
 	useEffect(() => {

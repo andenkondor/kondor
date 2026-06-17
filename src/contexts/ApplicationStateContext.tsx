@@ -12,7 +12,13 @@ import type { SelectionState } from "@hooks/useSelectionState";
 import { useSelectionState } from "@hooks/useSelectionState";
 import { useTerminalDimensions } from "@opentui/react";
 import type { ReactNode } from "react";
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+	createContext,
+	useCallback,
+	useContext,
+	useMemo,
+	useState,
+} from "react";
 
 const PREVIEW_DEBOUNCE_DELAY_MS = 100;
 
@@ -21,6 +27,8 @@ type ResultState = {
 	isLoading: boolean;
 	error: string | undefined;
 };
+
+type Setter<T> = (updater: (prev: T) => T) => void;
 
 type RgCycleMethods = {
 	cycleRgCase: () => void;
@@ -37,19 +45,17 @@ type FzfCycleMethods = {
 
 type ApplicationState = {
 	rgState: RgState;
-	setRgState: React.Dispatch<React.SetStateAction<RgState>>;
+	setRgState: Setter<RgState>;
 	fzfState: FzfState;
-	setFzfState: React.Dispatch<React.SetStateAction<FzfState>>;
+	setFzfState: Setter<FzfState>;
 	resultState: ResultState;
-	setResultState: React.Dispatch<React.SetStateAction<ResultState>>;
+	setResultState: Setter<ResultState>;
 	focusState: FocusState;
-	setFocusState: React.Dispatch<React.SetStateAction<FocusState>>;
+	setFocusState: Setter<FocusState>;
 	selectionState: SelectionState;
-	setSelectionState: (
-		updater: (prev: SelectionState) => SelectionState,
-	) => void;
+	setSelectionState: Setter<SelectionState>;
 	layoutState: LayoutState;
-	setLayoutState: (updater: (prev: LayoutState) => LayoutState) => void;
+	setLayoutState: Setter<LayoutState>;
 } & RgCycleMethods &
 	FzfCycleMethods;
 
@@ -79,7 +85,6 @@ export const ApplicationStateProvider = ({
 		useSelectionState(
 			fzfState.filterResults,
 			rgState.searchTerm,
-			rgState.searchResults,
 			PREVIEW_DEBOUNCE_DELAY_MS,
 		);
 	const { layoutState, setLayoutState } = useLayoutState(
@@ -88,19 +93,29 @@ export const ApplicationStateProvider = ({
 		preview.layout,
 	);
 
-	const [resultState, setResultState] = useState<ResultState>({
-		overallResults,
-		isLoading: false,
-		error: undefined,
-	});
+	const [error, setError] = useState<string | undefined>(undefined);
 
-	useEffect(() => {
-		setResultState((prev) => ({
-			...prev,
+	const resultState: ResultState = useMemo(
+		() => ({
 			overallResults,
 			isLoading: Boolean(rgState.isLoading || fzfState.isLoading),
-		}));
-	}, [overallResults, rgState.isLoading, fzfState.isLoading]);
+			error,
+		}),
+		[overallResults, rgState.isLoading, fzfState.isLoading, error],
+	);
+
+	const setResultState = useCallback(
+		(updater: (prev: ResultState) => ResultState) =>
+			setError(
+				(prevError) =>
+					updater({
+						overallResults: [],
+						isLoading: false,
+						error: prevError,
+					}).error,
+			),
+		[],
+	);
 
 	return (
 		<ApplicationStateContext.Provider

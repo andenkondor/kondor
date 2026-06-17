@@ -78,6 +78,14 @@ export function useFzf() {
 		};
 
 		search();
+
+		return () => {
+			activeFilterRef.current++;
+			if (fzfProcRef.current) {
+				fzfProcRef.current.kill();
+				fzfProcRef.current = undefined;
+			}
+		};
 	}, [
 		searchResults,
 		debouncedFzfFilter,
