@@ -5,8 +5,8 @@ import { type ReactNode, useRef } from "react";
 
 export const FzfExact = (): ReactNode => {
 	const {
-		colors: { highlightedBorder },
-		layout: { borderType },
+		colors: { highlightedBorder, defaultText },
+		borderType,
 	} = useConfig();
 	const {
 		fzfState: { fzfOptions },
@@ -23,7 +23,7 @@ export const FzfExact = (): ReactNode => {
 			borderColor={isInit ? undefined : highlightedBorder}
 			onMouseDown={cycleFzfIsExact}
 		>
-			<text>{display}</text>
+			<text fg={defaultText}>{display}</text>
 		</box>
 	);
 };

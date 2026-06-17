@@ -6,9 +6,7 @@ import { type ReactNode, useMemo, useRef } from "react";
 
 export const Preview = (): ReactNode => {
 	const boxRef = useRef<BoxRenderable>(null);
-	const {
-		layout: { borderType },
-	} = useConfig();
+	const { borderType } = useConfig();
 	const previewContent = usePreview(boxRef.current?.height);
 
 	const data: TerminalData = useMemo(

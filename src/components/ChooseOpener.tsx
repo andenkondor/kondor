@@ -30,13 +30,13 @@ export const ChooseOpener = (): ReactNode => {
 		executeOpener,
 	);
 	const {
-		colors: { focusedBorder, selectedBackground },
+		colors: { focusedBorder, selectedBackground, defaultText },
 	} = useConfig();
 
 	if (!selectedResult) {
 		return (
 			<box padding={1}>
-				<text>No result selected</text>
+				<text fg={defaultText}>No result selected</text>
 			</box>
 		);
 	}
@@ -44,7 +44,7 @@ export const ChooseOpener = (): ReactNode => {
 	if (openers.length === 0) {
 		return (
 			<box padding={1}>
-				<text>No openers configured</text>
+				<text fg={defaultText}>No openers configured</text>
 			</box>
 		);
 	}
@@ -60,11 +60,11 @@ export const ChooseOpener = (): ReactNode => {
 				>
 					<text
 						width={2}
-						fg={i === selectedIndex ? selectedBackground : undefined}
+						fg={i === selectedIndex ? selectedBackground : defaultText}
 					>
 						{`${i + 1} `}
 					</text>
-					<text fg={i === selectedIndex ? selectedBackground : undefined}>
+					<text fg={i === selectedIndex ? selectedBackground : defaultText}>
 						{opener.description}
 					</text>
 				</box>

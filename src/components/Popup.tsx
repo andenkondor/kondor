@@ -10,8 +10,8 @@ export const Popup = (): ReactNode => {
 		},
 	} = useApplicationState();
 	const {
-		colors: { focusedBorder, popupBackgroundColor, popupOverlayColor },
-		layout: { borderType },
+		colors: { focusedBorder, popupBackground, popupOverlay },
+		borderType,
 	} = useConfig();
 
 	if (!isChooseOpenerPopupOpen) {
@@ -27,12 +27,12 @@ export const Popup = (): ReactNode => {
 			height="100%"
 			alignItems="center"
 			justifyContent="center"
-			backgroundColor={popupOverlayColor}
+			backgroundColor={popupOverlay}
 		>
 			<box
 				borderStyle={borderType}
 				borderColor={focusedBorder}
-				backgroundColor={popupBackgroundColor}
+				backgroundColor={popupBackground}
 				title="Open with"
 				width={60}
 			>

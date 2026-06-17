@@ -102,25 +102,78 @@ These control how `fzf` filters the rg results. Toggled from a second toolbar ro
 
 Settings are stored in `~/.config/kondor/kondor-settings.yaml`. All fields are optional.
 
-```yaml
-# Preview pane
-preview:
-  showOnStart: false # show preview on startup (boolean)
-  layout: right # location of the preview pane ("right" | "bottom")
+### Example
 
-# Custom openers (accessible via Shift+Enter popup)
+```yaml
+preview:
+  # Show preview on startup. (boolean). Default: false
+  showOnStart: false
+  # Preview position. ("right" | "bottom"). Default: right
+  layout: right
+
+# Shift+Enter popup entries. Default: []
 openers:
+  # Label shown in the popup.
   - description: "vim"
+    # Shell command with {{.SelectedFile.*}} placeholders.
     command: 'vim {{.SelectedFile.Name}} -c "call cursor({{.SelectedFile.LineNumber}}, {{.SelectedFile.ColumnNumber}}"'
+    # Takes over terminal. (boolean, optional)
     terminal: true
   - description: "Zed"
     command: "zed . {{.SelectedFile.Name}}:{{.SelectedFile.LineNumber}}:{{.SelectedFile.ColumnNumber}}"
+  - description: "Yazi"
+    command: "yazi {{.SelectedFile.Name}}"
+    terminal: true
+
+# A color is either an ANSI palette index (0-255, adapts to terminal theme)
+# or a hex string (`#RRGGBB` or `#RRGGBBAA`).
+colors:
+  # ── General ──────────────────────────────────
+  # Non-highlighted text. Omit to use terminal default. Default: 7 (ANSI white)
+  defaultText: 7
+
+  # ── Result list ──────────────────────────────────
+  # File path text. Default: 5 (ANSI magenta)
+  filePathText: 5
+  # Match highlight. Default: 9 (ANSI bright red)
+  highlightedText: 9
+  # Line number. Default: 6 (ANSI cyan)
+  fileLineNumberText: 6
+  # Truncation ellipsis. Default: 4 (ANSI blue)
+  truncationText: 4
+  # Selected row background. Default: 8 (ANSI bright black)
+  selectedBackground: 8
+
+  # ── Borders ──────────────────────────────────────
+  # Focused element (input, popup) border. Default: 2 (ANSI green)
+  focusedBorder: 2
+  # Unfocused input border. Default: 7 (ANSI white)
+  unfocusedBorder: 7
+  # Toggled widget border. Default: 3 (ANSI yellow)
+  highlightedBorder: 3
+  # Error footer border. Default: 1 (ANSI red)
+  errorBorder: 1
+
+  # ── Popup ────────────────────────────────────────
+  # Popup content background. Default: 0 (ANSI black)
+  popupBackground: 0
+  # Backdrop overlay. Hex with alpha (ANSI indices don't support alpha). Default: "#00000080"
+  popupOverlay: "#00000080"
+
+# Marked result indicator. Default: "○"
+markSymbol: "○"
+# Selected result indicator. Default: ">"
+selectionSymbol: ">"
+# Border style. ("single" | "double" | "rounded" | "heavy"). Default: rounded
+borderType: rounded
 ```
+
+### Openers
+
+Placeholders for openers:
 
 | Placeholder                      | Description               |
 | -------------------------------- | ------------------------- |
 | `{{.SelectedFile.Name}}`         | File path (shell-escaped) |
 | `{{.SelectedFile.LineNumber}}`   | Line number               |
 | `{{.SelectedFile.ColumnNumber}}` | Column number             |
-
-Set `terminal: true` for CLI programs that need to take over the terminal. Omit it or set `false` for GUI apps that launch in the background.

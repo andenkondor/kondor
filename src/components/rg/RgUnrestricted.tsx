@@ -5,8 +5,8 @@ import type { ReactNode } from "react";
 
 export const RgUnrestricted = (): ReactNode => {
 	const {
-		colors: { highlightedBorder },
-		layout: { borderType },
+		colors: { highlightedBorder, defaultText },
+		borderType,
 	} = useConfig();
 	const {
 		rgState: { rgOptions },
@@ -21,7 +21,7 @@ export const RgUnrestricted = (): ReactNode => {
 			borderColor={rgOptions.unrestricted > 0 ? highlightedBorder : undefined}
 			onMouseDown={cycleRgUnrestricted}
 		>
-			<text>{`unrestricted: ${display}`}</text>
+			<text fg={defaultText}>{`unrestricted: ${display}`}</text>
 		</box>
 	);
 };

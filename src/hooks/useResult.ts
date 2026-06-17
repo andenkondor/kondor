@@ -1,25 +1,31 @@
 import { useConfig } from "@contexts/ConfigContext";
 import type { SearchResult } from "@definitions/SearchResult";
+import type { ColorInput } from "@opentui/core";
 import cliTruncate from "cli-truncate";
 import { useMemo } from "react";
 
-export type TextSegment = {
+type TextSegment = {
 	text: string;
-	color?: string;
+	color?: ColorInput;
 };
 
 const ELLIPSIS = "\u2026";
 
 export const useResult = (item: SearchResult, maxWidth: number) => {
 	const {
-		colors: { filePathText, highlightedText, fileLineNumber, truncationText },
+		colors: {
+			filePathText,
+			highlightedText,
+			fileLineNumberText,
+			truncationText,
+		},
 	} = useConfig();
 
 	const segments = useMemo(() => {
 		const pathSegments: TextSegment[] = [
 			{ text: item.filePath, color: filePathText },
 			{ text: ":" },
-			{ text: item.lineNumber.toString(), color: fileLineNumber },
+			{ text: item.lineNumber.toString(), color: fileLineNumberText },
 			{ text: " " },
 		];
 
@@ -62,7 +68,7 @@ export const useResult = (item: SearchResult, maxWidth: number) => {
 		maxWidth,
 		filePathText,
 		highlightedText,
-		fileLineNumber,
+		fileLineNumberText,
 		truncationText,
 		item.lineNumber.toString,
 		item.filePath,
@@ -110,8 +116,8 @@ const extractContent = (item: SearchResult) => {
 const truncateMatch = (
 	match: string,
 	space: number,
-	highlightColor: string,
-	truncationColor: string,
+	highlightColor?: ColorInput,
+	truncationColor?: ColorInput,
 ): TextSegment[] => {
 	if (space <= 0) {
 		return [];
@@ -131,7 +137,7 @@ const buildFullContent = (
 	pre: string,
 	match: string,
 	parts: { text: string; highlighted: boolean }[],
-	highlightColor: string,
+	highlightColor?: ColorInput,
 ): TextSegment[] => {
 	const segments: TextSegment[] = [];
 	if (pre) segments.push({ text: pre });
@@ -153,8 +159,8 @@ const buildTruncatedContent = (
 	post: string,
 	parts: { text: string; highlighted: boolean }[],
 	space: number,
-	highlightColor: string,
-	truncationColor: string,
+	highlightColor?: ColorInput,
+	truncationColor?: ColorInput,
 ): TextSegment[] => {
 	const { before, after } = distributeBudget(
 		pre.length,
@@ -191,8 +197,8 @@ const buildTruncatedContent = (
 const mapPostToParts = (
 	tPost: string,
 	parts: { text: string; highlighted: boolean }[],
-	highlightColor: string,
-	truncationColor: string,
+	highlightColor?: ColorInput,
+	truncationColor?: ColorInput,
 ): TextSegment[] => {
 	const hasEllipsis = tPost.endsWith(ELLIPSIS);
 	const content = hasEllipsis ? tPost.slice(0, -1) : tPost;
@@ -225,7 +231,7 @@ const mapPostToParts = (
 
 const splitTruncatedText = (
 	text: string,
-	truncationColor: string,
+	truncationColor?: ColorInput,
 ): TextSegment[] => {
 	const parts = text.split(ELLIPSIS);
 	const segments: TextSegment[] = [];

@@ -18,10 +18,7 @@ export const BorderedTextInput = ({
 	onMouseDown,
 	disableInput = false,
 }: Props): ReactNode => {
-	const {
-		colors,
-		layout: { borderType },
-	} = useConfig();
+	const { colors, borderType } = useConfig();
 
 	return (
 		<box
@@ -34,6 +31,7 @@ export const BorderedTextInput = ({
 				value={input}
 				onInput={onInputChange}
 				focused={hasFocus && !disableInput}
+				textColor={colors.defaultText}
 			/>
 		</box>
 	);

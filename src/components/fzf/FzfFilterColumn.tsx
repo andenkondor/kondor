@@ -5,8 +5,8 @@ import { type ReactNode, useRef } from "react";
 
 export const FzfFilterColumn = (): ReactNode => {
 	const {
-		colors: { highlightedBorder },
-		layout: { borderType },
+		colors: { highlightedBorder, defaultText },
+		borderType,
 	} = useConfig();
 	const {
 		fzfState: { fzfOptions },
@@ -29,7 +29,7 @@ export const FzfFilterColumn = (): ReactNode => {
 			borderColor={isInit ? undefined : highlightedBorder}
 			onMouseDown={cycleFzfFilterColumn}
 		>
-			<text>{display}</text>
+			<text fg={defaultText}>{display}</text>
 		</box>
 	);
 };

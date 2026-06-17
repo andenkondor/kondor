@@ -5,8 +5,8 @@ import { type ReactNode, useRef } from "react";
 
 export const RgCase = (): ReactNode => {
 	const {
-		colors: { highlightedBorder },
-		layout: { borderType },
+		colors: { highlightedBorder, defaultText },
+		borderType,
 	} = useConfig();
 	const {
 		rgState: { rgOptions },
@@ -24,7 +24,7 @@ export const RgCase = (): ReactNode => {
 			borderColor={isInit ? undefined : highlightedBorder}
 			onMouseDown={cycleRgCase}
 		>
-			<text>{display}</text>
+			<text fg={defaultText}>{display}</text>
 		</box>
 	);
 };

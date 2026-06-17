@@ -5,8 +5,8 @@ import { type ReactNode, useRef } from "react";
 
 export const RgResultsPerFile = (): ReactNode => {
 	const {
-		colors: { highlightedBorder },
-		layout: { borderType },
+		colors: { highlightedBorder, defaultText },
+		borderType,
 	} = useConfig();
 	const {
 		rgState: { rgOptions },
@@ -28,7 +28,7 @@ export const RgResultsPerFile = (): ReactNode => {
 			borderColor={isInit ? undefined : highlightedBorder}
 			onMouseDown={cycleRgResultsPerFile}
 		>
-			<text>{`results/file: ${resultsPerFile}`}</text>
+			<text fg={defaultText}>{`results/file: ${resultsPerFile}`}</text>
 		</box>
 	);
 };

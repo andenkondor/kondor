@@ -5,8 +5,8 @@ import { type ReactNode, useRef } from "react";
 
 export const RgMatchesPerResult = (): ReactNode => {
 	const {
-		colors: { highlightedBorder },
-		layout: { borderType },
+		colors: { highlightedBorder, defaultText },
+		borderType,
 	} = useConfig();
 	const {
 		rgState: { rgOptions },
@@ -25,7 +25,7 @@ export const RgMatchesPerResult = (): ReactNode => {
 			borderColor={isInit ? undefined : highlightedBorder}
 			onMouseDown={cycleRgSingleMatchPerResult}
 		>
-			<text>{`matches/result: ${display}`}</text>
+			<text fg={defaultText}>{`matches/result: ${display}`}</text>
 		</box>
 	);
 };

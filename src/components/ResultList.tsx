@@ -7,7 +7,8 @@ import { ResultListContent } from "./ResultListContent";
 
 export const ResultList = (): ReactNode => {
 	const {
-		layout: { borderType },
+		colors: { defaultText },
+		borderType,
 	} = useConfig();
 	const {
 		resultState: { isLoading },
@@ -26,7 +27,7 @@ export const ResultList = (): ReactNode => {
 					width="100%"
 					height="100%"
 				>
-					<text>{spinner}</text>
+					<text fg={defaultText}>{spinner}</text>
 				</box>
 			) : (
 				<ResultListContent />

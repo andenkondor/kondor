@@ -7,8 +7,8 @@ export const ErrorFooter = (): ReactNode => {
 		resultState: { error },
 	} = useApplicationState();
 	const {
-		colors: { errorBorder },
-		layout: { borderType },
+		colors: { errorBorder, defaultText },
+		borderType,
 	} = useConfig();
 
 	if (!error) {
@@ -17,7 +17,9 @@ export const ErrorFooter = (): ReactNode => {
 
 	return (
 		<box flexShrink={0} borderStyle={borderType} borderColor={errorBorder}>
-			<text paddingLeft={1}>{error}</text>
+			<text paddingLeft={1} fg={defaultText}>
+				{error}
+			</text>
 		</box>
 	);
 };

@@ -16,7 +16,7 @@ export const ResultLine = ({
 	isMarked,
 }: Props): ReactNode => {
 	const {
-		colors: { selectedBackground },
+		colors: { selectedBackground, defaultText },
 		markSymbol,
 		selectionSymbol,
 	} = useConfig();
@@ -48,8 +48,10 @@ export const ResultLine = ({
 			height={1}
 			backgroundColor={isSelected ? selectedBackground : undefined}
 		>
-			<text flexShrink={0}>{indicator}</text>
-			<text>
+			<text flexShrink={0} fg={defaultText}>
+				{indicator}
+			</text>
+			<text fg={defaultText}>
 				{segments.map((segment, index) => (
 					<span key={index} fg={segment.color}>
 						{segment.text}
